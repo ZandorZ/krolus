@@ -1,0 +1,78 @@
+<mat-toolbar *ngIf="depth == 0" color="primary">
+    <mat-toolbar-row>
+        <span>
+            <button mat-icon-button (click)="select($event)">
+                <mat-icon>{{model?.icon ? model.icon: 'home'}}</mat-icon>
+            </button>
+        </span>
+        <span class="flex-container">{{model?.label}}</span>
+        <span class="buttons">
+            <button mat-icon-button (click)="store.collapseAll()">
+                <mat-icon>unfold_less</mat-icon>
+            </button>
+            <button mat-icon-button (click)="showNodeDialogForm(true)">
+                <mat-icon>create_new_folder</mat-icon>
+            </button>
+        </span>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+
+<mat-list-item [matTooltip]="model.description" matTooltipPosition="right" *ngIf="depth > 0" dndDropzone
+    [ngClass]="{selected: isSelected(), loading: isLoading()}" (click)="select($event)" (dndDrop)="onDrop($event)"
+    (dndStart)="onDragStart()" (dndEnd)="onDragEnd()" [dndDraggable]="model" [dndDisableDropIf]="!isDroppagle()">
+
+    <button mat-icon-button class="drag_handle" dndHandle>
+        <mat-icon>drag_indicator</mat-icon>
+    </button>
+
+    <span *ngFor="let item of [].constructor(depth-1); let i = index" [ngStyle]="{'width':  '24px'}"></span>
+    <!-- <span [ngStyle]="{'width': ((depth - 1) * 24) + 'px'}"></span> -->
+
+    <div style="width: 32px;">
+        <button mat-icon-button *ngIf="isExpansable() && !isLoading()" (click)="expand($event)">
+            <mat-icon>{{ model?.children ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}</mat-icon>
+        </button>
+        <mat-spinner color="accent" diameter="16" *ngIf="isLoading()"></mat-spinner>
+    </div>
+    <mat-icon class="folder" dndDragImageRef>{{model.icon ? model.icon: 'folder'}}
+    </mat-icon>
+    <span class="label flex-container mat-caption">{{model.label}}</span>
+    <!-- <span class="items_count mat-caption">{{model.nodes_count}}</span> -->
+    <button [style.visibility]="isLoading() ? 'hidden' : 'visible'" mat-icon-button class="options_menu"
+        [matMenuTriggerFor]="menu" #menuTrigger (click)="options($event)">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="showLeafDialogForm()">
+            <mat-icon>add_box</mat-icon>Add subscription
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="showNodeDialogForm(true)">
+            <mat-icon>create_new_folder</mat-icon>Add directory
+        </button>
+        <button mat-menu-item (click)="showNodeDialogForm(false)">
+            <mat-icon>mode_edit</mat-icon>Edit directory
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item [disabled]="true">
+            <mat-icon>delete</mat-icon>Remove directory
+        </button>
+    </mat-menu>
+</mat-list-item>
+
+<mat-action-list [ngClass]="{first: depth === 0}" *ngIf="model?.children">
+
+    <ng-container *ngFor="let dir of model?.children">
+        <treex [dragged]="dragged" [selected]="selected" [loading]="loading" [model]="dir" [path]="subPath(dir)"
+            [depth]="depth + 1">
+        </treex>
+    </ng-container>
+
+    <ng-container *ngFor="let leaf of model?.leaves">
+        <treex-item (editLeaf)="showLeafDialogForm($event)" (removeLeaf)="onRemoveLeaf($event)"
+            (select)="selectLeaf(leaf)" [model]="leaf" [depth]="depth + 1" [selected]="isLeafSelected(leaf)"
+            (dragStart)="onDragStartLeaf(leaf)" (dragEnd)="onDragEnd()"></treex-item>
+    </ng-container>
+
+</mat-action-list>

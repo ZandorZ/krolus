@@ -1,0 +1,24 @@
+<div mat-dialog-title>
+    <span>{{ !!data.id ? 'Edit' : 'New' }} directory:</span>
+</div>
+<mat-dialog-content>
+
+    <mat-form-field>
+        <input matInput autocomplete="off" placeholder="Title" tabindex="1" [(ngModel)]="data.label" required>
+    </mat-form-field>
+
+
+    <mat-form-field>
+        <input matInput autocomplete="off" placeholder="Description" tabindex="2" [(ngModel)]="data.description"
+            required>
+    </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button tabindex="3" [mat-dialog-close]="data" [disabled]="!isValid()">
+        <mat-icon>save</mat-icon> SAVE
+    </button>
+    <button mat-raised-button (click)="onCancel()" tabindex="4">
+        <mat-icon>cancel</mat-icon> CANCEL
+    </button>
+</mat-dialog-actions>

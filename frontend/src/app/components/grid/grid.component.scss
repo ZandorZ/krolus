@@ -1,0 +1,139 @@
+@import "../../../theme.scss";
+
+.container {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.mat-card-actions,
+.mat-card-subtitle,
+.mat-card-content {
+    margin-bottom: 5px;
+    opacity: 0.2 !important;
+}
+
+.mat-card-header .mat-card-title {
+    opacity: 0.5 !important;
+    margin-bottom: 5px !important;
+    font-size: 16px !important;
+    line-height: 20px !important;
+}
+
+.mat-card-title {
+    display: initial !important;
+}
+
+mat-card {
+    @include mat-elevation-transition;
+
+    width: 300px;
+    height: 255px;
+    margin-left: 5px;
+    margin-top: 5px;
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+    &:hover {
+        .content {
+            opacity: 0.8;
+        }
+        .mat-card-title {
+            color: mat-color($warn);
+        }
+        .details {
+            opacity: 1;
+        }
+    }
+}
+
+.mat-card {
+    background-color: $disabled;
+    &:hover {
+        background-color: $hover;
+        @include mat-elevation(8);
+        .content {
+            filter: grayscale(0.5);
+        }
+    }
+}
+
+.mat-card.selected {
+    background-color: $selected;
+    @include mat-elevation(10);
+    .mat-card-title {
+        color: mat-color($accent, main);
+        opacity: 1 !important;
+    }
+    .content {
+        opacity: 1;
+        filter: grayscale(0);
+    }
+    .details {
+        opacity: 1;
+    }
+}
+
+.mat-card.new {
+    .mat-card-title {
+        opacity: 1 !important;
+        font-weight: bold;
+    }
+    .content {
+        opacity: 1;
+        filter: grayscale(0);
+    }
+    background-color: $background;
+    &:hover {
+        background-color: $hover;
+    }
+}
+
+mat-card-header {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1 1 auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    overflow: hidden;
+    opacity: 0.5;
+    filter: grayscale(1);
+    margin-bottom: 5px;
+    justify-content: center; /* horizontally center */
+    align-items: center; /* vertically center */
+
+    .icon {
+        max-width: 90%;
+        max-height: 90%;
+        background-color: red;
+        display: block;
+    }
+}
+
+.details {
+    opacity: 0.6;
+    display: flex;
+    min-height: 15px;
+    line-height: 15px;
+
+    .subLink {
+        max-width: 65%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        &:hover {
+            color: mat-color($accent, main);
+        }
+    }
+
+    .itemDate {
+        max-width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

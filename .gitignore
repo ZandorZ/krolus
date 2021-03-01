@@ -1,0 +1,7 @@
+
+/build
+/db
+/migrations/migrations
+
+/*.gob
+/go.sum

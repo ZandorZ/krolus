@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+    <head>
+        <title>My Subscriptions</title>
+    </head>
+    <body>
+        <outline text="Music" title="Music">
+            <outline text="Progresive Metal" title="Reddit/r/ProgresiveMetal" type="rss" xmlUrl="https://www.reddit.com/r/progressivemetal.rss" htmlUrl="https://www.reddit.com/r/progressivemetal" />
+        </outline>
+        <outline text="Tech" title="Tech">
+            <outline text="Lunduke on Tech" title="Lunduke on Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/tv/Lunduke" htmlUrl="https://lbry.tv/@Lunduke:e" />
+            <outline text="Rob Braxman Tech" title="Rob Braxman Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/tv/RobBraxmanTech" htmlUrl="https://lbry.tv/@RobBraxmanTech:6" />
+            <outline text="HackerNews" title="HackerNews" type="rss" xmlUrl="https://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/" />
+            <outline text="Luke Smith" title="Luke Smith" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA" htmlUrl="https://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA" />
+            <outline text="Blogs" title="Blogs">
+                <outline text="habd.as" title="habd.as" type="rss" xmlUrl="https://habd.as/post/index.xml" htmlUrl="https://habd.as" />
+            </outline>
+        </outline>
+        <outline text="All about crypto" title="Crypto">
+            <outline text="MrSotko CryptoCurrency" title="MrSotko CryptoCurrency" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCOypM17Zlp17jSlEUKtk9Wg" htmlUrl="https://www.youtube.com/channel/UCOypM17Zlp17jSlEUKtk9Wg" />
+            <outline text="Blockgeeks" title="Blockgeeks" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UCd8CDrm6rvwBZc6g7BYAkfQ" htmlUrl="https://www.youtube.com/channel/UCd8CDrm6rvwBZc6g7BYAkfQ" />
+            <outline text="Cointelegraph" title="Cointelegraph" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?user=cointelegraph" htmlUrl="https://www.youtube.com/channel/UCRqBu-grVX1p97WaX4d-OuQ" />
+            <outline text="Crypto Daily" title="Crypto Daily" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC67AEEecqFEc92nVvcqKdhA" htmlUrl="https://www.youtube.com/channel/UC67AEEecqFEc92nVvcqKdhA" />
+        </outline>
+    </body>
+</opml>

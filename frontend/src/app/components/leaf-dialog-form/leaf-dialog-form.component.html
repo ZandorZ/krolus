@@ -1,0 +1,42 @@
+<form [formGroup]="formG">
+    <mat-dialog>
+        <div mat-dialog-title>
+            <span>Add subscription:</span>
+        </div>
+        <mat-dialog-content>
+
+            <mat-form-field>
+                <input matInput name="XURL" formControlName="XURL" autocomplete="off" placeholder="Feed URL"
+                    tabindex="1" required />
+                <mat-error>{{getErrorMessage('XURL')}}</mat-error>
+                <mat-progress-bar *ngIf="querying" mode="indeterminate"></mat-progress-bar>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput name="Title" formControlName="Title" autocomplete="off" placeholder="Title" tabindex="2"
+                    required />
+                <mat-error>{{getErrorMessage('Title')}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput name="Description" formControlName="Description" autocomplete="off"
+                    placeholder="Description" tabindex="3" required />
+                <mat-error>{{getErrorMessage('Description')}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <input matInput name="URL" formControlName="URL" autocomplete="off" placeholder="Site URL" tabindex="4"
+                    required />
+            </mat-form-field>
+
+        </mat-dialog-content>
+        <mat-dialog-actions>
+            <button mat-raised-button tabindex="3" (click)="onSend()" [disabled]="formG.invalid">
+                <mat-icon>save</mat-icon> SAVE
+            </button>
+            <button mat-raised-button tabindex="4" (click)="onCancel()">
+                <mat-icon>cancel</mat-icon> CANCEL
+            </button>
+            <span class="error">{{errorQuery}}</span>
+        </mat-dialog-actions>
+    </mat-dialog>
+</form>

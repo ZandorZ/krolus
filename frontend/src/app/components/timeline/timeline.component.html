@@ -1,0 +1,27 @@
+<mat-selection-list #shoes (selectionChange)="onChange($event)" [multiple]="false">
+    <mat-list-option *ngFor="let item of items" [value]="item" [selected]="!!selected && item.ID == selected.ID">
+        <section class="container flex" [ngClass]="{'new' : item.New}">
+            <div class="shrink-3-basis">
+                <!-- <button mat-icon-button class="favorite" color="accent">
+                    <mat-icon>star</mat-icon>
+                </button> -->
+                <button mat-icon-button [ngSwitch]="item?.Type">
+                    <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
+                    <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
+                    <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
+                </button>
+            </div>
+
+            <div class="shrink-2-basis">
+                <span class="subLink"
+                    (click)="onSelectSub($event, {id: item.Subscription, label: item.SubscriptionName})">
+                    {{item.SubscriptionName}}
+                </span>
+            </div>
+            <div class="item flex-item-1">{{item.Title}}</div>
+            <div class="item mat-caption">
+                {{item.Published | date: 'short'}}
+            </div>
+        </section>
+    </mat-list-option>
+</mat-selection-list>

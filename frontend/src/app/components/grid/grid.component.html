@@ -1,0 +1,22 @@
+<div class="container">
+    <mat-card (click)="onChange(item)" *ngFor="let item of items"
+        [ngClass]="{'new' : item.New, 'selected': item.ID == selected?.ID}">
+        <mat-card-header>
+            <mat-card-title [matTooltip]="item?.Title" matTooltipPosition="above">{{item?.Title.length > 75 &&
+                item?.Type != 'unknown' ? item?.Title.substring(0,75) + "..." :
+                item.Title }}
+            </mat-card-title>
+            <div class="content" [ngStyle]="{backgroundImage:'url('+item.Thumbnail+')'}">
+                <span class="icon"></span>
+            </div>
+            <div class="details mat-caption">
+                <span class="subLink"
+                    (click)="onSelectSub($event, {id: item.Subscription, label: item.SubscriptionName})">
+                    {{item.SubscriptionName}}
+                </span>
+                <span class="flex"></span>
+                <span class="itemDate">{{item.Published | customDate}}</span>
+            </div>
+        </mat-card-header>
+    </mat-card>
+</div>

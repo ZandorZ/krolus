@@ -1,0 +1,114 @@
+@import "./theme";
+@import "./material.icons.css";
+
+.material-icons {
+    font-family: "Material Icons";
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-size: 1.25em;
+    height: 2em;
+}
+
+.mat-button .mat-button-wrapper > *,
+.mat-flat-button .mat-button-wrapper > *,
+.mat-stroked-button .mat-button-wrapper > *,
+.mat-raised-button .mat-button-wrapper > *,
+.mat-icon-button .mat-button-wrapper > *,
+.mat-fab .mat-button-wrapper > *,
+.mat-mini-fab .mat-button-wrapper > * {
+    vertical-align: sub !important;
+}
+
+.custom-modalbox-directory {
+    min-width: 30%;
+}
+
+.custom-modalbox-subscription {
+    min-width: 50%;
+}
+
+.custom-modalbox-directory,
+.custom-modalbox-subscription {
+    overflow: hidden;
+
+    .mat-dialog-container {
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+    }
+
+    [mat-dialog-title] {
+        background: mat-color(mat-palette($mat-primary, main));
+        color: map-get($mat-dark-theme-foreground, text);
+        padding: 10px;
+    }
+
+    mat-dialog-content {
+        margin: 0px;
+    }
+
+    mat-form-field {
+        display: block;
+    }
+
+    mat-dialog-actions {
+        margin: 0px;
+        padding: 10px;
+    }
+}
+
+.mat-menu-content:not(:empty) {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+// .mat-toolbar {
+//     padding: 0 5px !important;
+// }
+
+.mat-toolbar-row {
+    font-size: 18px !important;
+    @include mat-elevation(5);
+    height: 50px;
+    padding: 2px !important;
+    button {
+        &:hover {
+            color: mat-color($accent);
+        }
+    }
+}
+
+.mat-toolbar-multiple-rows {
+    min-height: 50px;
+}
+
+.mat-card-header-text {
+    margin: 0 0px !important;
+}
+
+.flex {
+    flex: 1;
+}
+
+body {
+    overflow: hidden;
+    margin: 0;
+    // zoom: 0.9;
+    font-family: sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #393939;
+}
+
+a:-webkit-any-link {
+    color: orange;
+    cursor: pointer;
+    text-decoration: underline;
+}

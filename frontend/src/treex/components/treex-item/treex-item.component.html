@@ -1,0 +1,32 @@
+<mat-list-item [matTooltip]="model.description" matTooltipPosition="right"
+    [ngClass]="{selected: selected, 'has-items': model?.new_items_count > 0}" (click)="onSelect($event)"
+    [dndDraggable]="model" (dndStart)="onDragStart()" (dndEnd)="onDragEnd()">
+    <button mat-icon-button class="drag_handle" dndHandle>
+        <mat-icon>drag_indicator</mat-icon>
+    </button>
+
+    <span *ngFor="let item of [].constructor(depth-1); let i = index" [ngStyle]="{'width':  '24px'}"></span>
+
+    <div style="width: 32px;">
+    </div>
+    <mat-icon class="folder" dndDragImageRef>{{model.icon ?
+        model.icon: 'rss_feed'}}
+    </mat-icon>
+    <span class="label flex-container mat-caption">
+        <span>{{model?.label}}</span>
+    </span>
+    <span *ngIf="model?.new_items_count > 0" class="items_count mat-caption">{{model?.new_items_count}}</span>
+    <button mat-icon-button class="options_menu" [matMenuTriggerFor]="menu" #menuTrigger (click)="options($event)">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="clickEdit()">
+            <mat-icon>mode_edit</mat-icon>Edit subscription
+        </button>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="showConfirmRemoveLeaf()">
+            <mat-icon>delete</mat-icon>Remove subscription
+        </button>
+    </mat-menu>
+
+</mat-list-item>

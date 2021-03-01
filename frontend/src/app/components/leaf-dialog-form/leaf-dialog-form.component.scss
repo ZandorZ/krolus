@@ -1,0 +1,13 @@
+.mat-progress-bar {
+    display: block;
+    height: 2px;
+    overflow: hidden;
+    position: relative;
+    transition: opacity 250ms linear;
+    width: 100%;
+    top: 9px;
+}
+
+.error {
+    color: red;
+}

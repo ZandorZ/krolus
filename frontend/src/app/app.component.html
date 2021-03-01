@@ -1,0 +1,18 @@
+<mat-sidenav-container [ngClass]="{'light-theme': isLightTheme}">
+    <mat-sidenav #drawer mode="side" opened="true" role="navigation">
+        <treex [selected]="selected$ | async" [loading]="loading$ | async" [dragged]="dragged$ | async"></treex>
+    </mat-sidenav>
+    <mat-sidenav-content fixedInViewport="true">
+
+        <mat-drawer-container [hasBackdrop]="false">
+            <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">
+                <app-item *ngIf="!!item" [model]="item" (close)="onCloseItem()" (open)="onOpenURL($event)">
+                </app-item>
+            </mat-drawer>
+            <mat-drawer-content>
+                <app-feed [node]="selected$ | async"></app-feed>
+            </mat-drawer-content>
+        </mat-drawer-container>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

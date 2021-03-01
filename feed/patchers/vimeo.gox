@@ -1,0 +1,102 @@
+package parser
+
+import (
+	"krolus/models"
+	"time"
+
+	"github.com/PuerkitoBio/goquery"
+	"github.com/antchfx/xmlquery"
+	"github.com/google/uuid"
+)
+
+// VimeoParser ...
+type VimeoParser struct {
+	requester Requester
+}
+
+// NewVimeoParser ...
+func NewVimeoParser(requester Requester) Parser {
+	return &VimeoParser{
+		requester: requester,
+	}
+}
+
+// Parse ...
+func (v *VimeoParser) Parse(stringURL string, since time.Time) (models.ItemCollection, error) {
+
+	var items models.ItemCollection
+
+	res, _err := v.requester.Request(stringURL)
+	if _err != nil {
+		return items, _err
+	}
+	defer res.Body.Close()
+
+	doc, _err := xmlquery.Parse(res.Body)
+	if _err != nil {
+		return items, _err
+	}
+
+	var err error
+	xmlquery.FindEachWithBreak(doc, "//item", func(i int, item *xmlquery.Node) bool {
+
+		dateString := xmlquery.FindOne(item, "/pubDate").FirstChild.Data
+		dateTime, _err := time.Parse(time.RFC1123Z, dateString)
+		if _err != nil {
+			err = _err
+			return false
+		}
+		//only new items
+		if !dateTime.After(since) {
+			return false
+		}
+
+		link := xmlquery.FindOne(item, "/link").FirstChild.Data
+		thumb := xmlquery.FindOne(item, "//media:thumbnail").SelectAttr("url")
+		title, _err := v.getTitle(link)
+		if _err != nil {
+			err = _err
+			return false
+		}
+
+		items = append(items, models.ItemModel{
+			ID:        uuid.New().String(),
+			Title:     title,
+			Link:      link,
+			Published: dateTime,
+			New:       true,
+			Seen:      false,
+			Thumbnail: thumb,
+			Provider:  "vimeo",
+			Type:      "video",
+		})
+
+		return true
+	})
+
+	return items, err
+}
+
+func (v *VimeoParser) getTitle(url string) (string, error) {
+
+	// Make request
+	res, err := v.requester.Request(url)
+	if err != nil {
+		return "", err
+	}
+	defer res.Body.Close()
+
+	// Load the HTML document
+	doc, err := goquery.NewDocumentFromReader(res.Body)
+	if err != nil {
+		return "", err
+	}
+
+	title := ""
+	if found := doc.Find("title"); found != nil {
+		title = found.Text()
+	}
+
+	return title, nil
+
+}

@@ -1,0 +1,22 @@
+{
+    "name": "krolus",
+    "description": "RSS Feed Client",
+    "author": {
+        "name": "zandorz",
+        "email": "dev@smk.cx"
+    },
+    "version": "0.0.1",
+    "binaryname": "krolus",
+    "frontend": {
+        "dir": "frontend",
+        "install": "npm install",
+        "build": "npx ng build --single-bundle true --output-hashing none --prod --bundle-styles false",
+        "bridge": "src",
+        "serve": "npx ng serve --poll=2000"
+    },
+    "WailsVersion": "",
+    "CrossCompile": false,
+    "Platform": "",
+    "Architecture": "",
+    "LdFlags": ""
+}

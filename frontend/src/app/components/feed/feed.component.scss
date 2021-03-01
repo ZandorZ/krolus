@@ -1,0 +1,16 @@
+.title {
+    // text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 10px;
+    // vertical-align: middle;
+    // height: 40px;
+    // line-height: 40px;
+    opacity: 0.8 !important;
+}
+
+.bottom {
+    height: 50px;
+    display: block;
+}

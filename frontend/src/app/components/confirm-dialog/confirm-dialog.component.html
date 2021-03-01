@@ -1,0 +1,18 @@
+<mat-dialog>
+    <div mat-dialog-title>
+        <span>Confirm:</span>
+    </div>
+    <mat-dialog-content>
+
+        {{data}}
+
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-raised-button tabindex="0" [mat-dialog-close]="false">
+            <mat-icon>cancel</mat-icon> NO
+        </button>
+        <button color="warn" mat-raised-button tabindex="1" [mat-dialog-close]="true">
+            <mat-icon>done</mat-icon> YES
+        </button>
+    </mat-dialog-actions>
+</mat-dialog>
