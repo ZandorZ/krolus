@@ -1,38 +1,33 @@
 package treex_test
 
 import (
-	"encoding/json"
-	"fmt"
 	"krolus/treex"
 	"krolus/treex/models"
+	"krolus/treex/persistence"
 	"testing"
 
 	. "github.com/franela/goblin"
 )
 
-func ResetRoot(root *models.Node) {
-	root = models.NewNode("Root", "My root").
-		AddNode(
-			models.NewNode("Dev", "All about DEV").
-				AddNode(models.NewNode("Rust", "Everything Rust")).
-				AddNode(models.NewNode("PHP", "PHP is  good").AddLeaf(
-					models.NewLeaf("Symfony", "Great resource"),
-				)).
-				AddNode(models.NewNode("Go", "Go development")).
-				AddNode(models.NewNode("Python", "Python must know"))).
-		AddNode(models.NewNode("Music", "My music").
-			AddNode(
-				models.NewNode("Rock", "Rock Music")))
+func ResetRoot() *models.Node {
 
-}
+	dev := models.NewNode("Dev", "All about DEV")
+	dev.AddNode(models.NewNode("Rust", "Everything Rust"))
+	php := models.NewNode("PHP", "PHP is  good")
+	php.AddLeaf(models.NewLeaf("Symfony", "Great resource"))
+	dev.AddNode(php)
+	dev.AddNode(models.NewNode("Go", "Go development"))
+	dev.AddNode(models.NewNode("Python", "Python must know"))
 
-// Pretty ...
-func Pretty(n interface{}) {
-	prettyJSON, err := json.MarshalIndent(n, "", "    ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s\n", string(prettyJSON))
+	music := models.NewNode("Music", "My music")
+	music.AddNode(models.NewNode("Rock", "Rock Music"))
+
+	root := models.NewNode("Root", "My root")
+	root.AddNode(dev)
+	root.AddNode(music)
+
+	return root
+
 }
 
 func Test(t *testing.T) {
@@ -41,7 +36,8 @@ func Test(t *testing.T) {
 	g := Goblin(t)
 	g.Describe("Test Find", func() {
 
-		ResetRoot(root)
+		root = ResetRoot()
+
 		var phpFound *models.Node
 
 		g.It("Should find php node ", func() {
@@ -61,7 +57,7 @@ func Test(t *testing.T) {
 	})
 
 	g.Describe("Test descendents", func() {
-		ResetRoot(root)
+		root = ResetRoot()
 		g.It("Rust should be descendent of Root ", func() {
 			rust := root.FindNode(func(node *models.Node) bool {
 				return node.Label == "Rust"
@@ -89,8 +85,8 @@ func Test(t *testing.T) {
 	})
 
 	g.Describe("Test move", func() {
-		ResetRoot(root)
-		rootState := treex.State{Root: root}
+		root = ResetRoot()
+		rootState, _ := treex.NewState(root, persistence.NewMem())
 		g.It("Move Rust to Rock", func() {
 			dev := root.FindNode(func(node *models.Node) bool {
 				return node.Label == "Dev"
@@ -136,8 +132,6 @@ func Test(t *testing.T) {
 
 			g.Assert(rust.Leaves.Get(symp.ID)).IsNotNil("Symfony not in Rust leaves")
 			g.Assert(php.Leaves.Get(symp.ID)).IsZero("Symfony still in PHP leaves")
-
-			//Pretty(root)
 
 		})
 
