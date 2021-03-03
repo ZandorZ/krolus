@@ -1,5 +1,20 @@
 @import "~@angular/material/theming";
 
+// -----------------------------------------------------------------------------------------------------
+// @ Component theming
+// -----------------------------------------------------------------------------------------------------
+@import "src/treex/treex.theme";
+@import "src/app/app.theme";
+
+// Define a mixin for easier access
+@mixin components-theme($theme) {
+    // components
+    @include app-theme($theme);
+    @include grid-theme($theme);
+    @include custom-modal-theme($theme);
+    @include treex-theme($theme);
+}
+
 $fontConfig: (
     display-4: mat-typography-level(112px, 112px, 300, "sans-serif", -0.0134em),
     display-3: mat-typography-level(56px, 56px, 400, "sans-serif", -0.0089em),
@@ -209,35 +224,33 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);
 
 $theme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
-@include angular-material-theme($theme);
+body.dark-theme {
+    @include angular-material-theme($theme);
 
-/* Track */
-::-webkit-scrollbar-track {
-    background: map-get($mat-dark-theme-background, app-bar);
+    @include components-theme($theme);
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: map-get($mat-dark-theme-background, app-bar);
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: map-get($mat-dark-theme-background, disabled-button);
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: map-get($mat-dark-theme-background, selected-button);
+    }
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: map-get($mat-dark-theme-background, disabled-button);
-}
+$altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: map-get($mat-dark-theme-background, selected-button);
-}
-
-$primary: mat-palette($mat-primary, lighter);
-$accent: mat-palette($mat-accent, main);
-$warn: mat-palette($mat-warn, lighter);
-$background: map-get($mat-dark-theme-background, card);
-$selected: map-get($mat-dark-theme-background, selected-button);
-$disabled: map-get($mat-dark-theme-background, disabled-button);
-$hover: map-get($mat-dark-theme-background, hover);
-
-.light-theme {
-    $altTheme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
-
+body.light-theme {
     @include angular-material-theme($altTheme);
+
+    @include components-theme($altTheme);
 
     /* Track */
     ::-webkit-scrollbar-track {
@@ -253,57 +266,10 @@ $hover: map-get($mat-dark-theme-background, hover);
     ::-webkit-scrollbar-thumb:hover {
         background: map-get($mat-light-theme-background, selected-button);
     }
-
-    $primary: mat-palette($mat-primary, main);
-    $accent: mat-palette($mat-accent, darker);
-    $warn: mat-palette($mat-warn, darker);
-    $background: map-get($mat-light-theme-background, card);
-    $selected: map-get($mat-light-theme-background, selected-button);
-    $disabled: map-get($mat-light-theme-background, disabled-button);
-    $hover: map-get($mat-light-theme-background, hover);
 }
 
 ////////////////////
 
 ::-webkit-scrollbar {
     width: 12px;
-}
-
-mat-selection-list {
-    margin: 10px;
-    height: calc(100vh - 130px);
-}
-
-mat-list-option {
-    // @include mat-elevation-transition;
-    // @include mat-elevation(1);
-    margin-top: 2px;
-
-    background-color: $background;
-
-    &:hover {
-        @include mat-elevation(8);
-
-        .favorite {
-            visibility: visible;
-        }
-
-        .mat-list-text {
-            color: mat-color($warn);
-            section {
-                opacity: 1;
-            }
-        }
-    }
-}
-
-.mat-list-single-selected-option {
-    @include mat-elevation-transition;
-    @include mat-elevation(3);
-    .mat-list-text {
-        color: mat-color($accent);
-        section {
-            opacity: 1;
-        }
-    }
 }

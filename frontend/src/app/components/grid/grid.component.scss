@@ -1,5 +1,3 @@
-@import "../../../theme.scss";
-
 .container {
     width: 100%;
     margin-bottom: 10px;
@@ -9,11 +7,11 @@
 .mat-card-subtitle,
 .mat-card-content {
     margin-bottom: 5px;
-    opacity: 0.2 !important;
+    opacity: 0.2;
 }
 
 .mat-card-header .mat-card-title {
-    opacity: 0.5 !important;
+    opacity: 0.5;
     margin-bottom: 5px !important;
     font-size: 16px !important;
     line-height: 20px !important;
@@ -24,8 +22,6 @@
 }
 
 mat-card {
-    @include mat-elevation-transition;
-
     width: 300px;
     height: 255px;
     margin-left: 5px;
@@ -33,59 +29,6 @@ mat-card {
     display: inline-block;
     padding: 10px;
     cursor: pointer;
-    &:hover {
-        .content {
-            opacity: 0.8;
-        }
-        .mat-card-title {
-            color: mat-color($warn);
-        }
-        .details {
-            opacity: 1;
-        }
-    }
-}
-
-.mat-card {
-    background-color: $disabled;
-    &:hover {
-        background-color: $hover;
-        @include mat-elevation(8);
-        .content {
-            filter: grayscale(0.5);
-        }
-    }
-}
-
-.mat-card.selected {
-    background-color: $selected;
-    @include mat-elevation(10);
-    .mat-card-title {
-        color: mat-color($accent, main);
-        opacity: 1 !important;
-    }
-    .content {
-        opacity: 1;
-        filter: grayscale(0);
-    }
-    .details {
-        opacity: 1;
-    }
-}
-
-.mat-card.new {
-    .mat-card-title {
-        opacity: 1 !important;
-        font-weight: bold;
-    }
-    .content {
-        opacity: 1;
-        filter: grayscale(0);
-    }
-    background-color: $background;
-    &:hover {
-        background-color: $hover;
-    }
 }
 
 mat-card-header {
@@ -103,15 +46,8 @@ mat-card-header {
     opacity: 0.5;
     filter: grayscale(1);
     margin-bottom: 5px;
-    justify-content: center; /* horizontally center */
-    align-items: center; /* vertically center */
-
-    .icon {
-        max-width: 90%;
-        max-height: 90%;
-        background-color: red;
-        display: block;
-    }
+    justify-content: center;
+    align-items: center;
 }
 
 .details {
@@ -125,9 +61,6 @@ mat-card-header {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        &:hover {
-            color: mat-color($accent, main);
-        }
     }
 
     .itemDate {

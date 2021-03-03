@@ -1,5 +1,3 @@
-@import "../../../theme";
-
 mat-toolbar {
     position: fixed;
     width: 15%;
@@ -43,34 +41,6 @@ mat-action-list.mat-list-base {
     padding-top: 0px !important;
 }
 
-mat-list-item.dndDragover {
-    opacity: 1 !important;
-    background-color: mat-color($primary);
-
-    mat-icon.folder {
-        color: mat-color($warn);
-    }
-}
-
-mat-list-item.selected {
-    @extend .mat-list-single-selected-option;
-
-    opacity: 1 !important;
-
-    mat-icon.folder {
-        color: mat-color($accent);
-    }
-
-    span.label {
-        font-weight: bold;
-        color: mat-color($accent);
-    }
-}
-
-mat-list-item.loading {
-    color: mat-color($warn);
-}
-
 mat-spinner {
     margin-left: 10px;
     margin-right: 10px;
@@ -78,8 +48,6 @@ mat-spinner {
 
 mat-icon.folder {
     margin-right: 5px;
-    /* margin-left: 5px; */
-    cursor: pointer;
 }
 
 :host {
@@ -95,14 +63,6 @@ mat-icon.folder {
 
     &:hover {
         opacity: 1 !important;
-
-        mat-icon.folder {
-            color: mat-color($warn) !important;
-        }
-
-        span.label {
-            color: mat-color($warn) !important;
-        }
 
         .items_count {
             display: none;
@@ -133,28 +93,25 @@ mat-icon.folder {
     opacity: 1 !important;
 }
 
-:host ::ng-deep .mat-list-item-content {
-    padding: 0px !important;
-    width: auto;
-}
-
-:host ::ng-deep .mat-list-base .mat-list-item,
-.mat-list-base .mat-list-option {
-    height: 35px;
+:host ::ng-deep {
+    .mat-list-item-content {
+        padding: 0px !important;
+        width: auto;
+    }
+    .mat-list-base .mat-list-item,
+    .mat-list-base .mat-list-option {
+        height: 35px;
+    }
 }
 
 .label {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    // span{
-    // 	margin-left: 10px;
-    // }
 }
 
 .items_count {
     margin-right: 15px;
-    color: mat-color($accent);
     font-size: 0.65em !important;
     font-weight: bold;
 }

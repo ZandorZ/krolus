@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnInit } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { LoadingDictionary, TreexNode } from 'src/treex/model';
@@ -20,9 +21,8 @@ export class AppComponent implements OnInit {
     dragged$: Observable<TreexNode>;
     item: ItemModel;
 
-    isLightTheme = false;
-
     constructor(
+        @Inject(DOCUMENT) private document: any,
         private treeStore: TreexStore,
         private feedStore: FeedStore,
         private itemStore: ItemStore) {
@@ -39,11 +39,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
-    }
-
-    changeTheme() {
-        this.isLightTheme = !this.isLightTheme;
+        this.document.body.classList.add('light-theme');
     }
 
     onCloseItem() {

@@ -1,0 +1,151 @@
+@mixin app-theme($theme) {
+    $background: map-get($theme, background);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    button {
+        &:hover {
+            color: mat-color($accent);
+        }
+    }
+
+    mat-list-option {
+        background: map-get($background, card);
+
+        &:hover {
+            .mat-list-text {
+                color: mat-color($warn);
+            }
+        }
+    }
+
+    .mat-list-single-selected-option {
+        @include mat-elevation-transition;
+        @include mat-elevation(3);
+        .mat-list-text {
+            color: mat-color($accent);
+            section {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+@mixin grid-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    app-grid {
+        .mat-card {
+            @include mat-elevation(3);
+            background: map-get($background, disabled-button);
+
+            &:hover {
+                @include mat-elevation-transition;
+                @include mat-elevation(8);
+                background: map-get($background, hover);
+                .content,
+                .mat-card-title,
+                .details {
+                    opacity: 1;
+                    color: mat-color($accent, darker);
+                }
+
+                .content {
+                    filter: grayscale(0.5);
+                }
+            }
+
+            .details {
+                .subLink {
+                    &:hover {
+                        color: mat-color($accent, main);
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+
+        .mat-card.selected {
+            background-color: map-get($background, selected-button);
+
+            @include mat-elevation(10);
+            .mat-card-title {
+                color: mat-color($accent, darker);
+                opacity: 1;
+            }
+            .content {
+                opacity: 1;
+                filter: grayscale(0);
+            }
+            .details {
+                opacity: 1;
+                color: mat-color($accent, darker);
+            }
+        }
+
+        .mat-card.new {
+            .mat-card-title {
+                opacity: 1;
+                font-weight: bold;
+            }
+            .content {
+                opacity: 1;
+                filter: grayscale(0);
+            }
+            .details {
+                opacity: 1;
+            }
+            background: map-get($background, card);
+            &:hover {
+                background: map-get($background, hover);
+            }
+        }
+    }
+}
+
+@mixin custom-modal-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+    .custom-modalbox-directory {
+        min-width: 30%;
+    }
+
+    .custom-modalbox-subscription {
+        min-width: 50%;
+    }
+
+    .custom-modalbox-directory,
+    .custom-modalbox-subscription {
+        overflow: hidden;
+
+        .mat-dialog-container {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        [mat-dialog-title] {
+            background: map-get($background, card);
+            color: map-get($foreground, text);
+            padding: 10px;
+        }
+
+        mat-dialog-content {
+            margin: 0px;
+        }
+
+        mat-form-field {
+            display: block;
+        }
+
+        mat-dialog-actions {
+            margin: 0px;
+            padding: 10px;
+        }
+    }
+}

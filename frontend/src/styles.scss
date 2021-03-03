@@ -16,52 +16,9 @@
     height: 2em;
 }
 
-.mat-button .mat-button-wrapper > *,
-.mat-flat-button .mat-button-wrapper > *,
-.mat-stroked-button .mat-button-wrapper > *,
-.mat-raised-button .mat-button-wrapper > *,
-.mat-icon-button .mat-button-wrapper > *,
-.mat-fab .mat-button-wrapper > *,
-.mat-mini-fab .mat-button-wrapper > * {
-    vertical-align: sub !important;
-}
-
-.custom-modalbox-directory {
-    min-width: 30%;
-}
-
-.custom-modalbox-subscription {
-    min-width: 50%;
-}
-
-.custom-modalbox-directory,
-.custom-modalbox-subscription {
-    overflow: hidden;
-
-    .mat-dialog-container {
-        padding: 0;
-        margin: 0;
-        overflow: hidden;
-    }
-
-    [mat-dialog-title] {
-        background: mat-color(mat-palette($mat-primary, main));
-        color: map-get($mat-dark-theme-foreground, text);
-        padding: 10px;
-    }
-
-    mat-dialog-content {
-        margin: 0px;
-    }
-
-    mat-form-field {
-        display: block;
-    }
-
-    mat-dialog-actions {
-        margin: 0px;
-        padding: 10px;
-    }
+mat-icon {
+    height: 20px !important;
+    width: 20px !important;
 }
 
 .mat-menu-content:not(:empty) {
@@ -69,20 +26,11 @@
     padding-bottom: 0px !important;
 }
 
-// .mat-toolbar {
-//     padding: 0 5px !important;
-// }
-
 .mat-toolbar-row {
     font-size: 18px !important;
     @include mat-elevation(5);
     height: 50px;
     padding: 2px !important;
-    button {
-        &:hover {
-            color: mat-color($accent);
-        }
-    }
 }
 
 .mat-toolbar-multiple-rows {
@@ -93,6 +41,29 @@
     margin: 0 0px !important;
 }
 
+mat-selection-list {
+    margin: 10px;
+    height: calc(100vh - 130px);
+}
+
+mat-list-option {
+    margin-top: 2px;
+
+    &:hover {
+        @include mat-elevation(8);
+
+        .favorite {
+            visibility: visible;
+        }
+
+        .mat-list-text {
+            section {
+                opacity: 1;
+            }
+        }
+    }
+}
+
 .flex {
     flex: 1;
 }
@@ -100,7 +71,7 @@
 body {
     overflow: hidden;
     margin: 0;
-    // zoom: 0.9;
+    //zoom: 0.9;
     font-family: sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

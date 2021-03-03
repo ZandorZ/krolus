@@ -1,0 +1,62 @@
+@mixin treex-theme($theme) {
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+
+    treex,
+    treex-item {
+        .items_count {
+            color: mat-color($accent);
+        }
+
+        mat-icon.folder {
+            color: map-get($foreground, base);
+        }
+
+        mat-list-item.selected {
+            background: map-get($background, selected-button);
+
+            .mat-list-text {
+                color: mat-color($accent);
+                section {
+                    opacity: 1;
+                }
+            }
+
+            opacity: 1 !important;
+
+            mat-icon.folder {
+                color: mat-color($accent);
+            }
+
+            span.label {
+                font-weight: bold;
+                color: mat-color($accent);
+            }
+        }
+
+        mat-list-item.loading {
+            color: mat-color($warn);
+        }
+
+        mat-list-item.dndDragover {
+            opacity: 1 !important;
+            background-color: mat-color($primary);
+
+            mat-icon.folder {
+                color: mat-color($warn);
+            }
+        }
+
+        mat-list-item {
+            &:hover {
+                mat-icon.folder,
+                span.label {
+                    color: mat-color($warn) !important;
+                }
+            }
+        }
+    }
+}
