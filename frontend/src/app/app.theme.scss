@@ -3,10 +3,12 @@
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
 
-    button {
-        &:hover {
+    button:hover:enabled {
+        color: mat-color($accent);
+        .mat-icon {
             color: mat-color($accent);
         }
+        background: map-get($background, hover) !important;
     }
 
     mat-list-option {
@@ -14,20 +16,35 @@
 
         &:hover {
             .mat-list-text {
-                color: mat-color($warn);
+                color: mat-color($accent);
             }
         }
     }
 
     .mat-list-single-selected-option {
-        @include mat-elevation-transition;
-        @include mat-elevation(3);
+        background: map-get($background, selected-button) !important;
+
         .mat-list-text {
             color: mat-color($accent);
             section {
                 opacity: 1;
             }
         }
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: map-get($background, base);
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: map-get($background, disabled-button);
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: map-get($background, selected-button);
     }
 }
 
@@ -108,7 +125,7 @@
 }
 
 @mixin custom-modal-theme($theme) {
-    $background: map-get($theme, background);
+    $primary: map-get($theme, primary);
     $foreground: map-get($theme, foreground);
 
     .custom-modalbox-directory {
@@ -130,7 +147,7 @@
         }
 
         [mat-dialog-title] {
-            background: map-get($background, card);
+            background: mat-color($primary);
             color: map-get($foreground, text);
             padding: 10px;
         }
@@ -141,6 +158,10 @@
 
         mat-form-field {
             display: block;
+        }
+
+        .mat-focused .mat-form-field-label {
+            color: mat-color($primary, lighter) !important;
         }
 
         mat-dialog-actions {

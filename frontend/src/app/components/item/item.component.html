@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <span style="height: 22px; margin-left: 10px;" [ngSwitch]="model?.Type">
+        <span style="height: 22px; margin-left: 10px; margin-right: 5px;" [ngSwitch]="model?.Type">
             <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
             <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
             <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
