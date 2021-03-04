@@ -23,6 +23,7 @@ type ItemManager interface {
 	AllPaginated(models.PaginatedRequest) (models.PaginatedItemCollection, error)
 	Get(string) (*models.ItemModel, error)
 	GetUpdate(string) (*models.ItemModel, error)
+	UpdateFavorite(string) error
 }
 
 // Manager ...

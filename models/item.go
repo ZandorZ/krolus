@@ -28,6 +28,7 @@ type ItemModel struct {
 	Saved            bool
 	New              bool
 	Embed            string
+	Favorite         bool
 }
 
 // ItemCollection collections of items

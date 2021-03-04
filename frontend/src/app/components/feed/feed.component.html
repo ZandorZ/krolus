@@ -21,7 +21,7 @@
 <div #scrollcont style="overflow-y: auto; height:calc(100vh - 100px); ">
 
     <app-timeline *ngIf="!typeGrid" [selected]="selected$ | async" (select)="onSelecItem($event)"
-        (selectSub)="onSelectLeaf($event)" [items]="items$ | async"></app-timeline>
+        (favorite)="onFavoriteItem($event)" (selectSub)="onSelectLeaf($event)" [items]="items$ | async"></app-timeline>
 
     <app-grid *ngIf="typeGrid" [selected]="selected$ | async" (select)="onSelecItem($event)"
         (selectSub)="onSelectLeaf($event)" [items]="items$ | async"></app-grid>

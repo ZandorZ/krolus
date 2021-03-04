@@ -34,5 +34,6 @@ type IMediaStore interface {
 // IItemStore ...
 type IItemStore interface {
 	FetchItem(string, bool) (models.ItemModel, error)
+	FavoriteItem(string) error
 	OpenItem(string) error
 }

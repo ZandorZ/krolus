@@ -13,5 +13,9 @@ export class ItemStore {
         return window.backend.ItemStore.FetchItem(id, isNew);
     }
 
+    async favoriteItem(id: string): Promise<void> {
+        //@ts-ignore
+        return window.backend.ItemStore.FavoriteItem(id);
+    }
 
 }

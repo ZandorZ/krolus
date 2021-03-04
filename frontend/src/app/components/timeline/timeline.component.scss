@@ -2,6 +2,27 @@
     padding-top: 0px !important;
 }
 
+mat-list-option {
+    margin-top: 2px;
+
+    &:hover {
+        .favorite {
+            visibility: visible;
+        }
+
+        .mat-list-text {
+            section {
+                opacity: 1 !important;
+            }
+        }
+    }
+}
+
+:host ::ng-deep .mat-list-text {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
 .flex {
     display: flex;
 }
@@ -57,12 +78,15 @@
     overflow: hidden;
     width: 230px;
 }
-.subLink {
-    &:hover {
-        text-decoration: underline;
-    }
+.subLink:hover {
+    text-decoration: underline;
 }
 
 .favorite {
+    color: orange !important;
+    opacity: 1 !important;
+}
+
+.hidden {
     visibility: hidden;
 }

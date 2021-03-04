@@ -12,6 +12,7 @@ export interface ItemModel {
     Type: string
     Thumbnail: string
     Embed: string
+    Favorite: boolean
 }
 
 export type ItemCollection = ItemModel[];

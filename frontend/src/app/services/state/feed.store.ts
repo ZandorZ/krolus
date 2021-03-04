@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from 'rxjs-observable-store';
 import { ItemCollection, ItemModel, PaginatedItemCollection, PaginatedRequest } from 'src/app/models/item.model'
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { isNode, TreexNode } from 'src/treex/model';
 
 

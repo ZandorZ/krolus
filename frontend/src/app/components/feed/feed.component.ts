@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
 import { FeedStore } from 'src/app/services/state/feed.store';
+import { ItemStore } from 'src/app/services/state/item.store';
 import { LeafModel, TreexNode } from 'src/treex/model';
 import { TreexStore } from 'src/treex/state/treex.store';
 
@@ -19,7 +20,7 @@ export class FeedComponent implements OnChanges {
     @Input()
     node: TreexNode;
 
-    typeGrid = true;
+    typeGrid = false;
 
     selected$: Observable<ItemModel>;
     label$: Observable<string>;
@@ -35,7 +36,7 @@ export class FeedComponent implements OnChanges {
     @ViewChild('paginator')
     paginator: MatPaginator;
 
-    constructor(private store: FeedStore, private treeStore: TreexStore) {
+    constructor(private store: FeedStore, private treeStore: TreexStore, private itemStore: ItemStore) {
         this.label$ = this.store.getLabel();
         this.items$ = this.store.getItems();
         this.total$ = this.store.getTotal();
@@ -61,6 +62,10 @@ export class FeedComponent implements OnChanges {
         this.request.Page = event.pageIndex;
         this.request.ItemsPerPage = event.pageSize;
         await this.loadMoreItems();
+    }
+
+    async onFavoriteItem(item: ItemModel) {
+        await this.itemStore.favoriteItem(item.ID);
     }
 
     onSelecItem(item: ItemModel) {

@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"krolus/models"
 
 	"github.com/timshannon/badgerhold/v3"
@@ -61,6 +62,7 @@ func (i *ItemManagerBH) AllPaginated(request models.PaginatedRequest) (models.Pa
 			Thumbnail:        item.Thumbnail,
 			Type:             item.Type,
 			New:              item.New,
+			Favorite:         item.Favorite,
 		})
 		return nil
 	}); err != nil {
@@ -104,4 +106,19 @@ func (i *ItemManagerBH) GetUpdate(itemID string) (*models.ItemModel, error) {
 	}
 
 	return item, tx.Commit()
+}
+
+// UpdateFavorite updates the favorite field
+func (i *ItemManagerBH) UpdateFavorite(itemID string) error {
+
+	return i.Store.UpdateMatching(&models.ItemModel{}, badgerhold.Where("ID").Eq(itemID), func(record interface{}) error {
+
+		update, ok := record.(*models.ItemModel) // record will always be a pointer
+		if !ok {
+			return fmt.Errorf("Record isn't the correct type!  Wanted *models.ItemModel, got %T", record)
+		}
+		update.Favorite = !update.Favorite
+
+		return nil
+	})
 }

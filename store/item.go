@@ -50,3 +50,8 @@ func (i *ItemStore) OpenItem(url string) error {
 	return browser.OpenURL(url)
 
 }
+
+// FavoriteItem ...
+func (i *ItemStore) FavoriteItem(id string) error {
+	return i.manager.Item.UpdateFavorite(id)
+}

@@ -22,6 +22,9 @@ export class TimelineComponent implements OnInit {
     @Output()
     selectSub: EventEmitter<LeafModel> = new EventEmitter();
 
+    @Output()
+    favorite: EventEmitter<ItemModel> = new EventEmitter();
+
 
     constructor() { }
 
@@ -37,6 +40,13 @@ export class TimelineComponent implements OnInit {
     onSelectSub(event: Event, sub: LeafModel) {
         event.stopPropagation();
         this.selectSub.emit(sub);
+    }
+
+    setFavorite(event: Event, item: ItemModel) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        this.favorite.emit(item);
+        item.Favorite = !item.Favorite;
     }
 
 }
