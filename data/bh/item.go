@@ -44,9 +44,19 @@ func (i *ItemManagerBH) AllPaginated(request models.PaginatedRequest) (models.Pa
 	var items models.ItemCollection
 	var paginate models.PaginatedItemCollection
 
-	q := badgerhold.Where("Subscription").
-		In(subIDs...).
-		Limit(request.ItemsPerPage).
+	crit := badgerhold.Where("Subscription").In(subIDs...)
+
+	// filters
+	if request.Filter != nil {
+		if request.Filter.Favorite != nil {
+			crit = crit.And("Favorite").Eq(*request.Filter.Favorite)
+		}
+		if request.Filter.New != nil {
+			crit = crit.And("New").Eq(*request.Filter.New)
+		}
+	}
+
+	q := crit.Limit(request.ItemsPerPage).
 		Skip(request.Page * request.ItemsPerPage).
 		SortBy("Published").
 		Reverse()
@@ -69,8 +79,7 @@ func (i *ItemManagerBH) AllPaginated(request models.PaginatedRequest) (models.Pa
 		return paginate, err
 	}
 
-	total, err := i.TxCount(tx, &models.ItemModel{},
-		badgerhold.Where("Subscription").In(subIDs...))
+	total, err := i.TxCount(tx, &models.ItemModel{}, crit)
 	if err != nil {
 		return paginate, err
 	}

@@ -1,6 +1,12 @@
 <mat-selection-list #shoes (selectionChange)="onChange($event)" [multiple]="false">
     <mat-list-option *ngFor="let item of items" [value]="item" [selected]="!!selected && item.ID == selected.ID">
         <section class="container flex" [ngClass]="{'new' : item.New}">
+            <div>
+                <button (click)="setFavorite($event, item)" mat-icon-button class="favorite"
+                    [ngClass]="{'hidden' : !item.Favorite}">
+                    <mat-icon>{{ item.Favorite ? "star": "star_outline"}}</mat-icon>
+                </button>
+            </div>
             <div class="shrink-3-basis">
                 <button mat-icon-button [ngSwitch]="item?.Type">
                     <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
@@ -18,11 +24,15 @@
             <div class="item flex-item-1">{{item.Title}}</div>
             <div class="item mat-caption">
                 {{item.Published | customDate}}
-                <button (click)="setFavorite($event, item)" mat-icon-button class="favorite"
-                    [ngClass]="{'hidden' : !item.Favorite}">
-                    <mat-icon>{{ item.Favorite ? "star": "star_outline"}}</mat-icon>
-                </button>
             </div>
         </section>
+        <div class="menu-container">
+            <button mat-icon-button>
+                <mat-icon>star</mat-icon>
+            </button>
+            <button mat-icon-button>
+                <mat-icon>home</mat-icon>
+            </button>
+        </div>
     </mat-list-option>
 </mat-selection-list>

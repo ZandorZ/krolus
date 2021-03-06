@@ -28,4 +28,15 @@ export interface PaginatedRequest {
     ItemsPerPage: number
     NodeID?: string
     LeafIDs?: string[]
+    Filter?: FilterRequest
+}
+
+export interface FilterRequest {
+    New?: boolean
+    Favorite?: boolean
+    Type?: string[]
+    Period?: {
+        Start?: Date
+        End?: Date
+    }
 }

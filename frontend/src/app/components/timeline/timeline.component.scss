@@ -6,7 +6,8 @@ mat-list-option {
     margin-top: 2px;
 
     &:hover {
-        .favorite {
+        .favorite,
+        .menu-container {
             visibility: visible;
         }
 
@@ -85,6 +86,13 @@ mat-list-option {
 .favorite {
     color: orange !important;
     opacity: 1 !important;
+}
+
+.menu-container {
+    float: right;
+    position: absolute;
+    right: 0px;
+    visibility: hidden;
 }
 
 .hidden {

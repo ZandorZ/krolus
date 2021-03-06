@@ -136,7 +136,12 @@
         min-width: 50%;
     }
 
+    .custom-modalbox-filter {
+        min-width: 35%;
+    }
+
     .custom-modalbox-directory,
+    .custom-modalbox-filter,
     .custom-modalbox-subscription {
         overflow: hidden;
 
@@ -150,6 +155,10 @@
             background: mat-color($primary);
             color: map-get($foreground, text);
             padding: 10px;
+            .mat-icon {
+                margin-right: 5px;
+                font-size: 20px;
+            }
         }
 
         mat-dialog-content {

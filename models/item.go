@@ -47,4 +47,11 @@ type PaginatedRequest struct {
 	ItemsPerPage int
 	NodeID       string
 	LeafIDs      []string
+	Filter       *FilterRequest
+}
+
+// FilterRequest ...
+type FilterRequest struct {
+	New      *bool
+	Favorite *bool
 }

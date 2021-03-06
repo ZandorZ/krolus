@@ -1,0 +1,19 @@
+.filter-item {
+    display: block;
+    margin: 5px;
+    border-bottom: gray 1px solid;
+    padding: 25px;
+}
+
+mat-radio-group {
+    text-align: right;
+}
+
+mat-slide-toggle {
+    width: 140px;
+}
+
+mat-radio-button {
+    margin-left: 20px;
+    width: 100px;
+}

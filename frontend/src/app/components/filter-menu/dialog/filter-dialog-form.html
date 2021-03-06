@@ -1,0 +1,50 @@
+<div mat-dialog-title>
+    <mat-icon>
+        filter_list
+    </mat-icon>
+    <span>Filter options</span>
+</div>
+<mat-dialog-content>
+
+    <span class="filter-item">
+        <mat-slide-toggle (change)="onChangeItem($event, 'New')" [(ngModel)]="newOption">
+            New
+        </mat-slide-toggle>
+        <mat-radio-group [disabled]="!newOption" [(ngModel)]="data.New">
+            <mat-radio-button [value]="true">Unseen</mat-radio-button>
+            <mat-radio-button [value]="false">Seen</mat-radio-button>
+        </mat-radio-group>
+    </span>
+
+    <span class="filter-item">
+        <mat-slide-toggle (change)="onChangeItem($event, 'Favorite')" [(ngModel)]="favoriteOption">
+            Favorite
+        </mat-slide-toggle>
+        <mat-radio-group [disabled]="!favoriteOption" [(ngModel)]="data.Favorite">
+            <mat-radio-button [value]="true">Yes</mat-radio-button>
+            <mat-radio-button [value]="false">Not</mat-radio-button>
+        </mat-radio-group>
+    </span>
+
+    <span class="filter-item">
+        <mat-slide-toggle>
+            Period
+        </mat-slide-toggle>
+
+    </span>
+
+    <span class="filter-item">
+        <mat-slide-toggle>
+            Type
+        </mat-slide-toggle>
+    </span>
+
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button tabindex="3" [mat-dialog-close]="data">
+        <mat-icon>check</mat-icon> OK
+    </button>
+    <button mat-raised-button (click)="onClear()" tabindex="4">
+        <mat-icon>clear</mat-icon> CLEAR
+    </button>
+</mat-dialog-actions>

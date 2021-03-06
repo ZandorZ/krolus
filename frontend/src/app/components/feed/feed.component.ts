@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
-import { ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
+import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
 import { FeedStore } from 'src/app/services/state/feed.store';
 import { ItemStore } from 'src/app/services/state/item.store';
 import { LeafModel, TreexNode } from 'src/treex/model';
@@ -66,6 +66,12 @@ export class FeedComponent implements OnChanges {
 
     async onFavoriteItem(item: ItemModel) {
         await this.itemStore.favoriteItem(item.ID);
+    }
+
+    async onChangeFilter(filter: FilterRequest) {
+        this.request.Filter = filter;
+        this.paginator.pageIndex = 0;
+        await this.loadMoreItems();
     }
 
     onSelecItem(item: ItemModel) {

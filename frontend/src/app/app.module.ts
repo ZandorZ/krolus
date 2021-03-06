@@ -3,12 +3,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatMenuModule } from '@angular/material/menu';
 import { TreexModule } from 'src/treex/treex.module';
 
 import { AppComponent } from './app.component';
@@ -29,6 +32,8 @@ import { LeafDialogFormComponent } from './components/leaf-dialog-form/leaf-dial
 import { GridComponent } from './components/grid/grid.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { CustomDatePipe } from './pipes/custom-date.pipe';
+import { FilterMenuComponent } from './components/filter-menu/filter-menu.component';
+import { FilterDialogFormComponent } from './components/filter-menu/dialog/filter-dialog-form';
 
 
 @NgModule({
@@ -41,9 +46,11 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
         IframePlayerComponent,
         NodeDialogFormComponent,
         LeafDialogFormComponent,
+        FilterDialogFormComponent,
         GridComponent,
         ConfirmDialogComponent,
         CustomDatePipe,
+        FilterMenuComponent,
     ],
     imports: [
         BrowserModule,
@@ -54,8 +61,11 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
         MatIconModule,
         MatTooltipModule,
         MatDialogModule,
+        MatMenuModule,
         MatButtonModule,
         MatCardModule,
+        MatRadioModule,
+        MatSlideToggleModule,
         MatToolbarModule,
         MatInputModule,
         MatProgressBarModule,

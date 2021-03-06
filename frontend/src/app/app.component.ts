@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.document.body.classList.add('light-theme');
+        this.document.body.classList.add('dark-theme');
     }
 
     onCloseItem() {
