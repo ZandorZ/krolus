@@ -44,24 +44,27 @@ func (i *ItemManagerBH) AllPaginated(request models.PaginatedRequest) (models.Pa
 	var items models.ItemCollection
 	var paginate models.PaginatedItemCollection
 
-	crit := badgerhold.Where("Subscription").In(subIDs...)
+	q1 := badgerhold.Where("Subscription").In(subIDs...)
+	q2 := badgerhold.Where("Subscription").In(subIDs...)
 
 	// filters
 	if request.Filter != nil {
 		if request.Filter.Favorite != nil {
-			crit = crit.And("Favorite").Eq(*request.Filter.Favorite)
+			q1.And("Favorite").Eq(*request.Filter.Favorite)
+			q2.And("Favorite").Eq(*request.Filter.Favorite)
 		}
 		if request.Filter.New != nil {
-			crit = crit.And("New").Eq(*request.Filter.New)
+			q1.And("New").Eq(*request.Filter.New)
+			q2.And("New").Eq(*request.Filter.New)
 		}
 	}
 
-	q := crit.Limit(request.ItemsPerPage).
+	q1.Limit(request.ItemsPerPage).
 		Skip(request.Page * request.ItemsPerPage).
 		SortBy("Published").
 		Reverse()
 
-	if err := i.TxForEach(tx, q, func(item *models.ItemModel) error {
+	if err := i.TxForEach(tx, q1, func(item *models.ItemModel) error {
 		// not all fields
 		items = append(items, models.ItemModel{
 			ID:               item.ID,
@@ -79,7 +82,7 @@ func (i *ItemManagerBH) AllPaginated(request models.PaginatedRequest) (models.Pa
 		return paginate, err
 	}
 
-	total, err := i.TxCount(tx, &models.ItemModel{}, crit)
+	total, err := i.TxCount(tx, &models.ItemModel{}, q2)
 	if err != nil {
 		return paginate, err
 	}

@@ -70,6 +70,7 @@ export class FeedComponent implements OnChanges {
 
     async onChangeFilter(filter: FilterRequest) {
         this.request.Filter = filter;
+        this.request.Page = 0;
         this.paginator.pageIndex = 0;
         await this.loadMoreItems();
     }
