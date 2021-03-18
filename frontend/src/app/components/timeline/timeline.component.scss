@@ -24,6 +24,12 @@ mat-list-option {
     padding-right: 0px !important;
 }
 
+:host ::ng-deep .mat-list-base .mat-list-item .mat-list-item-content-reverse,
+.mat-list-base .mat-list-option .mat-list-item-content-reverse {
+    padding-left: 0px !important;
+    padding-right: 16px !important;
+}
+
 .flex {
     display: flex;
 }
