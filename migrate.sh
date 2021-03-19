@@ -1,5 +1,5 @@
 #!/bin/sh
-rm ./db/* -Rf
+rm ~/.krolus/dev/* -Rf
 cd ./migrations
 rm migrations
 go build

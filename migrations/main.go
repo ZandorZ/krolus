@@ -8,18 +8,24 @@ import (
 	"krolus/treex/models"
 	"krolus/treex/persistence"
 	"log"
+	"os/user"
 
 	"github.com/gilliek/go-opml/opml"
 	"github.com/hokaccha/go-prettyjson"
 )
 
-const (
-	pathDB = "../db"
-)
-
 var manager *data.Manager
 
+var pathDB = ".krolus"
+
 func init() {
+
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	pathDB = usr.HomeDir + "/" + pathDB + "/dev"
+
 	manager = db.NewManager(pathDB)
 }
 

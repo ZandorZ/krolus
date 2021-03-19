@@ -20,15 +20,19 @@ const (
 	interval   = 30 * time.Minute
 )
 
-var pathDB = "./db"
+var pathDB = ".krolus"
 
 func init() {
-	if production {
-		usr, err := user.Current()
-		if err != nil {
-			panic(err)
-		}
-		pathDB = usr.HomeDir + "/.krolus/db"
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+	//TODO: Fix this, use system paths
+	pathDB = usr.HomeDir + "/" + pathDB
+	if !production {
+		pathDB += "/dev"
+	} else {
+		pathDB += "/db"
 	}
 }
 
