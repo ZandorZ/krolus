@@ -1,18 +1,23 @@
 <mat-sidenav-container>
-    <mat-sidenav #drawer mode="side" opened="true" role="navigation">
+    <mat-sidenav #drawer mode="side" role="navigation" [(opened)]="opened">
         <treex [selected]="selected$ | async" [loading]="loading$ | async" [dragged]="dragged$ | async"></treex>
     </mat-sidenav>
-    <mat-sidenav-content fixedInViewport="true">
 
-        <mat-drawer-container [hasBackdrop]="false">
+    <mat-sidenav-content>
+
+        <mat-drawer-container [hasBackdrop]="false" [autosize]="true">
+
+            <mat-drawer-content>
+                <app-feed [node]="selected$ | async" (hidemenu)="onToggleMenu($event)"></app-feed>
+            </mat-drawer-content>
+
             <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">
                 <app-item *ngIf="!!item" [model]="item" (close)="onCloseItem()" (open)="onOpenURL($event)">
                 </app-item>
             </mat-drawer>
-            <mat-drawer-content>
-                <app-feed [node]="selected$ | async"></app-feed>
-            </mat-drawer-content>
+
         </mat-drawer-container>
 
     </mat-sidenav-content>
+
 </mat-sidenav-container>

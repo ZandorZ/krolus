@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
@@ -16,6 +16,10 @@ export class FeedComponent implements OnChanges {
 
     @ViewChild('scrollcont') private myScrollContainer: ElementRef;
 
+
+    @Output() hidemenu: EventEmitter<boolean>;
+
+    hiddenmenu = false;
 
     @Input()
     node: TreexNode;
@@ -41,6 +45,12 @@ export class FeedComponent implements OnChanges {
         this.items$ = this.store.getItems();
         this.total$ = this.store.getTotal();
         this.selected$ = this.store.getSelected();
+        this.hidemenu = new EventEmitter();
+    }
+
+    toggleHideMenu() {
+        this.hiddenmenu = !this.hiddenmenu;
+        this.hidemenu.emit(this.hiddenmenu);
     }
 
     async ngOnChanges(changes: SimpleChanges) {

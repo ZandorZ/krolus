@@ -1,16 +1,20 @@
+mat-sidenav-container {
+    width: 100% !important;
+}
 mat-sidenav {
-    width: 15%;
+    width: 20%;
     height: 100%;
 }
 
 mat-sidenav-content {
+    min-width: 80% !important;
+    max-width: 100% !important;
     height: 100vh;
     overflow: hidden;
-    max-width: 100%;
 }
 
 mat-drawer {
-    width: 45%;
+    width: 40%;
     height: 100vh;
     overflow: hidden;
 }
@@ -22,5 +26,7 @@ mat-drawer-container {
 }
 
 mat-drawer-content {
+    min-width: 60% !important;
+    max-width: 100% !important;
     overflow: hidden;
 }

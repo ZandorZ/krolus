@@ -1,13 +1,20 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
+        <button mat-icon-button (click)="toggleHideMenu()"
+            [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">
+            <mat-icon>{{hiddenmenu ? 'menu' : 'chevron_left'}} </mat-icon>
+        </button>
         <span class="title"> {{label$ | async}} </span>
         <span class="flex"></span>
         <span class="buttons">
-            <button mat-icon-button>
+            <button mat-icon-button matTooltip="Search text" matTooltipPosition="below">
                 <mat-icon>search</mat-icon>
             </button>
+            <button mat-icon-button matTooltip="Mark all as read" matTooltipPosition="below">
+                <mat-icon>done_all</mat-icon>
+            </button>
             <app-filter-menu (filter)="onChangeFilter($event)"></app-filter-menu>
-            <button mat-icon-button (click)="typeGrid = !typeGrid">
+            <button mat-icon-button (click)="typeGrid = !typeGrid" matTooltip="Change view" matTooltipPosition="below">
                 <mat-icon *ngIf="!typeGrid">apps</mat-icon>
                 <mat-icon *ngIf="typeGrid">list</mat-icon>
             </button>

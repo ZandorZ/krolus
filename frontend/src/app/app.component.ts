@@ -15,6 +15,8 @@ import { ItemStore } from './services/state/item.store';
 })
 export class AppComponent implements OnInit {
 
+    opened = true;
+
     loading$: Observable<LoadingDictionary>;
     selected$: Observable<TreexNode>;
     isSelected$: Observable<boolean>;
@@ -45,6 +47,10 @@ export class AppComponent implements OnInit {
     onCloseItem() {
         this.item = undefined;
         this.feedStore.unSelectItem();
+    }
+
+    onToggleMenu(hidden: boolean) {
+        this.opened = !hidden;
     }
 
     async onOpenURL(url: string) {
