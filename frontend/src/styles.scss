@@ -36,11 +36,6 @@
     margin: 0 0px !important;
 }
 
-mat-selection-list {
-    margin: 10px;
-    height: calc(100vh - 130px);
-}
-
 .mat-tooltip {
     font-size: 14px !important;
 }
@@ -52,11 +47,24 @@ mat-selection-list {
 body {
     overflow: hidden;
     margin: 0;
-    // zoom: 0.9;
+    zoom: 0.8;
     font-family: "Noto Sans";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-smooth: always;
     font-smooth: 2em;
     background-color: #393939;
+}
+
+html {
+    position: initial !important;
+    overflow-y: initial !important;
+}
+
+html.cdk-global-scrollblock body {
+    overflow: hidden;
+}
+
+.cdk-overlay-container {
+    overflow: hidden;
 }

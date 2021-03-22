@@ -1,7 +1,24 @@
 @mixin app-theme($theme) {
     $background: map-get($theme, background);
     $accent: map-get($theme, accent);
+    $primary: map-get($theme, primary);
     $warn: map-get($theme, warn);
+
+    app-feed {
+        .mat-toolbar {
+            background: map-get($primary, darker);
+        }
+    }
+
+    app-item {
+        .mat-toolbar {
+            background: map-get($background, card);
+            .title,
+            .item-icon mat-icon {
+                color: mat-color($accent) !important;
+            }
+        }
+    }
 
     button:hover:enabled {
         color: mat-color($accent);
@@ -42,7 +59,7 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-        background: map-get($background, base);
+        background: map-get($background, disabled-button);
     }
 
     /* Handle */
@@ -159,8 +176,7 @@
         }
 
         [mat-dialog-title] {
-            background: mat-color($primary);
-            color: white;
+            background: mat-color($primary, darker);
             padding: 10px;
             .mat-icon {
                 margin-right: 5px;

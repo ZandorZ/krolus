@@ -2,15 +2,16 @@ mat-toolbar {
     position: absolute;
 }
 
-mat-toolbar-row {
-    .buttons {
-        visibility: hidden;
-    }
-
+:host {
     &:hover {
         .buttons {
-            visibility: visible;
+            display: inherit;
         }
+    }
+}
+mat-toolbar-row {
+    .buttons {
+        display: none;
     }
 
     .flex-container {

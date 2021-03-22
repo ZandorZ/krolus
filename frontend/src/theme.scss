@@ -34,8 +34,8 @@ $fontConfig: (
 // // Compute font config
 @include mat-core($fontConfig);
 
-$dark-primary: mat-palette($mat-blue-grey, 700, 200, 900);
-$dark-accent: mat-palette($mat-orange, 800);
+$dark-primary: mat-palette($mat-teal, 300, 200, 900);
+$dark-accent: mat-palette($mat-orange, 800, 300, 900);
 $dark-warn: mat-palette($mat-red, A200);
 
 $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
@@ -45,8 +45,11 @@ body.dark-theme {
 
     @include components-theme($dark-theme);
 
+    a:-webkit-any-link:hover {
+        color: mat-color($dark-primary);
+    }
     a:-webkit-any-link {
-        color: cyan;
+        color: mat-color($dark-primary, lighter);
     }
 }
 
@@ -72,7 +75,7 @@ body.light-theme {
 ////////////////////
 
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 16px;
 }
 
 a:-webkit-any-link {

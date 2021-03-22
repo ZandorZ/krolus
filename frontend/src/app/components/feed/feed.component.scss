@@ -14,3 +14,20 @@
     height: 50px;
     display: block;
 }
+
+.scroll-container {
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+}
+
+:host {
+    &:hover {
+        .buttons {
+            display: inherit;
+        }
+    }
+}
+
+.buttons {
+    display: none;
+}

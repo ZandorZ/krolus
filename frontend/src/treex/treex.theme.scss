@@ -7,6 +7,12 @@
 
     treex,
     treex-item {
+        .mat-toolbar {
+            background: mat-color($background, base);
+            color: mat-color($primary, lighter);
+            opacity: 0.7;
+        }
+
         .items_count {
             color: mat-color($accent);
         }

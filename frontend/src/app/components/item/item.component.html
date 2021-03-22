@@ -1,57 +1,57 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <span style="height: 22px; margin-left: 10px; margin-right: 5px;" [ngSwitch]="model?.Type">
-            <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
-            <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
-            <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
-        </span>
-        <span class="title" [innerHTML]="model?.Title"></span>
+<div id="item-container">
+    <mat-toolbar>
+        <mat-toolbar-row>
+            <span class="item-icon" [ngSwitch]="model?.Type">
+                <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
+                <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
+                <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
+            </span>
+            <span class="title" [innerHTML]="model?.Title"></span>
 
-        <span class="flex"></span>
+            <span class="flex"></span>
 
-        <span class="buttons">
-            <button mat-icon-button (click)="openLink()" matTooltip="Open link in new window"
-                matTooltipPosition="below">
-                <mat-icon>open_in_new</mat-icon>
-            </button>
-            <button mat-icon-button (click)="donwloadItem()" matTooltip="Download content" matTooltipPosition="below">
-                <mat-icon>download</mat-icon>
-            </button>
-            <button mat-icon-button (click)="close.emit()">
-                <mat-icon>close</mat-icon>
-            </button>
-        </span>
-    </mat-toolbar-row>
+            <span class="item-buttons">
+                <button mat-icon-button (click)="openLink()" matTooltip="Open link in new window"
+                    matTooltipPosition="above">
+                    <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button mat-icon-button (click)="donwloadItem()" matTooltip="Download content"
+                    matTooltipPosition="above">
+                    <mat-icon>download</mat-icon>
+                </button>
+                <button mat-icon-button (click)="close.emit()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </span>
+        </mat-toolbar-row>
 
-</mat-toolbar>
+    </mat-toolbar>
 
 
-<div id="main">
+    <div id="main">
 
-    <!-- videos -->
+        <!-- videos -->
 
-    <div *ngIf="model?.Type == 'video'" style="height: 50%;">
-        <app-iframe-player [url]="model?.Embed">
-        </app-iframe-player>
-    </div>
-
-    <!-- description -->
-    <div *ngIf="model?.Type == 'video'" style="height: 50%; overflow: auto;" class="description mat-body-1">
-        <div *ngIf="model?.Provider == 'youtube' || model?.Provider == 'bitchute'" [innerText]="model?.Description">
+        <div *ngIf="model?.Type == 'video'" style="height: 50%;">
+            <app-iframe-player [url]="model?.Embed">
+            </app-iframe-player>
         </div>
-        <div *ngIf="model?.Provider == 'lbry' || model?.Provider == 'reddit'" [innerHTML]="model?.Description"></div>
+
+        <!-- description -->
+        <div *ngIf="model?.Type == 'video'" style="height: 48%; overflow: auto;" class="description mat-body-1">
+            <div *ngIf="model?.Provider == 'youtube' || model?.Provider == 'bitchute'" [innerText]="model?.Description">
+            </div>
+            <div *ngIf="model?.Provider == 'lbry' || model?.Provider == 'reddit'" [innerHTML]="model?.Description">
+            </div>
+        </div>
+
+
+        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && content" [innerHTML]="content">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && model?.Description"
+            [innerHTML]="model?.Description">
+        </div>
+
     </div>
-
-
-    <div class="content mat-body-1" *ngIf="model?.Type != 'video' && content" [innerHTML]="content">
-    </div>
-
-    <div class="content mat-body-1" *ngIf="model?.Type != 'video' && model?.Description"
-        [innerHTML]="model?.Description">
-    </div>
-
 </div>
-
-
-
-<!-- bla bla bla -->
