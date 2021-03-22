@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
@@ -10,7 +10,8 @@ import { TreexStore } from 'src/treex/state/treex.store';
 @Component({
     selector: 'app-feed',
     templateUrl: './feed.component.html',
-    styleUrls: ['./feed.component.scss']
+    styleUrls: ['./feed.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedComponent implements OnChanges {
 

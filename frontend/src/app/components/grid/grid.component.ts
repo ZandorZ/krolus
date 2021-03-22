@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ItemCollection, ItemModel } from 'src/app/models/item.model';
 import { LeafModel } from 'src/treex/model';
 
 @Component({
     selector: 'app-grid',
     templateUrl: './grid.component.html',
-    styleUrls: ['./grid.component.scss']
+    styleUrls: ['./grid.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GridComponent implements OnInit {
     @Input()

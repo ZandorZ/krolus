@@ -1,4 +1,4 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
     <mat-toolbar-row>
         <button mat-icon-button (click)="toggleHideMenu()"
             [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">
@@ -23,7 +23,7 @@
 
 </mat-toolbar>
 
-<div #scrollcont style="overflow-y: auto; height:calc(100vh - 100px); ">
+<div #scrollcont class="scroll-container">
 
     <app-timeline *ngIf="!typeGrid" [selected]="selected$ | async" (select)="onSelecItem($event)"
         (favorite)="onFavoriteItem($event)" (selectSub)="onSelectLeaf($event)" [items]="items$ | async"></app-timeline>

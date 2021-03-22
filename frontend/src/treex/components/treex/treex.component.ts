@@ -3,6 +3,9 @@ import { TreexStore } from 'src/treex/state/treex.store';
 import { isDescendent, isNode, LeafModel, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { DndDropEvent } from 'ngx-drag-drop';
 import { filter } from 'rxjs/operators';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LeafDialogFormComponent } from 'src/app/components/leaf-dialog-form/leaf-dialog-form.component';
+import { NodeDialogFormComponent } from 'src/app/components/node-dialog-form/node-dialog-form.component';
 
 
 @Component({
@@ -21,7 +24,7 @@ export class TreexComponent implements OnInit {
     @Input() loading: LoadingDictionary;
 
 
-    constructor(public store: TreexStore, private cd: ChangeDetectorRef) { }
+    constructor(public store: TreexStore, private dialog: MatDialog, private cd: ChangeDetectorRef) { }
 
     async ngOnInit() {
         // root
@@ -147,58 +150,58 @@ export class TreexComponent implements OnInit {
     //TODO: decouple
     async showNodeDialogForm(isNew: boolean) {
 
-        //     let options: MatDialogConfig<NodeModel> = {
-        //         disableClose: true,
-        //         panelClass: 'custom-modalbox-directory',
-        //     };
+        let options: MatDialogConfig<NodeModel> = {
+            disableClose: true,
+            panelClass: 'custom-modalbox-directory',
+        };
 
-        //     if (!isNew) {
-        //         options.data = { ...this.model };
-        //     }
+        if (!isNew) {
+            options.data = { ...this.model };
+        }
 
-        //     const data = await this.dialog
-        //         .open(NodeDialogFormComponent, options)
-        //         .afterClosed()
-        //         .toPromise();
+        const data = await this.dialog
+            .open(NodeDialogFormComponent, options)
+            .afterClosed()
+            .toPromise();
 
 
-        //     if (!!data) {
-        //         if (!!data.id) {
-        //             await this.store.editNode(data as NodeModel);
-        //         } else {
-        //             await this.store.addNode(data as NodeModel, this.model.id);
-        //         }
-        //     }
+        if (!!data) {
+            if (!!data.id) {
+                await this.store.editNode(data as NodeModel);
+            } else {
+                await this.store.addNode(data as NodeModel, this.model.id);
+            }
+        }
 
     }
 
     // //TODO: decouple
     async showLeafDialogForm(leaf?: LeafModel) {
 
-        //     let options: MatDialogConfig<LeafModel> = {
-        //         disableClose: true,
-        //         panelClass: 'custom-modalbox-subscription',
-        //     };
+        let options: MatDialogConfig<LeafModel> = {
+            disableClose: true,
+            panelClass: 'custom-modalbox-subscription',
+        };
 
-        //     if (leaf) {
-        //         //TODO: decouple
-        //         //@ts-ignore 
-        //         const sub = await window.backend.FeedStore.GetSub(leaf.id);
-        //         options.data = { ...sub };
-        //     }
+        if (leaf) {
+            //TODO: decouple
+            //@ts-ignore 
+            const sub = await window.backend.FeedStore.GetSub(leaf.id);
+            options.data = { ...sub };
+        }
 
-        //     const data = await this.dialog
-        //         .open(LeafDialogFormComponent, options)
-        //         .afterClosed()
-        //         .toPromise();
+        const data = await this.dialog
+            .open(LeafDialogFormComponent, options)
+            .afterClosed()
+            .toPromise();
 
-        //     if (!!data) {
-        //         if (!!data.ID) {
-        //             await this.store.editNode(data);
-        //         } else {
-        //             await this.store.addNode(data, this.model.id);
-        //         }
-        //     }
+        if (!!data) {
+            if (!!data.ID) {
+                await this.store.editNode(data);
+            } else {
+                await this.store.addNode(data, this.model.id);
+            }
+        }
     }
 
 }

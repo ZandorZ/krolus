@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatSelectionListChange } from '@angular/material/list';
 import { ItemCollection, ItemModel } from 'src/app/models/item.model';
 import { LeafModel } from 'src/treex/model';
@@ -6,7 +6,9 @@ import { LeafModel } from 'src/treex/model';
 @Component({
     selector: 'app-timeline',
     templateUrl: './timeline.component.html',
-    styleUrls: ['./timeline.component.scss']
+    styleUrls: ['./timeline.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class TimelineComponent implements OnInit {
 
