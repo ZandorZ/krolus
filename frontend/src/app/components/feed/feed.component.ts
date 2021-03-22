@@ -22,6 +22,8 @@ export class FeedComponent implements OnChanges {
 
     hiddenmenu = false;
 
+    pageSize = 40;
+
     @Input()
     node: TreexNode;
 
@@ -32,7 +34,7 @@ export class FeedComponent implements OnChanges {
     items$: Observable<ItemCollection>;
     total$: Observable<number>;
     request: PaginatedRequest = {
-        ItemsPerPage: 30,
+        ItemsPerPage: this.pageSize,
         Page: 0,
         LeafIDs: [],
         NodeID: "",
@@ -72,6 +74,14 @@ export class FeedComponent implements OnChanges {
     async onChangePage(event: PageEvent) {
         this.request.Page = event.pageIndex;
         this.request.ItemsPerPage = event.pageSize;
+        await this.loadMoreItems();
+    }
+
+    async onChangePageSize(pageSize: number) {
+        this.request.Page = 0;
+        this.request.ItemsPerPage = pageSize;
+        this.pageSize = pageSize;
+        this.paginator.pageIndex = 0;
         await this.loadMoreItems();
     }
 

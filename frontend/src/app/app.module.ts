@@ -34,6 +34,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { FilterMenuComponent } from './components/filter-menu/filter-menu.component';
 import { FilterDialogFormComponent } from './components/filter-menu/dialog/filter-dialog-form';
+import { PagesizeComponent } from './components/pagesize/pagesize.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import { FilterDialogFormComponent } from './components/filter-menu/dialog/filte
         ConfirmDialogComponent,
         CustomDatePipe,
         FilterMenuComponent,
+        PagesizeComponent,
     ],
     imports: [
         BrowserModule,

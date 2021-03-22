@@ -1,0 +1,8 @@
+<span [ngClass]="{'disabled': disabled}" class="mat-caption">Items per page:</span>
+<button mat-icon-button (click)="minus()" [disabled]="disabled">
+    <mat-icon>remove</mat-icon>
+</button>
+<span [ngClass]="{'disabled': disabled}" class="mat-caption">{{counter}}</span>
+<button mat-icon-button (click)="add()" [disabled]="disabled">
+    <mat-icon>add</mat-icon>
+</button>

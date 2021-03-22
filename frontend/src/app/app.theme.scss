@@ -6,7 +6,11 @@
 
     app-feed {
         .mat-toolbar {
-            background: map-get($primary, darker);
+            background: mat-color($primary, darker);
+        }
+        .bottom,
+        .mat-paginator {
+            background: mat-color($background, card) !important;
         }
     }
 
