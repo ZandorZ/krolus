@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { isDescendent, isNode, LeafModel, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { DndDropEvent } from 'ngx-drag-drop';
@@ -14,7 +14,11 @@ import { NodeDialogFormComponent } from 'src/app/components/node-dialog-form/nod
     styleUrls: ['./treex.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TreexComponent implements OnInit, OnChanges {
+export class TreexComponent implements OnInit, OnDestroy, AfterViewInit {
+
+    // @ContentChildren(TreexComponent) subTrees: QueryList<TreexComponent>
+    @ViewChildren(TreexComponent) subTrees: QueryList<TreexComponent>;
+
 
     @Input() path = "";
     @Input() depth = 0;
@@ -28,15 +32,53 @@ export class TreexComponent implements OnInit, OnChanges {
 
     constructor(private el: ElementRef, public store: TreexStore, private dialog: MatDialog, private cd: ChangeDetectorRef) { }
 
-
-    ngOnChanges(changes: SimpleChanges): void {
-        setTimeout(() => {
-            this.myHeight = this.el.nativeElement.offsetHeight;
-            this.cd.detectChanges()
-        }, 100);
+    ngOnDestroy(): void {
+        // console.log('Destroyed:', this.model.label);
     }
 
+    ngAfterViewInit() {
+
+        if (!!this.model) {
+            const hasNodes = !!this.model.children && this.model.children.length > 0;
+            const hasLeaves = !!this.model.leaves && this.model.leaves.length > 0;
+
+            if (hasLeaves) {
+                this.myHeight = this.el.nativeElement.offsetHeight;
+                this.myHeight -= 39;
+                this.cd.detectChanges();
+            }
+
+            //only nodes
+            if (!hasLeaves && hasNodes) {
+                this.myHeight = this.el.nativeElement.offsetHeight;
+                this.myHeight -= this.subTrees.last.el.nativeElement.offsetHeight + 4;
+                this.cd.detectChanges();
+            }
+        }
+
+    }
+
+
+    private adjustLineHeight() {
+
+        const hasNodes = !!this.model.children && this.model.children.length > 0;
+        const hasLeaves = !!this.model.leaves && this.model.leaves.length > 0;
+
+        //only nodes
+        if (!hasLeaves && hasNodes) {
+            this.cd.detectChanges();
+            console.log('!hasLeaves && hasNodes', this.model.label)
+            console.log(this.subTrees);
+        }
+
+
+
+    }
+
+
+
     async ngOnInit() {
+
         // root
         if (this.model == undefined && this.depth == 0) {
             this.store

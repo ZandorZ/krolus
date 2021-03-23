@@ -27,8 +27,9 @@
         <mat-icon>drag_indicator</mat-icon>
     </button>
 
-    <span class="line" *ngIf="model?.children || model?.leaves"
-        [ngStyle]="{'left': (depth  * 22) + 17 + 'px', 'height': (myHeight - 39) + 'px', 'z-index': depth * 10}"
+    <span class="line"
+        *ngIf="(model?.children || model?.leaves) && (model?.children.length > 0 || model?.leaves.length > 0)"
+        [ngStyle]="{'left': (depth  * 22) + 17 + 'px', 'height': myHeight + 'px', 'z-index': depth * 10}"
         style="border: white 1px solid; position: absolute; top: 20px; opacity: 0.4"></span>
 
     <span [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
