@@ -4,6 +4,10 @@ mat-toolbar {
 
 :host {
     &:hover {
+        .mat-toolbar {
+            opacity: 1 !important;
+        }
+
         .buttons {
             display: inherit;
         }
