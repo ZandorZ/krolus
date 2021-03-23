@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { isDescendent, isNode, LeafModel, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { DndDropEvent } from 'ngx-drag-drop';
@@ -14,7 +14,7 @@ import { NodeDialogFormComponent } from 'src/app/components/node-dialog-form/nod
     styleUrls: ['./treex.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TreexComponent implements OnInit {
+export class TreexComponent implements OnInit, OnChanges {
 
     @Input() path = "";
     @Input() depth = 0;
@@ -24,7 +24,17 @@ export class TreexComponent implements OnInit {
     @Input() loading: LoadingDictionary;
 
 
-    constructor(public store: TreexStore, private dialog: MatDialog, private cd: ChangeDetectorRef) { }
+    myHeight: any;
+
+    constructor(private el: ElementRef, public store: TreexStore, private dialog: MatDialog, private cd: ChangeDetectorRef) { }
+
+
+    ngOnChanges(changes: SimpleChanges): void {
+        setTimeout(() => {
+            this.myHeight = this.el.nativeElement.offsetHeight;
+            this.cd.detectChanges()
+        }, 100);
+    }
 
     async ngOnInit() {
         // root

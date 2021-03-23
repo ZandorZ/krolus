@@ -27,10 +27,16 @@
         <mat-icon>drag_indicator</mat-icon>
     </button>
 
-    <span *ngFor="let item of [].constructor(depth-1); let i = index" [ngStyle]="{'width':  '24px'}"></span>
-    <!-- <span [ngStyle]="{'width': ((depth - 1) * 24) + 'px'}"></span> -->
+    <span class="line" *ngIf="model?.children || model?.leaves"
+        [ngStyle]="{'left': (depth  * 22) + 17 + 'px', 'height': (myHeight - 39) + 'px', 'z-index': depth * 10}"
+        style="border: white 1px solid; position: absolute; top: 20px; opacity: 0.4"></span>
 
-    <div style="width: 32px;">
+    <span [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
+
+    <span *ngIf="depth > 1" [ngStyle]="{'left': ((depth * 22) - 4) + 'px', 'z-index':depth * 10}"
+        style="position:absolute; width: 14px; border: white 1px solid; opacity: 0.4;"></span>
+
+    <div style="width: 32px" [ngStyle]="{'z-index': (depth * 10) + 1}">
         <button mat-icon-button *ngIf="isExpansable() && !isLoading()" (click)="expand($event)">
             <mat-icon>{{ model?.children ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}}</mat-icon>
         </button>

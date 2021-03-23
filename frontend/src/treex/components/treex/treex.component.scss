@@ -65,6 +65,11 @@ mat-icon.folder {
     &:hover {
         opacity: 1 !important;
 
+        .line {
+            opacity: 1 !important;
+            border: red 1px solid !important;
+        }
+
         .items_count {
             display: none;
         }
@@ -120,3 +125,8 @@ mat-icon.folder {
 .flex-container {
     flex: 1;
 }
+
+// .mat-list-item .line {
+//     border: red 1px solid !important;
+//     display: block;
+// }

@@ -5,10 +5,11 @@
         <mat-icon>drag_indicator</mat-icon>
     </button>
 
-    <span *ngFor="let item of [].constructor(depth-1); let i = index" [ngStyle]="{'width':  '24px'}"></span>
+    <span style="margin-left: 32px" [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
 
-    <div style="width: 32px;">
-    </div>
+    <span class="line" [ngStyle]="{'left': ((depth * 22) - 4) + 'px'}"
+        style="position:absolute; width: 20px; border: white 1px solid; opacity: 0.4"></span>
+
     <mat-icon class="folder" dndDragImageRef>{{model.icon ?
         model.icon: 'rss_feed'}}
     </mat-icon>
