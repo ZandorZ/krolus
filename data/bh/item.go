@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"krolus/models"
 
+	"github.com/google/uuid"
 	"github.com/timshannon/badgerhold/v3"
 )
 
@@ -14,6 +15,8 @@ type ItemManagerBH struct {
 
 // Add saves an item
 func (i *ItemManagerBH) Add(item *models.ItemModel) error {
+	//overide ID
+	item.ID = uuid.New().String()
 	return i.Insert(item.ID, item)
 }
 
@@ -25,6 +28,8 @@ func (i *ItemManagerBH) AddInBatch(subBatch models.SubscriptionItemsMap) error {
 
 	for sub, items := range subBatch {
 		for _, item := range *items {
+			//overide ID
+			item.ID = uuid.New().String()
 			i.TxInsert(tx, item.ID, item)
 		}
 		// Update sub
