@@ -7,9 +7,8 @@
         <outline text="Music" title="Music">
             <outline text="Progresive Metal" title="Reddit/r/ProgresiveMetal" type="rss" xmlUrl="https://www.reddit.com/r/progressivemetal.rss" htmlUrl="https://www.reddit.com/r/progressivemetal" />
         </outline>
-        <outline text="Tech" title="Tech">
-            <outline text="Lunduke on Tech" title="Lunduke on Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/tv/Lunduke" htmlUrl="https://lbry.tv/@Lunduke:e" />
-            <outline text="Rob Braxman Tech" title="Rob Braxman Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/tv/RobBraxmanTech" htmlUrl="https://lbry.tv/@RobBraxmanTech:6" />
+        <outline text="Tech" title="Tech">            
+            <outline text="Rob Braxman Tech" title="Rob Braxman Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/RobBraxmanTech" htmlUrl="https://odysee.com/@RobBraxmanTech:6" />
             <outline text="HackerNews" title="HackerNews" type="rss" xmlUrl="https://news.ycombinator.com/rss" htmlUrl="https://news.ycombinator.com/" />
             <outline text="Luke Smith" title="Luke Smith" type="rss" xmlUrl="https://www.youtube.com/feeds/videos.xml?channel_id=UC2eYFnH61tmytImy1mTYvhA" htmlUrl="https://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA" />
             <outline text="Blogs" title="Blogs">

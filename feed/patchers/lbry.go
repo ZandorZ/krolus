@@ -19,7 +19,7 @@ func NewLbryPatcher() Patcher {
 
 func (l *Lbry) extractName(url string) (string, error) {
 
-	re, err := regexp.Compile(`https:\/\/lbry.tv\/@([\w\.-]+):(\w)\/(.*):`)
+	re, err := regexp.Compile(`lbry:\/\/(.*)#(.*)`)
 
 	if err != nil {
 		return "", err
@@ -28,10 +28,10 @@ func (l *Lbry) extractName(url string) (string, error) {
 	found := re.FindAllStringSubmatch(url, 2)
 
 	if len(found) > 0 {
-		return found[0][3], nil
+		return found[0][1], nil
 	}
 
-	return "", fmt.Errorf("Patter not found")
+	return "", fmt.Errorf("pattern not found")
 
 }
 
@@ -41,7 +41,7 @@ func (l *Lbry) Patch(item *gofeed.Item) *models.ItemModel {
 	embed := ""
 	name, err := l.extractName(item.Link)
 	if err == nil {
-		embed = fmt.Sprintf("https://lbry.tv/$/embed/%s/%s", name, item.GUID)
+		embed = fmt.Sprintf("https://odysee.com/$/embed/%s/%s", name, item.GUID)
 	}
 
 	return &models.ItemModel{
