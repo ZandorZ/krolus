@@ -1,4 +1,4 @@
-<mat-list-item [matTooltip]="model.description" matTooltipPosition="right"
+<mat-list-item class="leaf" [matTooltip]="model.description" matTooltipPosition="right"
     [ngClass]="{selected: selected, 'has-items': model?.new_items_count > 0}" (click)="onSelect($event)"
     [dndDraggable]="model" (dndStart)="onDragStart()" (dndEnd)="onDragEnd()">
     <button mat-icon-button class="drag_handle" dndHandle>

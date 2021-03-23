@@ -34,7 +34,7 @@
 
     <span [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
 
-    <span *ngIf="depth > 1" [ngStyle]="{'left': ((depth * 22) - 4) + 'px', 'z-index':depth * 10}"
+    <span class="line" *ngIf="depth > 1" [ngStyle]="{'left': ((depth * 22) - 4) + 'px', 'z-index':depth * 10}"
         style="position:absolute; width: 14px; border: white 1px solid; opacity: 0.4;"></span>
 
     <div style="width: 32px" [ngStyle]="{'z-index': (depth * 10) + 1}">

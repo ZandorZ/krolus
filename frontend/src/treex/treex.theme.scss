@@ -23,6 +23,7 @@
 
         mat-list-item.selected {
             background: map-get($background, selected-button);
+            z-index: 3;
 
             .mat-list-text {
                 color: mat-color($accent);
