@@ -78,7 +78,7 @@ func (s *State) LoadNode(ID string) error {
 
 	node := s.MapNodes.Get(ID)
 	if node == nil {
-		return fmt.Errorf("Node not found: %s", ID)
+		return fmt.Errorf("node not found: %s", ID)
 	}
 	node.LoadChildren()
 
@@ -92,7 +92,7 @@ func (s *State) UnLoadNode(ID string) error {
 
 	node := s.MapNodes.Get(ID)
 	if node == nil {
-		return fmt.Errorf("Node not found: %s", ID)
+		return fmt.Errorf("node not found: %s", ID)
 	}
 	node.UnLoadChildren()
 
@@ -107,27 +107,27 @@ func (s *State) MoveNode(nodeID, parentID string) error {
 
 	node := s.MapNodes.Get(nodeID)
 	if node == nil {
-		return fmt.Errorf("Node %s not found", nodeID)
+		return fmt.Errorf("node %s not found", nodeID)
 	}
 
 	//same parent
 	if node.ParentID == parentID {
-		return fmt.Errorf("Same parent")
+		return fmt.Errorf("same parent")
 	}
 
 	parent := s.MapNodes.Get(parentID)
 	if parent == nil {
-		return fmt.Errorf("Parent %s not found", parentID)
+		return fmt.Errorf("parent %s not found", parentID)
 	}
 
 	//is descendent
 	if node.IsDescendent(parent) {
-		return fmt.Errorf("Error moving. New parent '%s' is descendent of '%s'", parent.Label, node.Label)
+		return fmt.Errorf("error moving. New parent '%s' is descendent of '%s'", parent.Label, node.Label)
 	}
 
 	oldParent := s.MapNodes.Get(node.ParentID)
 	if oldParent == nil {
-		return fmt.Errorf("Old parent  %s not found", node.ParentID)
+		return fmt.Errorf("old parent  %s not found", node.ParentID)
 	}
 
 	//remove from old parent
@@ -152,22 +152,22 @@ func (s *State) MoveLeaf(leafID, parentID string) error {
 
 	leaf := s.Root.FindLeafByID(leafID)
 	if leaf == nil {
-		return fmt.Errorf("Leaf %s not found", leafID)
+		return fmt.Errorf("leaf %s not found", leafID)
 	}
 
 	//same parent
 	if leaf.ParentID == parentID {
-		return fmt.Errorf("Same parent")
+		return fmt.Errorf("same parent")
 	}
 
 	parent := s.MapNodes.Get(parentID)
 	if parent == nil {
-		return fmt.Errorf("Parent %s not found", parentID)
+		return fmt.Errorf("parent %s not found", parentID)
 	}
 
 	oldParent := s.MapNodes.Get(leaf.ParentID)
 	if oldParent == nil {
-		return fmt.Errorf("Old parent  %s not found", leaf.ParentID)
+		return fmt.Errorf("old parent  %s not found", leaf.ParentID)
 	}
 
 	//remove from old parent
@@ -192,7 +192,7 @@ func (s *State) AddNode(node *models.Node, parentID string) error {
 
 	parent := s.MapNodes.Get(parentID)
 	if parent == nil {
-		return fmt.Errorf("Parent: %s not found", parentID)
+		return fmt.Errorf("parent: %s not found", parentID)
 	}
 	parent.AddNode(node)
 	s.MapNodes.Put(node)
@@ -213,7 +213,7 @@ func (s *State) AddLeaf(leaf *models.Leaf, parentID string) error {
 
 	parent := s.MapNodes.Get(parentID)
 	if parent == nil {
-		return fmt.Errorf("Parent: %s not found", parentID)
+		return fmt.Errorf("parent: %s not found", parentID)
 	}
 	parent.AddLeaf(leaf)
 	s.MapLeaves.Put(leaf)
@@ -234,7 +234,18 @@ func (s *State) EditNode(_node *models.Node) error {
 
 	node := s.MapNodes.Get(_node.ID)
 	if node == nil {
-		return fmt.Errorf("Node: %s not found", _node.ID)
+		return fmt.Errorf("node: %s not found", _node.ID)
+	}
+
+	//label changed?
+	if node.Label != _node.Label {
+		node.Label = _node.Label
+
+		//find parent
+		if parent := s.MapNodes.Get(node.ParentID); parent != nil {
+			parent.Nodes.Sort()
+			parent.MemNodes.Sort()
+		}
 	}
 
 	node.Color = _node.Color
@@ -258,12 +269,12 @@ func (s *State) RemoveLeaf(id string) error {
 
 	leaf := s.MapLeaves.Get(id)
 	if leaf == nil {
-		return fmt.Errorf("Leaf: %s not found", id)
+		return fmt.Errorf("leaf: %s not found", id)
 	}
 
 	parent := s.MapNodes.Get(leaf.ParentID)
 	if parent == nil {
-		return fmt.Errorf("Parent of Leaf: %s not found", id)
+		return fmt.Errorf("parent of Leaf: %s not found", id)
 	}
 
 	parent.RemoveLeaf(id)
@@ -285,11 +296,21 @@ func (s *State) EditLeaf(_leaf *models.Leaf) error {
 
 	leaf := s.MapLeaves.Get(_leaf.ID)
 	if leaf == nil {
-		return fmt.Errorf("Leaf: %s not found", _leaf.ID)
+		return fmt.Errorf("leaf: %s not found", _leaf.ID)
+	}
+
+	//label changed?
+	if leaf.Label != _leaf.Label {
+		leaf.Label = _leaf.Label
+
+		//find parent
+		if parent := s.MapNodes.Get(leaf.ParentID); parent != nil {
+			parent.Leaves.Sort()
+			parent.MemLeaves.Sort()
+		}
 	}
 
 	leaf.Color = _leaf.Color
-	leaf.Label = _leaf.Label
 	leaf.Icon = _leaf.Icon
 	leaf.Description = _leaf.Description
 

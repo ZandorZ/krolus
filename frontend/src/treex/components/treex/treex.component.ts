@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { isDescendent, isNode, LeafModel, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { DndDropEvent } from 'ngx-drag-drop';
