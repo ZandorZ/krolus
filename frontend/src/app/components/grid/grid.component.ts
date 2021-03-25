@@ -28,7 +28,6 @@ export class GridComponent implements OnInit {
 
     onChange(item: ItemModel) {
         this.select.emit(item);
-        item.New = false;
     }
 
     onSelectSub(event: Event, sub: LeafModel) {

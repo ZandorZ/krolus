@@ -44,17 +44,7 @@ export class ItemComponent implements OnChanges {
         //@ts-ignore
         const cont = await this.mediaStore.downloadItem(this.model.ID);
 
-        const style = `
-        <style>
-            img {                 
-                max-width: 80%; 
-            }
-            a {
-                color: orange;
-            }
-        </style>`;
-
-        this.content = this.sanitizer.bypassSecurityTrustHtml(style + cont);
+        this.content = this.sanitizer.bypassSecurityTrustHtml(cont);
     }
 
 }

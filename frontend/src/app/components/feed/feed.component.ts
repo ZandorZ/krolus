@@ -98,6 +98,7 @@ export class FeedComponent implements OnChanges {
 
     onSelecItem(item: ItemModel) {
         this.store.selectItem(item);
+        item.New = false;
     }
 
     onSelectLeaf(sub: LeafModel) {

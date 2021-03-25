@@ -1,6 +1,6 @@
 <mat-sidenav-container>
     <mat-sidenav #drawer mode="side" role="navigation" [(opened)]="opened">
-        <treex [selected]="selected$ | async" [loading]="loading$ | async" [dragged]="dragged$ | async"></treex>
+        <treex [selected]="treeSelected$ | async" [loading]="loading$ | async" [dragged]="dragged$ | async"></treex>
     </mat-sidenav>
 
     <mat-sidenav-content>
@@ -8,7 +8,7 @@
         <mat-drawer-container [hasBackdrop]="false" [autosize]="true">
 
             <mat-drawer-content>
-                <app-feed [node]="selected$ | async" (hidemenu)="onToggleMenu($event)"></app-feed>
+                <app-feed [node]="treeSelected$ | async" (hidemenu)="onToggleMenu($event)"></app-feed>
             </mat-drawer-content>
 
             <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">

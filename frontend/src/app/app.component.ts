@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { filter, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { LoadingDictionary, TreexNode } from 'src/treex/model';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { ItemModel } from './models/item.model';
@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     opened = true;
 
     loading$: Observable<LoadingDictionary>;
-    selected$: Observable<TreexNode>;
+    treeSelected$: Observable<TreexNode>;
     isSelected$: Observable<boolean>;
     dragged$: Observable<TreexNode>;
     item: ItemModel;
@@ -29,15 +29,21 @@ export class AppComponent implements OnInit {
         private feedStore: FeedStore,
         private itemStore: ItemStore) {
 
-        this.selected$ = this.treeStore.getSelected();
+        this.treeSelected$ = this.treeStore.getSelected();
         this.isSelected$ = this.feedStore.isSelected();
         this.loading$ = this.treeStore.getLoading();
         this.dragged$ = this.treeStore.getDragged();
         this.feedStore.getSelected()
             .pipe(
-                filter(item => !!item),
-                switchMap(item => from(this.itemStore.fetchItem(item.ID, item.New))),
-            ).subscribe(item => this.item = item);
+                filter(item => !!item)
+            ).subscribe(item => this.onSelectedChange(item));
+    }
+
+    private async onSelectedChange(item: ItemModel) {
+        let loadRoot = item.New;
+        this.item = await this.itemStore.fetchItem(item.ID, item.New);
+        //TODO: patch tree by sub path
+        if (loadRoot) this.treeStore.loadChildren("", "");
     }
 
     ngOnInit(): void {

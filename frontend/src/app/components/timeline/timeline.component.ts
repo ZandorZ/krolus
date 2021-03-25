@@ -36,7 +36,6 @@ export class TimelineComponent implements OnInit {
     onChange(event: MatSelectionListChange) {
         const item = event.options[0].value as ItemModel;
         this.select.emit(item);
-        item.New = false;
     }
 
     onSelectSub(event: Event, sub: LeafModel) {
