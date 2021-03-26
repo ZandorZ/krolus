@@ -4,7 +4,13 @@
             [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">
             <mat-icon>{{hiddenmenu ? 'menu' : 'chevron_left'}} </mat-icon>
         </button>
-        <span class="title"> {{label$ | async}} </span>
+        <span class="title">
+            <span *ngFor="let header of headers">
+                / <button mat-button>
+                    <mat-icon>{{ header.leaf ? 'rss_feed' : 'folder' }}</mat-icon> {{header.label}}
+                </button>
+            </span>
+        </span>
         <span class="flex"></span>
         <span class="buttons">
             <button mat-icon-button matTooltip="Search text" matTooltipPosition="below">

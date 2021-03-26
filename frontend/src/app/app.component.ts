@@ -3,10 +3,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { LoadingDictionary, TreexNode } from 'src/treex/model';
+import { TreexNodeHeader } from 'src/treex/state/store';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { ItemModel } from './models/item.model';
 import { FeedStore } from './services/state/feed.store';
 import { ItemStore } from './services/state/item.store';
+
 
 @Component({
     selector: '[id="app"]',
@@ -19,6 +21,7 @@ export class AppComponent implements OnInit {
 
     loading$: Observable<LoadingDictionary>;
     treeSelected$: Observable<TreexNode>;
+    treeSelectedHeaders$: Observable<TreexNodeHeader[]>;
     isSelected$: Observable<boolean>;
     dragged$: Observable<TreexNode>;
     item: ItemModel;
@@ -30,6 +33,7 @@ export class AppComponent implements OnInit {
         private itemStore: ItemStore) {
 
         this.treeSelected$ = this.treeStore.getSelected();
+        this.treeSelectedHeaders$ = this.treeStore.getSelectedHeaders();
         this.isSelected$ = this.feedStore.isSelected();
         this.loading$ = this.treeStore.getLoading();
         this.dragged$ = this.treeStore.getDragged();
@@ -40,10 +44,12 @@ export class AppComponent implements OnInit {
     }
 
     private async onSelectedChange(item: ItemModel) {
-        let loadRoot = item.New;
+        let reloadTree = item.New;
         this.item = await this.itemStore.fetchItem(item.ID, item.New);
         //TODO: patch tree by sub path
-        if (loadRoot) this.treeStore.loadChildren("", "");
+        if (reloadTree) {
+            this.treeStore.loadChildren("", "/");
+        }
     }
 
     ngOnInit(): void {

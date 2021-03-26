@@ -2,7 +2,7 @@ import { Store } from 'rxjs-observable-store';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
-import { TreexState } from './store';
+import { TreexNodeHeader, TreexState } from './store';
 import { LoadingDictionary, NodeModel, TreexNode } from '../model';
 var objectPath = require("object-path");
 
@@ -42,13 +42,18 @@ export class TreexStore extends Store<TreexState> {
         objectPath.set(this.state, 'root.' + path + '.leaves', null);
     }
 
-    updateSelected(selected: TreexNode): void {
+    updateSelected(selected: TreexNode, path: string): void {
         this.patchState(selected, "selected");
+        this.patchState('root.' + path, "selectedPath");
     }
-
 
     clearSelected(): void {
         this.patchState(undefined, "selected");
+        this.patchState(undefined, "selectedPath");
+    }
+
+    getSelectedHeaders(): Observable<TreexNodeHeader[]> {
+        return null;
     }
 
     collapseAll(): void {

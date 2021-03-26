@@ -8,6 +8,14 @@
     // height: 40px;
     // line-height: 40px;
     opacity: 0.8 !important;
+
+    .mat-button {
+        font-size: 16px !important;
+    }
+
+    .mat-icon {
+        margin-right: 5px !important;
+    }
 }
 
 .bottom {
@@ -24,6 +32,9 @@
     &:hover {
         .buttons {
             display: inherit;
+        }
+        .title {
+            opacity: 1 !important;
         }
     }
 }

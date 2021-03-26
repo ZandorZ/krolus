@@ -1,3 +1,6 @@
+import { TreexNodeHeader } from "../state/store";
+
+
 export interface LeafModel {
     id?: string
     parent?: string
@@ -41,4 +44,24 @@ export const isDescendent = (node: NodeModel, id: string): boolean => {
     }
 
     return false;
+}
+
+export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
+
+    let local: any[] = [];
+    path.split(".children.").slice(1).forEach((id) => {
+        if (id.includes(".leaves.")) {
+            const temp = id.split('.leaves.');
+            const parent = node.children.find(n => n.id == temp[0]);
+            local.push({ id: parent.id, label: parent.label, leaf: false });
+            const leaf = parent.leaves.find(l => l.id == temp[1]);
+            local.push({ id: leaf.id, label: leaf.label, leaf: true });
+        } else {
+            const n = node.children.find(n => n.id == id);
+            local.push({ id: n.id, label: n.label, leaf: false });
+            node = n;
+        }
+    });
+
+    return local;
 }

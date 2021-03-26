@@ -5,7 +5,8 @@ import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/
 import { FeedStore } from 'src/app/services/state/feed.store';
 import { ItemStore } from 'src/app/services/state/item.store';
 import { LeafModel, TreexNode } from 'src/treex/model';
-import { TreexStore } from 'src/treex/state/treex.store';
+import { TreexNodeHeader } from 'src/treex/state/store';
+
 
 @Component({
     selector: 'app-feed',
@@ -27,10 +28,12 @@ export class FeedComponent implements OnChanges {
     @Input()
     node: TreexNode;
 
+    @Input()
+    headers: TreexNodeHeader[];
+
     typeGrid = false;
 
     selected$: Observable<ItemModel>;
-    label$: Observable<string>;
     items$: Observable<ItemCollection>;
     total$: Observable<number>;
     request: PaginatedRequest = {
@@ -43,8 +46,7 @@ export class FeedComponent implements OnChanges {
     @ViewChild('paginator')
     paginator: MatPaginator;
 
-    constructor(private store: FeedStore, private treeStore: TreexStore, private itemStore: ItemStore) {
-        this.label$ = this.store.getLabel();
+    constructor(private store: FeedStore, private itemStore: ItemStore) {
         this.items$ = this.store.getItems();
         this.total$ = this.store.getTotal();
         this.selected$ = this.store.getSelected();
@@ -102,7 +104,8 @@ export class FeedComponent implements OnChanges {
     }
 
     onSelectLeaf(sub: LeafModel) {
-        this.treeStore.updateSelected(sub);
+        // TODO: load recursively
+        // this.treeStore.updateSelected(sub);
     }
 
 }

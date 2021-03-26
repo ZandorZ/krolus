@@ -8,7 +8,8 @@
         <mat-drawer-container [hasBackdrop]="false" [autosize]="true">
 
             <mat-drawer-content>
-                <app-feed [node]="treeSelected$ | async" (hidemenu)="onToggleMenu($event)"></app-feed>
+                <app-feed [node]="treeSelected$ | async" [headers]="treeSelectedHeaders$ | async"
+                    (hidemenu)="onToggleMenu($event)"></app-feed>
             </mat-drawer-content>
 
             <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">
