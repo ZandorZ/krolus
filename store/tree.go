@@ -63,7 +63,12 @@ func (t *TreeStore) LoadNode(ID string) error {
 		return err
 	}
 	return t.store.Set(t.treeState.Root)
+}
 
+// LoadAncestors ...
+func (t *TreeStore) LoadAncestors(ID string, isLeaf bool) error {
+	t.treeState.LoadAncestors(ID, isLeaf)
+	return t.store.Set(t.treeState.Root)
 }
 
 // UnLoadNode  ...

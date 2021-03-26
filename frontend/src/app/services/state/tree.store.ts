@@ -22,7 +22,7 @@ export class TreeStore extends Store<TreexState> {
     }
 
     private async onChange(data: NodeModel) {
-        console.log("Tree state updated")
+        console.log("Tree state updated");
         // root first load
         if (data.children == null && data.leaves == null) {
             this.updateSelected(data, "/");
@@ -46,6 +46,12 @@ export class TreeStore extends Store<TreexState> {
         this.patchState(false, "loading", id);
     }
 
+    async loadAncestors(id: string, isLeaf: boolean) {
+        //@ts-ignore
+        await window.backend.TreeStore.LoadAncestors(id, isLeaf);
+    }
+
+
     updateSelected(node: TreexNode, path: string): void {
         this.patchState(node, "selected");
         this.patchState('root.' + path, "selectedPath");
@@ -62,7 +68,6 @@ export class TreeStore extends Store<TreexState> {
     clearSelected(): void {
         this.patchState(undefined, "selected");
         this.patchState(undefined, "selectedPath");
-        this.patchState(undefined, "selectedHeader");
     }
 
     async collapseAll() {

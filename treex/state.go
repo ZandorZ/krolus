@@ -59,6 +59,32 @@ func (s *State) UpdateCounters(subInfos dataModels.SubscriptionItemsMap) {
 	}
 }
 
+// LoadAncestors ...
+func (s *State) LoadAncestors(ID string, isLeaf bool) error {
+
+	var parentID string
+	if isLeaf {
+		leaf := s.MapLeaves.Get(ID)
+		if leaf == nil {
+			return fmt.Errorf("leaf not found: %s", ID)
+		}
+		parentID = leaf.ParentID
+	} else {
+		node := s.MapNodes.Get(ID)
+		if node == nil {
+			return fmt.Errorf("node not found: %s", ID)
+		}
+		parentID = node.ParentID
+	}
+
+	parent := s.MapNodes.Get(parentID)
+	for parent != nil {
+		parent.LoadChildren()
+		parent = s.MapNodes.Get(parent.ParentID)
+	}
+	return nil
+}
+
 // UnLoadAll ...
 func (s *State) UnLoadAll() {
 	s.lock.RLock()

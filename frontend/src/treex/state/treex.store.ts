@@ -26,6 +26,10 @@ export class TreexStore extends Store<TreexState> {
     }
 
 
+    async loadAncestors(id: string, isLeaf: boolean) {
+
+    }
+
     loadChildren(id: string, path: string) {
 
         this.patchState(true, "loading", id);

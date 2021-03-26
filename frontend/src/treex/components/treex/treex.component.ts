@@ -86,7 +86,7 @@ export class TreexComponent implements OnInit, AfterViewInit {
         event.stopImmediatePropagation();
 
         if (!!this.model && (!!this.model.children && !!this.model.leaves)) {
-            this.store.unloadChildren(this.model.id, this.path); //this.path
+            this.store.unloadChildren(this.model.id, this.path);
         } else {
             this.store.loadChildren(this.model.id, this.path);
         }

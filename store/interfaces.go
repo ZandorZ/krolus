@@ -17,6 +17,7 @@ type ITreeStore interface {
 	UnLoadAll() error
 	LoadNode(ID string) error
 	UnLoadNode(ID string) error
+	LoadAncestors(ID string, isLeaf bool) error
 	MoveLeaf(leafID string, nodeID string) error
 	MoveNode(nodeID string, toID string) error
 	AddNode(node map[string]interface{}, toID string) error

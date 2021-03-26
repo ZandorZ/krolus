@@ -21,6 +21,8 @@ export class FeedComponent implements OnChanges {
 
     @Output() hidemenu: EventEmitter<boolean>;
 
+    @Output() selectHeader: EventEmitter<TreexNodeHeader>;
+
     hiddenmenu = false;
 
     pageSize = 40;
@@ -51,6 +53,7 @@ export class FeedComponent implements OnChanges {
         this.total$ = this.store.getTotal();
         this.selected$ = this.store.getSelected();
         this.hidemenu = new EventEmitter();
+        this.selectHeader = new EventEmitter();
     }
 
     toggleHideMenu() {
@@ -103,9 +106,12 @@ export class FeedComponent implements OnChanges {
         item.New = false;
     }
 
-    onSelectLeaf(sub: LeafModel) {
-        // TODO: load recursively
-        // this.treeStore.updateSelected(sub);
+    onSelectSub(sub: LeafModel) {
+        this.onSelectHeader({ id: sub.id, label: sub.label, leaf: true });
+    }
+
+    onSelectHeader(header: TreexNodeHeader) {
+        this.selectHeader.emit(header);
     }
 
 }

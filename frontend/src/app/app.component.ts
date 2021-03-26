@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LoadingDictionary, TreexNode } from 'src/treex/model';
+import { LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader } from 'src/treex/state/store';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { ItemModel } from './models/item.model';
@@ -67,7 +67,20 @@ export class AppComponent implements OnInit {
 
     async onOpenURL(url: string) {
         //@ts-ignore
-        await window.backend.ItemStore.OpenItem(url);
+        await window.backend.ItemStore.OpenItem(url); //TODO: wrong access
+    }
+
+    async onSelectHeader(header: TreexNodeHeader) {
+
+        await this.treeStore.loadAncestors(header.id, header.leaf);
+        if (header.path) {
+            let node: TreexNode = { id: header.id, label: header.label };
+            if (!header.leaf) {
+                (<NodeModel>node).nodes_count = 0;
+            }
+            this.treeStore.updateSelected(node, header.path);
+        }
+
     }
 
 }
