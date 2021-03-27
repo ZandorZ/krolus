@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
+import { getPath, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader } from 'src/treex/state/store';
 import { TreexStore } from 'src/treex/state/treex.store';
 import { ItemModel } from './models/item.model';
@@ -79,6 +79,12 @@ export class AppComponent implements OnInit {
                 (<NodeModel>node).nodes_count = 0;
             }
             this.treeStore.updateSelected(node, header.path);
+        } else {
+            setTimeout(() => {
+                const path = getPath(this.treeStore.state.root, header.id).slice(1);
+                this.treeStore.updateSelected({ id: header.id, label: header.label }, path);
+            }, 100);
+
         }
 
     }

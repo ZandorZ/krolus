@@ -33,6 +33,7 @@ export const isNode = (data: TreexNode): data is NodeModel => {
 }
 
 export const isDescendent = (node: NodeModel, id: string): boolean => {
+
     if (!!node.children && !!node.children.find(n => n.id == id)) {
         return true;
     }
@@ -46,10 +47,32 @@ export const isDescendent = (node: NodeModel, id: string): boolean => {
     return false;
 }
 
-export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
+export const getPath = (parent: NodeModel, id: string): string => {
 
+    if (!!parent.children && !!parent.children.find(n => n.id == id)) {
+        return ".children." + id;
+    }
+
+    if (!!parent.leaves && !!parent.leaves.find(l => l.id == id)) {
+        return ".leaves." + id;
+    }
+
+    if (!!parent.children) {
+        for (let i = 0; i < parent.children.length; i++) {
+            const path = getPath(parent.children[i], id);
+            if (path.length > 0) {
+                return ".children." + parent.children[i].id + path;
+            }
+        }
+    }
+
+    return "";
+}
+
+export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
     let headers: TreexNodeHeader[] = [];
     let local = "root";
+
     path.split(".children.").slice(1).forEach((id) => {
         if (id.includes(".leaves.")) {
             const temp = id.split('.leaves.');
