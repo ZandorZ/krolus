@@ -98,10 +98,7 @@ export class TreexComponent implements OnInit, AfterViewInit {
 
     select(event: Event) {
         event.stopPropagation();
-        this.store.updateSelected({
-            id: this.model.id,
-            nodes_count: this.model.nodes_count
-        }, this.path);
+        this.store.updateSelected(this.model, this.path);
     }
 
     selectLeaf(leaf: LeafModel) {

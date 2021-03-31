@@ -81,7 +81,6 @@ export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHead
     ];
     let local = "root";
 
-
     path.split(".children.").slice(1).forEach((id) => {
         if (id.includes(".leaves.")) {
             const temp = id.split('.leaves.');
@@ -91,7 +90,7 @@ export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHead
             const leaf = parent.leaves.find(l => l.id == temp[1]);
             local += ".leaves." + temp[1];
             headers.push({ id: leaf.id, label: leaf.label, leaf: true, path: local });
-        } else {
+        } else if (!!node.children) {
             const n = node.children.find(n => n.id == id);
             local += ".children." + id
             headers.push({ id: n.id, label: n.label, leaf: false, path: local });
