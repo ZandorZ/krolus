@@ -107,7 +107,7 @@ export class FeedComponent implements OnChanges {
     }
 
     onSelectSub(sub: LeafModel) {
-        this.onSelectHeader({ id: sub.id, label: sub.label, leaf: true });
+        this.onSelectHeader({ id: sub.id, label: sub.label, description: sub.description, leaf: true });
     }
 
     onSelectHeader(header: TreexNodeHeader) {

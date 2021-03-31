@@ -1,6 +1,6 @@
 import { Store } from 'rxjs-observable-store';
 import { Injectable, NgZone } from '@angular/core';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
 import { getHeadersFromPath, isNode, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader, TreexState } from 'src/treex/state/store';
@@ -31,7 +31,6 @@ export class TreeStore extends Store<TreexState> {
         this.patchState(data, "root");
     }
 
-
     async loadChildren(id: string, path: string) {
         this.patchState(true, "loading", id);
         //@ts-ignore
@@ -55,14 +54,6 @@ export class TreeStore extends Store<TreexState> {
     updateSelected(node: TreexNode, path: string): void {
         this.patchState(node, "selected");
         this.patchState('root.' + path, "selectedPath");
-    }
-
-    getSelectedHeaders(): Observable<TreexNodeHeader[]> {
-        return this.onChanges('selectedPath').pipe(
-            filter(path => !!path),
-            distinctUntilChanged(),
-            map(path => getHeadersFromPath(this.state.root, path))
-        );
     }
 
     clearSelected(): void {
@@ -90,6 +81,10 @@ export class TreeStore extends Store<TreexState> {
         );
     }
 
+    getRoot(): Observable<TreexNode> {
+        return this.onChanges('root');
+    }
+
     getSelected(): Observable<TreexNode> {
         return this.onChanges('selected').pipe(
             filter(selected => !!selected),
@@ -97,10 +92,25 @@ export class TreeStore extends Store<TreexState> {
         );
     }
 
+    getSelectedPath(): Observable<string> {
+        return this.onChanges('selectedPath').pipe(
+            filter(path => !!path),
+            distinctUntilChanged()
+        );
+    }
+
+    getSelectedHeaders(): Observable<TreexNodeHeader[]> {
+
+        return combineLatest(
+            this.getRoot(), this.getSelectedPath()
+        ).pipe(
+            map(([root, path]) => getHeadersFromPath(root as NodeModel, path))
+        );
+    }
+
     getLoading(): Observable<LoadingDictionary> {
         return this.onChanges('loading');
     }
-
 
     startDrag(dragged: TreexNode): void {
         this.patchState(dragged, "dragged");
