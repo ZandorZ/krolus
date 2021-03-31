@@ -70,8 +70,17 @@ export const getPath = (parent: NodeModel, id: string): string => {
 }
 
 export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
-    let headers: TreexNodeHeader[] = [];
+
+    let headers: TreexNodeHeader[] = [
+        {
+            id: node.id,
+            label: node.label,
+            leaf: false,
+            path: '/'
+        }
+    ];
     let local = "root";
+
 
     path.split(".children.").slice(1).forEach((id) => {
         if (id.includes(".leaves.")) {

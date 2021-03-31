@@ -4,15 +4,20 @@
             [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">
             <mat-icon>{{hiddenmenu ? 'menu' : 'chevron_left'}} </mat-icon>
         </button>
-        <button mat-icon-button>
-            <mat-icon>home</mat-icon>
-        </button>
         <span class="title">
             <span *ngFor="let header of headers">
-                /
-                <button mat-button (click)="onSelectHeader(header)">
-                    <mat-icon>{{ header.leaf ? 'rss_feed' : 'folder' }}</mat-icon> {{header.label}}
-                </button>
+                <ng-container *ngIf="header.path == '/'">
+                    <button mat-icon-button (click)="onSelectHeader(header)">
+                        <mat-icon>home</mat-icon>
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="header.path != '/'">
+                    /
+                    <button mat-button (click)="onSelectHeader(header)">
+                        <mat-icon>{{ header.leaf ? 'rss_feed' : 'folder' }}</mat-icon>
+                        {{header.label}}
+                    </button>
+                </ng-container>
             </span>
         </span>
         <span class="flex"></span>
