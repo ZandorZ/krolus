@@ -2,7 +2,7 @@ import { Store } from 'rxjs-observable-store';
 import { Injectable, NgZone } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
-import { getHeadersFromPath, isNode, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
+import { getHeadersFromPath, getPath, isNode, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader, TreexState } from 'src/treex/state/store';
 import * as Wails from '@wailsapp/runtime';
 
@@ -125,13 +125,32 @@ export class TreeStore extends Store<TreexState> {
     }
 
     async moveLeaf(id: string, target: string) {
-        //@ts-ignore
-        await window.backend.TreeStore.MoveLeaf(id, target);
+
+        try {
+            //@ts-ignore
+            await window.backend.TreeStore.MoveLeaf(id, target);
+
+            //moved is selected
+            if (this.state.selectedPath.includes(id)) {
+                const targetPath = getPath(this.state.root, target);
+                //update selectedPath
+                this.patchState(targetPath + '.leaves.' + id, "selectedPath");
+            }
+
+        } catch (e) { }
+
     }
 
     async moveNode(id: string, target: string) {
         //@ts-ignore
         await window.backend.TreeStore.MoveNode(id, target);
+
+        //moved is selected
+        if (this.state.selectedPath.includes(id)) {
+            const targetPath = getPath(this.state.root, target);
+            //update selectedPath
+            this.patchState(targetPath + '.children.' + id + this.state.selectedPath.split(id)[1], "selectedPath");
+        }
     }
 
     async addNode(node: TreexNode, target: string) {
