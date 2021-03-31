@@ -6,14 +6,16 @@
         </button>
         <span class="title">
             <span *ngFor="let header of headers">
+                /
                 <ng-container *ngIf="header.path == '/'">
-                    <button mat-icon-button (click)="onSelectHeader(header)">
+                    <button mat-icon-button (click)="onSelectHeader(header)" matTooltip="Return to root"
+                        matTooltipPosition="below">
                         <mat-icon>home</mat-icon>
                     </button>
                 </ng-container>
                 <ng-container *ngIf="header.path != '/'">
-                    /
-                    <button mat-button (click)="onSelectHeader(header)">
+                    <button mat-button [matTooltip]="header.description" matTooltipPosition="below"
+                        (click)="onSelectHeader(header)">
                         <mat-icon>{{ header.leaf ? 'rss_feed' : 'folder' }}</mat-icon>
                         {{header.label}}
                     </button>

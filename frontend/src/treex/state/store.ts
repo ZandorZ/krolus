@@ -4,6 +4,7 @@ import { LoadingDictionary, NodeModel, TreexNode } from '../model';
 export type TreexNodeHeader = {
     id: string
     label: string
+    description: string
     leaf: boolean
     path?: string
 }
