@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	production = false
+	production = true
 	numWorkers = 3
 	interval   = 30 * time.Minute
 )
@@ -23,6 +23,7 @@ const (
 var pathDB = ".krolus"
 
 func init() {
+
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)
@@ -68,8 +69,8 @@ func main() {
 		panic(err)
 	}
 
-	js := mewn.String("./frontend/dist/frontend/main.js")
-	css := mewn.String("./frontend/dist/frontend/styles.css")
+	js := mewn.String("./front/frontend/dist/frontend/main.js")
+	css := mewn.String("./front/frontend/dist/frontend/styles.css")
 
 	app := wails.CreateApp(&wails.AppConfig{
 		Width:            1024,

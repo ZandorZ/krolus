@@ -1,0 +1,21 @@
+version: "3"
+
+tasks:
+    migrate:
+        cmds:
+            - rm ~/.krolus/dev/* -Rf
+            - cd ./migrations; go build -o migrate
+            - ./migrations/migrate
+    serve-web:
+        cmds:
+            - cd ./front/frontend;  npx ng serve
+    serve-front:
+        cmds:
+            - cd ./front; go build -o wview
+            - ./front/wview
+    serve:
+        cmds:
+            - wails serve
+    build:
+        cmds:
+            - wails build

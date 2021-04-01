@@ -8,7 +8,9 @@ import (
 	"krolus/treex/models"
 	"krolus/treex/persistence"
 	"log"
+	"os"
 	"os/user"
+	"path"
 
 	"github.com/gilliek/go-opml/opml"
 	"github.com/hokaccha/go-prettyjson"
@@ -82,9 +84,14 @@ func main() {
 		panic(err)
 	}
 
-	root := models.NewNode("My Aggregator", "...")
+	root := models.NewNode("Subscriptions", "My subscriptions")
 
-	importFile("./subs/test.xml", root)
+	ex, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+
+	importFile(path.Dir(ex)+"/test.xml", root)
 
 	if err := filePersist.Save(*root); err != nil {
 		panic(err)

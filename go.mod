@@ -25,6 +25,7 @@ require (
 	github.com/timshannon/badgerhold/v3 v3.0.0-20210208141506-eb78b03f8097
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/wailsapp/wails v1.11.0
+	github.com/webview/webview v0.0.0-20210330151455-f540d88dde4e
 	github.com/xxjwxc/gowp v0.0.0-20200603141413-57c3ba7108be
 	golang.org/x/net v0.0.0-20201021035429-f5854403a974
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect

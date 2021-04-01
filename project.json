@@ -2,13 +2,13 @@
     "name": "krolus",
     "description": "RSS Feed Client",
     "author": {
-        "name": "zandorz",
+        "name": "zandor storm",
         "email": "dev@smk.cx"
     },
     "version": "0.0.1",
     "binaryname": "krolus",
     "frontend": {
-        "dir": "frontend",
+        "dir": "./front/frontend",
         "install": "npm install",
         "build": "npx ng build --single-bundle true --output-hashing none --prod --bundle-styles false",
         "bridge": "src",

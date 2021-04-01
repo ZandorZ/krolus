@@ -1,7 +1,8 @@
 
 /build
 /db
-/migrations/migrations
+/migrations/migrate
+/front/wbiew
 
 /*.gob
 /go.sum
