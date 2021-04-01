@@ -100,7 +100,6 @@ export class TreeStore extends Store<TreexState> {
     }
 
     getSelectedHeaders(): Observable<TreexNodeHeader[]> {
-
         return combineLatest(
             this.getRoot(), this.getSelectedPath()
         ).pipe(

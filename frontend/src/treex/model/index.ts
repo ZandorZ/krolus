@@ -71,6 +71,10 @@ export const getPath = (parent: NodeModel, id: string): string => {
 
 export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
 
+    if (!node) {
+        return [];
+    }
+
     let headers: TreexNodeHeader[] = [
         {
             id: node.id,

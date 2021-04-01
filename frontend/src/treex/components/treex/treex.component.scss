@@ -14,6 +14,8 @@ mat-toolbar {
     }
 }
 mat-toolbar-row {
+    padding-left: 15px !important;
+
     .buttons {
         display: none;
     }

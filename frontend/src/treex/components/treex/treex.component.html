@@ -1,11 +1,6 @@
 <mat-toolbar *ngIf="depth == 0">
     <mat-toolbar-row>
-        <span>
-            <button mat-icon-button (click)="select($event)">
-                <mat-icon>{{model?.icon ? model.icon: 'home'}}</mat-icon>
-            </button>
-        </span>
-        <span class="flex-container">{{model?.label}}</span>
+        <span class="flex-container">Subscriptions</span>
         <span class="buttons">
             <button mat-icon-button (click)="store.collapseAll()" matTooltip="Collapse all" matTooltipPosition="below">
                 <mat-icon>unfold_less</mat-icon>
