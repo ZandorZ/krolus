@@ -32,7 +32,7 @@ func (r *Reddit) Patch(item *gofeed.Item) *models.ItemModel {
 		Link:        item.Link,
 		Description: item.Content,
 		Thumbnail:   thumb,
-		Published:   item.UpdatedParsed.Local(),
+		Published:   item.PublishedParsed.Local(),
 		New:         true,
 		Provider:    "reddit",
 		Type:        "unknown",
