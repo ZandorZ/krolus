@@ -46,9 +46,8 @@ export class AppComponent implements OnInit {
     private async onSelectedChange(item: ItemModel) {
         let reloadTree = item.New;
         this.item = await this.itemStore.fetchItem(item.ID, item.New);
-        //TODO: patch tree by sub path
         if (reloadTree) {
-            this.treeStore.loadChildren("", "/");
+            //TODO: check if sub is loaded in tree to update newItemsCount
         }
     }
 

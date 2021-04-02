@@ -102,9 +102,11 @@ export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHead
             }
         } else if (!!node.children) {
             const n = node.children.find(n => n.id == id);
-            local += ".children." + id
-            headers.push({ id: n.id, label: n.label, description: n.description, leaf: false, path: local });
-            node = n;
+            if (!!n) {
+                local += ".children." + id
+                headers.push({ id: n.id, label: n.label, description: n.description, leaf: false, path: local });
+                node = n;
+            }
         }
     });
 

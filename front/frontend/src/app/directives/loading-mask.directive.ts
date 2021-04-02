@@ -12,7 +12,7 @@ export class LoadingMaskDirective implements OnChanges {
     constructor(private el: ElementRef) {
 
         this.mask = document.createElement('div');
-        this.mask.style.transition = '1s all linear';
+        this.mask.style.transition = '0.2s all linear';
         this.mask.style.backgroundColor = 'black';
         this.mask.style.position = 'absolute';
         this.mask.style.width = '100%';
@@ -22,6 +22,7 @@ export class LoadingMaskDirective implements OnChanges {
         this.mask.style.display = 'none';
 
         this.el.nativeElement.appendChild(this.mask);
+        this.el.nativeElement.style.transition = 'filter 0.2s linear';
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -33,8 +34,10 @@ export class LoadingMaskDirective implements OnChanges {
     }
 
     private addMask() {
+
         this.el.nativeElement.style.filter = 'blur(4px)';
         this.mask.style.display = 'block';
+
 
     }
 
@@ -42,7 +45,5 @@ export class LoadingMaskDirective implements OnChanges {
         this.el.nativeElement.style.filter = 'none';
         this.mask.style.display = 'none';
     }
-
-
 
 }

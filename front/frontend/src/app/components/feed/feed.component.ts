@@ -16,16 +16,15 @@ import { TreexNodeHeader } from 'src/treex/state/store';
 })
 export class FeedComponent implements OnChanges {
 
-    @ViewChild('scrollcont') private myScrollContainer: ElementRef;
+    hiddenmenu = false;
+    typeGrid = true;
+    pageSize = 40;
 
+    @ViewChild('scrollcont') private myScrollContainer: ElementRef;
 
     @Output() hidemenu: EventEmitter<boolean>;
 
     @Output() selectHeader: EventEmitter<TreexNodeHeader>;
-
-    hiddenmenu = false;
-
-    pageSize = 40;
 
     @Input()
     node: TreexNode;
@@ -33,7 +32,6 @@ export class FeedComponent implements OnChanges {
     @Input()
     headers: TreexNodeHeader[];
 
-    typeGrid = false;
 
     loading$: Observable<boolean>;
     selected$: Observable<ItemModel>;
