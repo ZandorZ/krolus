@@ -62,7 +62,7 @@ export class FeedComponent implements OnChanges {
     }
 
     async ngOnChanges(changes: SimpleChanges) {
-        if (!!this.node) {
+        if (!!this.node && !!changes.node) {
             this.request.Page = 0;
             this.request.LeafIDs = [];
             this.request.NodeID = "";
