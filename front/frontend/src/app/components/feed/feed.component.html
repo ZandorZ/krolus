@@ -40,7 +40,7 @@
 
 </mat-toolbar>
 
-<div #scrollcont class="scroll-container">
+<div #scrollcont class="scroll-container" [appLoadingMask]="loading$ | async">
 
     <app-timeline *ngIf="!typeGrid" [selected]="selected$ | async" (select)="onSelecItem($event)"
         (favorite)="onFavoriteItem($event)" (selectSub)="onSelectSub($event)" [items]="items$ | async">

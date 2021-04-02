@@ -8,9 +8,9 @@ import { isNode, TreexNode } from 'src/treex/model';
 
 
 export class FeedState {
-    Label: string
     PaginatedItems: PaginatedItemCollection
     Selected: ItemModel
+    Loading: boolean
 }
 
 @Injectable({
@@ -49,13 +49,14 @@ export class FeedStore extends Store<FeedState> {
         }
         this.currentReq = req
         await this.loadRemote();
-        this.patchState(selected.label, "Label");
     }
 
     private async loadRemote() {
+        this.setLoading(true);
         //@ts-ignore
         const itens = await window.backend.FeedStore.LoadMoreItems(this.currentReq);
         this.patchState(itens, "PaginatedItems");
+        this.setLoading(false);
     }
 
 
@@ -73,13 +74,6 @@ export class FeedStore extends Store<FeedState> {
 
     unSelectItem() {
         this.patchState(undefined, "Selected");
-    }
-
-    getLabel(): Observable<string> {
-        return this.onChanges("Label")
-            .pipe(
-                distinctUntilChanged()
-            );
     }
 
     getTotal(): Observable<number> {
@@ -106,6 +100,14 @@ export class FeedStore extends Store<FeedState> {
                 // filter(item => !!item),
                 // distinctUntilKeyChanged("ID")
             );
+    }
+
+    isLoading(): Observable<boolean> {
+        return this.onChanges('Loading');
+    }
+
+    setLoading(flag: boolean) {
+        this.patchState(flag, 'Loading');
     }
 
 }

@@ -35,6 +35,7 @@ import { CustomDatePipe } from './pipes/custom-date.pipe';
 import { FilterMenuComponent } from './components/filter-menu/filter-menu.component';
 import { FilterDialogFormComponent } from './components/filter-menu/dialog/filter-dialog-form';
 import { PagesizeComponent } from './components/pagesize/pagesize.component';
+import { LoadingMaskDirective } from './directives/loading-mask.directive';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { PagesizeComponent } from './components/pagesize/pagesize.component';
         CustomDatePipe,
         FilterMenuComponent,
         PagesizeComponent,
+        LoadingMaskDirective,
     ],
     imports: [
         BrowserModule,

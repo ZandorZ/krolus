@@ -35,6 +35,7 @@ export class FeedComponent implements OnChanges {
 
     typeGrid = false;
 
+    loading$: Observable<boolean>;
     selected$: Observable<ItemModel>;
     items$: Observable<ItemCollection>;
     total$: Observable<number>;
@@ -49,6 +50,7 @@ export class FeedComponent implements OnChanges {
     paginator: MatPaginator;
 
     constructor(private store: FeedStore, private itemStore: ItemStore) {
+        this.loading$ = this.store.isLoading();
         this.items$ = this.store.getItems();
         this.total$ = this.store.getTotal();
         this.selected$ = this.store.getSelected();
