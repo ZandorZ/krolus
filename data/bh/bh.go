@@ -1,4 +1,4 @@
-package db
+package bh
 
 import (
 	"krolus/data"
@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	bh          *badgerhold.Store
+	bhold       *badgerhold.Store
 	dataManager *data.Manager
 )
 
@@ -21,13 +21,13 @@ func NewManager(path string) *data.Manager {
 		options.SyncWrites = true
 
 		var err error
-		bh, err = badgerhold.Open(options)
+		bhold, err = badgerhold.Open(options)
 		if err != nil {
 			panic(err)
 		}
 		dataManager = &data.Manager{
-			Subscription: &SubscriptionManagerBH{bh},
-			Item:         &ItemManagerBH{bh},
+			Subscription: &SubscriptionManagerBH{bhold},
+			Item:         &ItemManagerBH{bhold},
 		}
 	}
 
@@ -36,12 +36,12 @@ func NewManager(path string) *data.Manager {
 
 // ClearDB ...
 func ClearDB() {
-	bh.Badger().DropAll()
+	bhold.Badger().DropAll()
 }
 
 // CloseDB ...
 func CloseDB() {
-	bh.Badger().Close()
+	bhold.Badger().Close()
 }
 
 func stringsToGenerics(pars ...string) []interface{} {

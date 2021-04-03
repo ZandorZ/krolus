@@ -1,4 +1,4 @@
-package db
+package bh
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func (s *SubscriptionManagerBH) Update(sub *models.SubscriptionModel) error {
 	return s.Store.UpdateMatching(&models.SubscriptionModel{}, badgerhold.Where("ID").Eq(sub.ID), func(record interface{}) error {
 		update, ok := record.(*models.SubscriptionModel)
 		if !ok {
-			return fmt.Errorf("Record isn't the correct type!  Wanted models.SubscriptionModel, got %T", record)
+			return fmt.Errorf("record isn't the correct type!  Wanted models.SubscriptionModel, got %T", record)
 		}
 		update.AlertNewItems = sub.AlertNewItems
 		update.Title = sub.Title
