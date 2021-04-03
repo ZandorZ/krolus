@@ -18,11 +18,13 @@ func NewGenericPatcher() Patcher {
 }
 
 // Patch ...
-func (yt *Generic) Patch(item *gofeed.Item) *models.ItemModel {
+func (g *Generic) Patch(item *gofeed.Item) *models.ItemModel {
 
 	img := ""
 	if item.Image != nil {
 		img = item.Image.URL
+	} else if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "image/jpeg" {
+		img = item.Enclosures[0].URL
 	}
 
 	d := item.PublishedParsed
