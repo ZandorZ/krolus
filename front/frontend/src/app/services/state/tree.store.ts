@@ -1,7 +1,7 @@
 import { Store } from 'rxjs-observable-store';
 import { Injectable, NgZone } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
-import { distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
+import { delay, distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
 import { getHeadersFromPath, getPath, isNode, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader, TreexState } from 'src/treex/state/store';
 import * as Wails from '@wailsapp/runtime';
@@ -100,10 +100,9 @@ export class TreeStore extends Store<TreexState> {
     }
 
     getSelectedHeaders(): Observable<TreexNodeHeader[]> {
-        return combineLatest(
-            this.getRoot(), this.getSelectedPath()
-        ).pipe(
-            map(([root, path]) => getHeadersFromPath(root as NodeModel, path))
+        return this.getSelectedPath().pipe(
+            delay(200),
+            map(path => getHeadersFromPath(this.state.root as NodeModel, path))
         );
     }
 

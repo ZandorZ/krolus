@@ -71,7 +71,7 @@ export const getPath = (parent: NodeModel, id: string): string => {
 
 export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHeader[] => {
 
-    if (!node) {
+    if (node == null) {
         return [];
     }
 
@@ -89,15 +89,18 @@ export const getHeadersFromPath = (node: NodeModel, path: string): TreexNodeHead
     path.split(".children.").slice(1).forEach((id) => {
         if (id.includes(".leaves.")) {
             const temp = id.split('.leaves.');
-            const parent = node.children.find(n => n.id == temp[0]);
-            if (!!parent) {
-                local += ".children." + temp[0];
-                headers.push({ id: parent.id, label: parent.label, description: parent.description, leaf: false, path: local });
-
-                const leaf = parent.leaves.find(l => l.id == temp[1]);
-                if (!!leaf) {
-                    local += ".leaves." + temp[1];
-                    headers.push({ id: leaf.id, label: leaf.label, description: leaf.description, leaf: true, path: local });
+            if (!!node.children) {
+                const parent = node.children.find(n => n.id == temp[0]);
+                if (!!parent) {
+                    local += ".children." + temp[0];
+                    headers.push({ id: parent.id, label: parent.label, description: parent.description, leaf: false, path: local });
+                    if (!!parent.leaves) {
+                        const leaf = parent.leaves.find(l => l.id == temp[1]);
+                        if (!!leaf) {
+                            local += ".leaves." + temp[1];
+                            headers.push({ id: leaf.id, label: leaf.label, description: leaf.description, leaf: true, path: local });
+                        }
+                    }
                 }
             }
         } else if (!!node.children) {
