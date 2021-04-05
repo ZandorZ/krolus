@@ -47,6 +47,7 @@ type PaginatedRequest struct {
 	Page         int
 	ItemsPerPage int
 	LeafIDs      []string
+	NodeID       string
 	Filter       *FilterRequest
 }
 

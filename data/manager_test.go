@@ -194,15 +194,6 @@ func Test_Item(t *testing.T) {
 		err = manager.Item.AddInBatch(itemsMap)
 		assert.Nil(t, err)
 
-		// items, err := manager.Item.All()
-		// assert.Nil(t, err)
-
-		// // table := tablewriter.NewWriter(os.Stdout)
-		// // for _, v := range items {
-		// // 	table.Append([]string{v.ID, v.Title, v.SubscriptionModel.Title, v.SubscriptionModel.LastUpdate.String()})
-		// // }
-		// // table.Render()
-
 	})
 
 	t.Run("Query item pagination (without Sub IDs)", func(t *testing.T) {
@@ -277,6 +268,16 @@ func Test_Item(t *testing.T) {
 		item, err = manager.Item.Get(items[0].ID)
 		assert.Nil(t, err)
 		assert.False(t, item.Favorite)
+
+	})
+
+	t.Run("Test sliced items", func(t *testing.T) {
+		items, err := manager.Item.All()
+		assert.Nil(t, err)
+
+		sliced := sqte.SplitItems(items, 5)
+
+		assert.Len(t, sliced, 3)
 
 	})
 

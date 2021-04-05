@@ -1,13 +1,12 @@
 package main
 
 import (
-	db "krolus/data/bh"
+	"krolus/data/sqte"
 	"krolus/feed"
 	"krolus/store"
 	"krolus/treex"
 	"krolus/treex/models"
 	"krolus/treex/persistence"
-	"os/user"
 	"time"
 
 	"github.com/leaanthony/mewn"
@@ -15,32 +14,33 @@ import (
 )
 
 const (
-	production = true
+	production = false
 	numWorkers = 3
 	interval   = 30 * time.Minute
 )
 
-var pathDB = ".krolus"
+var pathDB = "./db"
 
 func init() {
 
-	usr, err := user.Current()
-	if err != nil {
-		panic(err)
-	}
-	//TODO: Fix this, use system paths
-	pathDB = usr.HomeDir + "/" + pathDB
-	if !production {
-		pathDB += "/dev"
-	} else {
-		pathDB += "/db"
-	}
+	// usr, err := user.Current()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// //TODO: Fix this, use system paths
+	// pathDB = usr.HomeDir + "/" + pathDB
+	// if !production {
+	// 	pathDB += "/dev"
+	// } else {
+	// 	pathDB += "/db"
+	// }
+
 }
 
 func main() {
 
-	man := db.NewManager(pathDB)
-	defer db.CloseDB()
+	man := sqte.NewManager(pathDB + "/dev.db")
+	// defer bh.CloseDB()
 
 	ob := feed.NewObserver()
 

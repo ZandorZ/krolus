@@ -3,13 +3,12 @@ package main
 import (
 	"fmt"
 	"krolus/data"
-	db "krolus/data/bh"
+	"krolus/data/sqte"
 	_models "krolus/models"
 	"krolus/treex/models"
 	"krolus/treex/persistence"
 	"log"
 	"os"
-	"os/user"
 	"path"
 
 	"github.com/gilliek/go-opml/opml"
@@ -18,17 +17,10 @@ import (
 
 var manager *data.Manager
 
-var pathDB = ".krolus"
+var pathDB = "./db"
 
 func init() {
-
-	usr, err := user.Current()
-	if err != nil {
-		panic(err)
-	}
-	pathDB = usr.HomeDir + "/" + pathDB + "/dev"
-
-	manager = db.NewManager(pathDB)
+	manager = sqte.NewManager(pathDB + "/dev.db")
 }
 
 func pretty(data interface{}) {
@@ -77,7 +69,7 @@ func importFile(name string, parent *models.Node) error {
 // main function
 func main() {
 
-	defer db.CloseDB()
+	// defer db.CloseDB()
 
 	filePersist, err := persistence.NewFile(pathDB + "/tree.x_")
 	if err != nil {

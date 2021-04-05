@@ -25,17 +25,20 @@ func (i *ItemManagerSqte) Add(item *models.ItemModel) error {
 // AddInBatch ....
 func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap) error {
 
-	return i.DB.Transaction(func(tx *gorm.DB) error {
-		for sub, items := range subBatch {
-			if err := tx.CreateInBatches(items, len(*items)).Error; err != nil {
-				return err
-			}
-			if err := tx.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
+	for sub, items := range subBatch {
+
+		sliced := SplitItems(*items, 30)
+		for _, slice := range sliced {
+			if err := i.DB.CreateInBatches(slice, len(slice)).Error; err != nil {
 				return err
 			}
 		}
-		return nil
-	})
+		if err := i.DB.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
+			return err
+		}
+	}
+	return nil
+
 }
 
 // AllPaginated ...
@@ -105,4 +108,18 @@ func (i *ItemManagerSqte) All() (models.ItemCollection, error) {
 	var items models.ItemCollection
 	err := i.DB.Preload("SubscriptionModel").Find(&items).Error
 	return items, err
+}
+
+// split items in chunks
+func SplitItems(items models.ItemCollection, size int) []models.ItemCollection {
+	slicedItems := []models.ItemCollection{}
+	var j int
+	for i := 0; i < len(items); i += size {
+		j += size
+		if j > len(items) {
+			j = len(items)
+		}
+		slicedItems = append(slicedItems, items[i:j])
+	}
+	return slicedItems
 }

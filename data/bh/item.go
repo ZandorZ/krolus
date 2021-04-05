@@ -132,10 +132,15 @@ func (i *ItemManagerBH) UpdateFavorite(itemID string) error {
 
 		update, ok := record.(*models.ItemModel) // record will always be a pointer
 		if !ok {
-			return fmt.Errorf("Record isn't the correct type!  Wanted *models.ItemModel, got %T", record)
+			return fmt.Errorf("record isn't the correct type!  Wanted *models.ItemModel, got %T", record)
 		}
 		update.Favorite = !update.Favorite
 
 		return nil
 	})
+}
+
+func (i *ItemManagerBH) All() (models.ItemCollection, error) {
+	var items models.ItemCollection
+	return items, nil
 }

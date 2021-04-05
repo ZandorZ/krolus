@@ -3,7 +3,7 @@ version: "3"
 tasks:
     migrate:
         cmds:
-            - rm ~/.krolus/dev/* -Rf
+            - rm ./db/dev.db
             - cd ./migrations; go build -o migrate
             - ./migrations/migrate
     serve-web:
