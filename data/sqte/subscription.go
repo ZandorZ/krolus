@@ -26,7 +26,7 @@ func (s *SubscriptionManagerSqte) Add(sub *models.SubscriptionModel) error {
 
 // Update ...
 func (s *SubscriptionManagerSqte) Update(sub *models.SubscriptionModel) error {
-	return s.Model(sub).Where("ID = ?", sub.ID).Updates(&sub).Error
+	return s.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
 }
 
 // Remove ...
@@ -37,21 +37,43 @@ func (s *SubscriptionManagerSqte) Remove(ID string) error {
 // Get ...
 func (s *SubscriptionManagerSqte) Get(ID string) (*models.SubscriptionModel, error) {
 	var sub models.SubscriptionModel
-	err := s.First(&sub, "ID = ?", ID).Error
+	err := s.DB.First(&sub, "id = ?", ID).Error
 	return &sub, err
 }
 
 // GetByURL ...
 func (s *SubscriptionManagerSqte) GetByURL(XURL string) (*models.SubscriptionModel, error) {
-	return nil, nil
+	var sub models.SubscriptionModel
+	err := s.DB.First(&sub, "xurl = ?", XURL).Error
+	return &sub, err
 }
 
 // AllByIDs ...
 func (s *SubscriptionManagerSqte) AllByIDs(IDs ...string) (models.SubscriptionCollection, error) {
-	return nil, nil
+	var subs []models.SubscriptionModel
+	err := s.DB.Find(&subs, IDs).Error
+	return subs, err
 }
 
 // ForEachOlderThan ...
 func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel) error) error {
+	rows, err := s.DB.Model(&models.SubscriptionModel{}).
+		Order("last_updated DESC").
+		Where("last_updated < ?", time.Now().Add(-since)).
+		Rows()
+
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var sub models.SubscriptionModel
+		if err := s.DB.ScanRows(rows, &sub); err != nil {
+			return err
+		} else {
+			forEachFn(&sub)
+		}
+	}
 	return nil
 }

@@ -17,12 +17,17 @@ const (
 type SubscriptionModel struct {
 	ID            string
 	Title         string
-	XURL          string
+	XURL          string `gorm:"column:xurl"`
 	Description   string
 	URL           string
-	LastUpdate    time.Time
+	LastUpdate    time.Time `gorm:"column:last_updated"`
 	Status        uint
 	AlertNewItems bool
+}
+
+// TableName overrides the table name
+func (SubscriptionModel) TableName() string {
+	return "subscriptions"
 }
 
 // SubscriptionCollection ...
