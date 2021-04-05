@@ -75,7 +75,7 @@ func Test_Subscription(t *testing.T) {
 	t.Run("Get sub by URL", func(t *testing.T) {
 
 		id := uuid.New().String()
-		title := "Sub test"
+		title := "Sub test 3"
 		url := "https://www.example.com"
 		err := manager.Subscription.Add(&models.SubscriptionModel{
 			ID:          id,
@@ -104,7 +104,7 @@ func Test_Subscription(t *testing.T) {
 		for i, id := range ids {
 			err := manager.Subscription.Add(&models.SubscriptionModel{
 				ID:          id,
-				Title:       fmt.Sprintf("Syb Test %d", i),
+				Title:       fmt.Sprintf("Sub Test %d", i),
 				Description: fmt.Sprintf("This is a %d test", i),
 				XURL:        fmt.Sprintf("http://www.example%d.com", i),
 				LastUpdate:  time.Now().Add(-time.Hour * time.Duration(4+i)),
@@ -133,6 +133,151 @@ func Test_Subscription(t *testing.T) {
 		})
 		assert.Nil(t, err)
 		assert.Equal(t, 4, counter)
+	})
+
+}
+
+func Test_Item(t *testing.T) {
+
+	t.Run("Add item", func(t *testing.T) {
+
+		id := uuid.New().String()
+		title := "First item test"
+		err := manager.Item.Add(&models.ItemModel{
+			ID:          id,
+			Title:       title,
+			Description: "This is the first test",
+			Published:   time.Now().Add(-time.Hour * 1),
+			New:         true,
+		})
+		assert.Nil(t, err)
+
+		// get sub
+		sub, err := manager.Item.Get(id)
+		assert.Nil(t, err)
+
+		// sub exist
+		if assert.NotNil(t, sub) {
+			// same title
+			assert.Equal(t, title, sub.Title)
+		}
+
+	})
+
+	t.Run("Add item in batch", func(t *testing.T) {
+
+		itemsMap := models.SubscriptionItemsMap{}
+		//get subs
+		since := time.Hour * 3
+		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel) error {
+			assert.IsType(t, &models.SubscriptionModel{}, sm)
+
+			ids := []string{uuid.New().String(), uuid.New().String(), uuid.New().String()}
+			var items models.ItemCollection
+			for i, id := range ids {
+				items = append(items, models.ItemModel{
+					ID:                id,
+					Title:             fmt.Sprintf("Item Test %d", i),
+					Description:       fmt.Sprintf("This is a %d test", i),
+					Link:              fmt.Sprintf("http://www.example%d.com", i),
+					Published:         time.Now().Add(-time.Hour * time.Duration(2+i)),
+					SubscriptionModel: *sm,
+					New:               true,
+				})
+			}
+			sm.LastUpdate = items[len(items)-1].Published
+			itemsMap[sm] = &items
+			return nil
+		})
+		assert.Nil(t, err)
+
+		err = manager.Item.AddInBatch(itemsMap)
+		assert.Nil(t, err)
+
+		// items, err := manager.Item.All()
+		// assert.Nil(t, err)
+
+		// // table := tablewriter.NewWriter(os.Stdout)
+		// // for _, v := range items {
+		// // 	table.Append([]string{v.ID, v.Title, v.SubscriptionModel.Title, v.SubscriptionModel.LastUpdate.String()})
+		// // }
+		// // table.Render()
+
+	})
+
+	t.Run("Query item pagination (without Sub IDs)", func(t *testing.T) {
+
+		req := models.PaginatedRequest{
+			Page:         0,
+			ItemsPerPage: 3,
+		}
+
+		items, err := manager.Item.AllPaginated(req)
+		assert.Nil(t, err)
+		assert.Len(t, items.Items, 3)
+		assert.Equal(t, 13, items.Total)
+
+	})
+
+	t.Run("Query item pagination (with Sub IDs)", func(t *testing.T) {
+
+		//get subs
+		since := time.Hour * 4
+		var ids []string
+		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel) error {
+			assert.IsType(t, &models.SubscriptionModel{}, sm)
+			ids = append(ids, sm.ID)
+			return nil
+		})
+		assert.Nil(t, err)
+
+		req := models.PaginatedRequest{
+			Page:         0,
+			ItemsPerPage: 5,
+			LeafIDs:      ids[0:2],
+		}
+
+		items, err := manager.Item.AllPaginated(req)
+		assert.Nil(t, err)
+		assert.Len(t, items.Items, 5)
+		assert.Equal(t, 6, items.Total)
+
+		req.Page = 1
+		items, err = manager.Item.AllPaginated(req)
+		assert.Nil(t, err)
+		assert.Len(t, items.Items, 1)
+		assert.Equal(t, 6, items.Total)
+
+	})
+
+	t.Run("GetUpated item", func(t *testing.T) {
+		items, err := manager.Item.All()
+		assert.Nil(t, err)
+
+		item, err := manager.Item.GetUpdate(items[0].ID)
+		assert.Nil(t, err)
+		assert.False(t, item.New)
+
+	})
+
+	t.Run("Update favorite item", func(t *testing.T) {
+		items, err := manager.Item.All()
+		assert.Nil(t, err)
+
+		err = manager.Item.UpdateFavorite(items[0].ID)
+		assert.Nil(t, err)
+
+		item, err := manager.Item.Get(items[0].ID)
+		assert.Nil(t, err)
+		assert.True(t, item.Favorite)
+
+		err = manager.Item.UpdateFavorite(items[0].ID)
+		assert.Nil(t, err)
+
+		item, err = manager.Item.Get(items[0].ID)
+		assert.Nil(t, err)
+		assert.False(t, item.Favorite)
+
 	})
 
 }

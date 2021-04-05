@@ -15,20 +15,21 @@ const (
 
 // ItemModel ...
 type ItemModel struct {
-	ID               string
-	Title            string
-	Link             string
-	Description      string
-	Published        time.Time
-	Subscription     string
-	SubscriptionName string
-	Provider         string
-	Thumbnail        string
-	Type             string
-	Saved            bool
-	New              bool
-	Embed            string
-	Favorite         bool
+	ID                string
+	Title             string
+	Link              string
+	Description       string
+	Published         time.Time
+	Subscription      string
+	SubscriptionName  string
+	SubscriptionModel SubscriptionModel `gorm:"foreignKey:Subscription"`
+	Provider          string
+	Thumbnail         string
+	Type              string
+	Saved             bool
+	New               bool
+	Embed             string
+	Favorite          bool
 }
 
 // ItemCollection collections of items
@@ -45,7 +46,6 @@ type PaginatedItemCollection struct {
 type PaginatedRequest struct {
 	Page         int
 	ItemsPerPage int
-	NodeID       string
 	LeafIDs      []string
 	Filter       *FilterRequest
 }
