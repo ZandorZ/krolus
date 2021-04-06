@@ -7,7 +7,7 @@ import (
 
 func main() {
 	new(app.KrolusApp).Start(app.Options{
-		Production: false,
+		Production: true,
 		Interval:   30 * time.Minute,
 		Workers:    3,
 	})

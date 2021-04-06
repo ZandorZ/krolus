@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"krolus/app"
 	"krolus/data"
-	"krolus/data/bh"
+	"krolus/data/sqte"
 	"krolus/models"
 	"krolus/treex"
 	treexModels "krolus/treex/models"
@@ -23,7 +23,7 @@ var filePersist persistence.Persister
 
 func init() {
 	basePath = app.GetPath(true)
-	manager = bh.NewManager(basePath) //+ "/dev.db"
+	manager = sqte.NewManager(basePath + "/mine.db")
 
 	var err error
 	filePersist, err = persistence.NewFile(basePath + "/tree.x_")
@@ -139,12 +139,12 @@ func main() {
 	}
 	xmlFile := path.Dir(ex) + "/mine.xml"
 
-	if err := exportOPML(xmlFile); err != nil {
-		panic(err)
-	}
-
-	// if err := importOPML(xmlFile); err != nil {
+	// if err := exportOPML(xmlFile); err != nil {
 	// 	panic(err)
 	// }
+
+	if err := importOPML(xmlFile); err != nil {
+		panic(err)
+	}
 
 }
