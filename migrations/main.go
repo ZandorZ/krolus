@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"krolus/app"
 	"krolus/data"
-	"krolus/data/sqte"
+	"krolus/data/bh"
 	"krolus/models"
 	"krolus/treex"
 	treexModels "krolus/treex/models"
@@ -22,8 +22,8 @@ var treeState *treex.State
 var filePersist persistence.Persister
 
 func init() {
-	basePath = app.GetPath(false)
-	manager = sqte.NewManager(basePath + "/dev.db")
+	basePath = app.GetPath(true)
+	manager = bh.NewManager(basePath) //+ "/dev.db"
 
 	var err error
 	filePersist, err = persistence.NewFile(basePath + "/tree.x_")
@@ -67,37 +67,40 @@ func traverseOPML(outlines []opml.Outline, parent *treexModels.Node) {
 	}
 }
 
-func traverseTreex(doc *opml.Outline, parent *treexModels.Node) {
-	doc.Title = parent.Label
-	doc.Text = parent.Description
+func traverseTreex(outlines *[]opml.Outline, parent *treexModels.Node) {
+
 	treeState.LoadNode(parent.ID)
 
-	doc.Outlines = make([]opml.Outline, len(parent.Nodes)+len(parent.Leaves))
-	for i, node := range parent.Nodes {
-		traverseTreex(&doc.Outlines[i], node)
-	}
+	tempOuts := make([]opml.Outline, len(parent.Nodes)+len(parent.Leaves))
 
-	start := len(parent.Nodes)
 	for i, leaf := range parent.Leaves {
-		doc.Outlines[start+i].Title = leaf.Label
-		doc.Outlines[start+i].Text = leaf.Description
+		tempOuts[i].Title = leaf.Label
+		tempOuts[i].Text = leaf.Description
 		sub, err := manager.Subscription.Get(leaf.ID)
 		if err != nil {
 			panic(err)
 		}
-		doc.Outlines[start+i].HTMLURL = sub.URL
-		doc.Outlines[start+i].XMLURL = sub.XURL
-		doc.Outlines[start+i].Type = "rss"
+		tempOuts[i].HTMLURL = sub.URL
+		tempOuts[i].XMLURL = sub.XURL
+		tempOuts[i].Type = "rss"
 	}
+	start := len(parent.Leaves)
+
+	for i, node := range parent.Nodes {
+		tempOuts[start+i].Title = node.Label
+		tempOuts[start+i].Text = node.Description
+		traverseTreex(&tempOuts[start+i].Outlines, node)
+	}
+	*outlines = tempOuts
 }
 
 func exportOPML(fileName string) error {
 	doc := &opml.OPML{
-		Version: "2.0",
+		Version: "1.0",
 	}
-	doc.Body.Outlines = make([]opml.Outline, 1)
+	doc.Head.Title = treeState.Root.Label
 
-	traverseTreex(&doc.Body.Outlines[0], treeState.Root)
+	traverseTreex(&doc.Body.Outlines, treeState.Root)
 
 	xml, err := doc.XML()
 	if err != nil {
@@ -134,12 +137,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	// if err := exportOPML(path.Dir(ex) + "/mine.xml"); err != nil {
-	// 	panic(err)
-	// }
+	xmlFile := path.Dir(ex) + "/mine.xml"
 
-	if err := importOPML(path.Dir(ex) + "/mine.xml"); err != nil {
+	if err := exportOPML(xmlFile); err != nil {
 		panic(err)
 	}
+
+	// if err := importOPML(xmlFile); err != nil {
+	// 	panic(err)
+	// }
 
 }

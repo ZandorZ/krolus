@@ -21,7 +21,7 @@ func (i *ItemManagerBH) Add(item *models.ItemModel) error {
 }
 
 // AddInBatch ....
-func (i *ItemManagerBH) AddInBatch(subBatch models.SubscriptionItemsMap) error {
+func (i *ItemManagerBH) AddInBatch(subBatch models.SubscriptionItemsMap, _tx interface{}) error {
 
 	tx := i.Badger().NewTransaction(true)
 	defer tx.Discard()

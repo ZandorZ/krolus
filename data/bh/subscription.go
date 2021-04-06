@@ -68,7 +68,7 @@ func (s *SubscriptionManagerBH) AllByIDs(IDs ...string) (models.SubscriptionColl
 }
 
 // ForEachOlderThan ...
-func (s *SubscriptionManagerBH) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel) error) error {
+func (s *SubscriptionManagerBH) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel, interface{}) error) error {
 	return s.Store.ForEach(badgerhold.
 		Where("LastUpdate").
 		Lt(time.Now().Add(-since)).
