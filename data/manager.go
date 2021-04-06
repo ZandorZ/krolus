@@ -13,17 +13,18 @@ type SubscriptionManager interface {
 	GetByURL(XURL string) (*models.SubscriptionModel, error)
 	Update(sub *models.SubscriptionModel) error
 	AllByIDs(IDs ...string) (models.SubscriptionCollection, error)
-	ForEachOlderThan(time.Duration, func(*models.SubscriptionModel) error) error
+	ForEachOlderThan(time.Duration, func(*models.SubscriptionModel, interface{}) error) error
 }
 
 // ItemManager ...
 type ItemManager interface {
 	Add(item *models.ItemModel) error
-	AddInBatch(models.SubscriptionItemsMap) error
+	AddInBatch(models.SubscriptionItemsMap, interface{}) error
 	AllPaginated(models.PaginatedRequest) (models.PaginatedItemCollection, error)
 	Get(string) (*models.ItemModel, error)
 	GetUpdate(string) (*models.ItemModel, error)
 	UpdateFavorite(string) error
+	All() (models.ItemCollection, error)
 }
 
 // Manager ...

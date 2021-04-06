@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
+	"krolus/app"
 	"krolus/data"
-	db "krolus/data/bh"
-	_models "krolus/models"
-	"krolus/treex/models"
+	"krolus/data/sqte"
+	"krolus/models"
+	"krolus/treex"
+	treexModels "krolus/treex/models"
 	"krolus/treex/persistence"
-	"log"
 	"os"
-	"os/user"
 	"path"
 
 	"github.com/gilliek/go-opml/opml"
@@ -17,18 +17,23 @@ import (
 )
 
 var manager *data.Manager
-
-var pathDB = ".krolus"
+var basePath string
+var treeState *treex.State
+var filePersist persistence.Persister
 
 func init() {
+	basePath = app.GetPath(true)
+	manager = sqte.NewManager(basePath + "/mine.db")
 
-	usr, err := user.Current()
+	var err error
+	filePersist, err = persistence.NewFile(basePath + "/tree.x_")
 	if err != nil {
 		panic(err)
 	}
-	pathDB = usr.HomeDir + "/" + pathDB + "/dev"
-
-	manager = db.NewManager(pathDB)
+	treeState, err = treex.NewState(treexModels.NewNode("Subscriptions", "My Subscriptions"), filePersist)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func pretty(data interface{}) {
@@ -36,20 +41,20 @@ func pretty(data interface{}) {
 	fmt.Println(string(s))
 }
 
-func traverse(outlines []opml.Outline, parent *models.Node) {
+func traverseOPML(outlines []opml.Outline, parent *treexModels.Node) {
 
 	for _, outline := range outlines {
 		//folder
 		if outline.XMLURL == "" {
-			node := models.NewNode(outline.Title, outline.Text)
+			node := treexModels.NewNode(outline.Title, outline.Text)
 			parent.AddNode(node)
 			if len(outline.Outlines) > 0 {
-				traverse(outline.Outlines, node)
+				traverseOPML(outline.Outlines, node)
 			}
 		} else {
-			leaf := models.NewLeaf(outline.Title, outline.Text)
+			leaf := treexModels.NewLeaf(outline.Title, outline.Text)
 			parent.AddLeaf(leaf)
-			if err := manager.Subscription.Add(&_models.SubscriptionModel{
+			if err := manager.Subscription.Add(&models.SubscriptionModel{
 				ID:          leaf.ID,
 				Title:       leaf.Label,
 				XURL:        outline.XMLURL,
@@ -62,40 +67,84 @@ func traverse(outlines []opml.Outline, parent *models.Node) {
 	}
 }
 
-func importFile(name string, parent *models.Node) error {
+func traverseTreex(outlines *[]opml.Outline, parent *treexModels.Node) {
 
-	doc, err := opml.NewOPMLFromFile(name)
+	treeState.LoadNode(parent.ID)
+
+	tempOuts := make([]opml.Outline, len(parent.Nodes)+len(parent.Leaves))
+
+	for i, leaf := range parent.Leaves {
+		tempOuts[i].Title = leaf.Label
+		tempOuts[i].Text = leaf.Description
+		sub, err := manager.Subscription.Get(leaf.ID)
+		if err != nil {
+			panic(err)
+		}
+		tempOuts[i].HTMLURL = sub.URL
+		tempOuts[i].XMLURL = sub.XURL
+		tempOuts[i].Type = "rss"
+	}
+	start := len(parent.Leaves)
+
+	for i, node := range parent.Nodes {
+		tempOuts[start+i].Title = node.Label
+		tempOuts[start+i].Text = node.Description
+		traverseTreex(&tempOuts[start+i].Outlines, node)
+	}
+	*outlines = tempOuts
+}
+
+func exportOPML(fileName string) error {
+	doc := &opml.OPML{
+		Version: "1.0",
+	}
+	doc.Head.Title = treeState.Root.Label
+
+	traverseTreex(&doc.Body.Outlines, treeState.Root)
+
+	xml, err := doc.XML()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	traverse(doc.Outlines(), parent)
+	f, err := os.Create(fileName)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
 
+	_, err = f.WriteString(xml)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func importOPML(file string) error {
+	doc, err := opml.NewOPMLFromFile(file)
+	if err != nil {
+		return err
+	}
+	traverseOPML(doc.Outlines(), treeState.Root)
+
+	return filePersist.Save(*treeState.Root)
 }
 
 // main function
 func main() {
 
-	defer db.CloseDB()
-
-	filePersist, err := persistence.NewFile(pathDB + "/tree.x_")
-	if err != nil {
-		panic(err)
-	}
-
-	root := models.NewNode("Subscriptions", "My subscriptions")
-
 	ex, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
+	xmlFile := path.Dir(ex) + "/mine.xml"
 
-	importFile(path.Dir(ex)+"/test.xml", root)
+	// if err := exportOPML(xmlFile); err != nil {
+	// 	panic(err)
+	// }
 
-	if err := filePersist.Save(*root); err != nil {
+	if err := importOPML(xmlFile); err != nil {
 		panic(err)
 	}
 
-	pretty(root)
 }
