@@ -125,7 +125,7 @@ func Test_Subscription(t *testing.T) {
 
 		since := time.Hour * 3
 		counter := 0
-		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel) error {
+		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel, _tx interface{}) error {
 			assert.IsType(t, &models.SubscriptionModel{}, sm)
 			assert.True(t, sm.LastUpdate.Before(time.Now().Add(-since)))
 			counter++
@@ -169,7 +169,7 @@ func Test_Item(t *testing.T) {
 		itemsMap := models.SubscriptionItemsMap{}
 		//get subs
 		since := time.Hour * 3
-		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel) error {
+		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel, _tx interface{}) error {
 			assert.IsType(t, &models.SubscriptionModel{}, sm)
 
 			ids := []string{uuid.New().String(), uuid.New().String(), uuid.New().String()}
@@ -191,7 +191,7 @@ func Test_Item(t *testing.T) {
 		})
 		assert.Nil(t, err)
 
-		err = manager.Item.AddInBatch(itemsMap)
+		err = manager.Item.AddInBatch(itemsMap, nil)
 		assert.Nil(t, err)
 
 	})
@@ -215,7 +215,7 @@ func Test_Item(t *testing.T) {
 		//get subs
 		since := time.Hour * 4
 		var ids []string
-		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel) error {
+		err := manager.Subscription.ForEachOlderThan(since, func(sm *models.SubscriptionModel, _tx interface{}) error {
 			assert.IsType(t, &models.SubscriptionModel{}, sm)
 			ids = append(ids, sm.ID)
 			return nil
