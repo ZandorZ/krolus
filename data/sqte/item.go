@@ -51,11 +51,12 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 	itemsP := models.PaginatedItemCollection{}
 	var items models.ItemCollection
 
-	if i.tx == nil {
-		i.tx = i.DB.Session(&gorm.Session{})
+	tx := i.tx
+	if tx == nil {
+		tx = i.DB.Session(&gorm.Session{})
 	}
 
-	query := i.tx.Model(&models.ItemModel{}).Preload("SubscriptionModel")
+	query := tx.Model(&models.ItemModel{}).Preload("SubscriptionModel")
 
 	if len(request.LeafIDs) > 0 {
 		query.Where("Subscription IN (?)", request.LeafIDs)
@@ -86,7 +87,6 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 	itemsP.Total = int(count)
 
 	return itemsP, nil
-
 }
 
 // Get gets an item
@@ -100,15 +100,16 @@ func (i *ItemManagerSqte) Get(ID string) (*models.ItemModel, error) {
 func (i *ItemManagerSqte) GetUpdate(itemID string) (*models.ItemModel, error) {
 	var item models.ItemModel
 
-	if i.tx == nil {
-		i.tx = i.DB.Session(&gorm.Session{})
+	tx := i.tx
+	if tx == nil {
+		tx = i.DB.Session(&gorm.Session{})
 	}
 
-	if err := i.tx.First(&item, "id = ?", itemID).Error; err != nil {
+	if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
 		return nil, err
 	}
 
-	if err := i.tx.Model(&item).Update("new", false).Error; err != nil {
+	if err := tx.Model(&item).Update("new", false).Error; err != nil {
 		return nil, err
 	}
 
@@ -117,13 +118,17 @@ func (i *ItemManagerSqte) GetUpdate(itemID string) (*models.ItemModel, error) {
 
 // UpdateFavorite updates the favorite field
 func (i *ItemManagerSqte) UpdateFavorite(itemID string) error {
-	return i.DB.Transaction(func(tx *gorm.DB) error {
-		var item models.ItemModel
-		if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
-			return err
-		}
-		return tx.Model(&item).Update("favorite", !item.Favorite).Error
-	})
+	tx := i.tx
+	if tx == nil {
+		tx = i.DB.Session(&gorm.Session{})
+	}
+
+	var item models.ItemModel
+	if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
+		return err
+	}
+
+	return tx.Model(&item).Update("favorite", !item.Favorite).Error
 }
 
 func (i *ItemManagerSqte) All() (models.ItemCollection, error) {

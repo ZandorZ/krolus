@@ -26,10 +26,11 @@ func (s *SubscriptionManagerSqte) Add(sub *models.SubscriptionModel) error {
 
 // Update ...
 func (s *SubscriptionManagerSqte) Update(sub *models.SubscriptionModel) error {
-	if s.tx == nil {
-		s.tx = s.DB.Session(&gorm.Session{})
+	tx := s.tx
+	if tx == nil {
+		tx = s.DB.Session(&gorm.Session{})
 	}
-	return s.tx.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
+	return tx.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
 }
 
 // Remove ...
@@ -62,7 +63,6 @@ func (s *SubscriptionManagerSqte) AllByIDs(IDs ...string) (models.SubscriptionCo
 func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel, interface{}) error) error {
 
 	return s.DB.Transaction(func(tx *gorm.DB) error {
-
 		s.tx = tx
 		rows, err := tx.Model(&models.SubscriptionModel{}).
 			Order("last_updated DESC").
