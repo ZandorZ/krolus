@@ -13,7 +13,7 @@ func NewManager(path string) *data.Manager {
 
 	if dataManager == nil {
 		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
-			SkipDefaultTransaction: true,
+			// SkipDefaultTransaction: true,
 		})
 		if err != nil {
 			panic("failed to connect database")

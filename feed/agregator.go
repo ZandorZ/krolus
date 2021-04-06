@@ -56,7 +56,7 @@ func (a *Aggregator) eachLoop(now time.Time) {
 	// rest
 	if a.Pool.Size() > 0 {
 		a.Pool.Run()
-		a.saveBatchItems()
+		a.saveBatchItems(nil)
 	}
 
 	a.logger.Warnf("Finish loop at %s", now.Format(time.RFC822))
@@ -78,14 +78,14 @@ func (a *Aggregator) CheckSub(sub *models.SubscriptionModel) error {
 		a.subInfos.Put(sub, &items)
 	}
 
-	a.saveBatchItems()
+	a.saveBatchItems(nil)
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 	return nil
 }
 
 // eachSub ...
-func (a *Aggregator) eachSub(sub *models.SubscriptionModel) error {
+func (a *Aggregator) eachSub(sub *models.SubscriptionModel, tx interface{}) error {
 
 	a.Pool.Add(func() {
 		a.logger.Infof("Checking: %s, since: %s", sub.Title, sub.LastUpdate)
@@ -104,18 +104,18 @@ func (a *Aggregator) eachSub(sub *models.SubscriptionModel) error {
 	if a.Pool.Size()%a.batchSize == 0 {
 		a.logger.Infof("Batching: ")
 		a.Pool.Run()
-		a.saveBatchItems()
+		a.saveBatchItems(tx)
 	}
 
 	return nil
 }
 
 // saveBatchItems
-func (a *Aggregator) saveBatchItems() {
+func (a *Aggregator) saveBatchItems(tx interface{}) {
 
 	if a.subInfos.Len() > 0 {
 		a.logger.Debugf("Adding batch ...")
-		err := a.dataMng.Item.AddInBatch(a.subInfos.Infos())
+		err := a.dataMng.Item.AddInBatch(a.subInfos.Infos(), tx)
 		if err != nil {
 			a.logger.Errorf("Error adding items into batch: %v", err)
 		}

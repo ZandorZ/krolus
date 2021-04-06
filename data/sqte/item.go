@@ -23,17 +23,21 @@ func (i *ItemManagerSqte) Add(item *models.ItemModel) error {
 }
 
 // AddInBatch ....
-func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap) error {
+func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx interface{}) error {
+
+	tx, ok := _tx.(*gorm.DB)
+	if !ok {
+		tx = i.DB.Session(&gorm.Session{})
+	}
 
 	for sub, items := range subBatch {
-
 		sliced := SplitItems(*items, 30)
 		for _, slice := range sliced {
-			if err := i.DB.CreateInBatches(slice, len(slice)).Error; err != nil {
+			if err := tx.CreateInBatches(slice, len(slice)).Error; err != nil {
 				return err
 			}
 		}
-		if err := i.DB.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
+		if err := tx.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
 			return err
 		}
 	}
@@ -47,31 +51,33 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 	itemsP := models.PaginatedItemCollection{}
 	var items models.ItemCollection
 
-	return itemsP, i.DB.Transaction(func(tx *gorm.DB) error {
+	tx := i.DB.Session(&gorm.Session{SkipDefaultTransaction: true})
 
-		query := tx.Model(&models.ItemModel{})
+	query := tx.Model(&models.ItemModel{})
 
-		if len(request.LeafIDs) > 0 {
-			query = query.Where("subscription IN (?)", request.LeafIDs)
-		}
+	if len(request.LeafIDs) > 0 {
+		query.Where("Subscription IN (?)", request.LeafIDs)
+	}
 
-		var count int64
-		if err := query.Count(&count).Error; err != nil {
-			return err
-		}
+	var count int64
+	if err := query.Count(&count).Error; err != nil {
+		return itemsP, err
+	}
 
-		if err := query.Limit(request.ItemsPerPage).Offset(request.ItemsPerPage * request.Page).
-			Find(&items).Error; err != nil {
-			return err
-		}
+	if err := query.Limit(request.ItemsPerPage).
+		Offset(request.ItemsPerPage * request.Page).
+		Order("Published DESC").
+		Find(&items).
+		Error; err != nil {
+		return itemsP, err
+	}
 
-		itemsP.Items = items
-		itemsP.Page = request.Page
-		itemsP.Total = int(count)
+	itemsP.Items = items
+	itemsP.Page = request.Page
+	itemsP.Total = int(count)
 
-		return nil
+	return itemsP, nil
 
-	})
 }
 
 // Get gets an item

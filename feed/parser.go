@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -58,6 +59,7 @@ func (p *GenericParser) Parse(sub *models.SubscriptionModel) (models.ItemCollect
 		newItem := patcher.Patch(item)
 		newItem.Subscription = sub.ID
 		newItem.SubscriptionName = sub.Title
+		newItem.ID = uuid.New().String()
 
 		if newItem.Published.After(sub.LastUpdate) {
 			if newItem.Published.After(last) {

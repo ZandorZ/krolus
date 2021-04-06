@@ -56,24 +56,29 @@ func (s *SubscriptionManagerSqte) AllByIDs(IDs ...string) (models.SubscriptionCo
 }
 
 // ForEachOlderThan ...
-func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel) error) error {
-	rows, err := s.DB.Model(&models.SubscriptionModel{}).
-		Order("last_updated DESC").
-		Where("last_updated < ?", time.Now().Add(-since)).
-		Rows()
+func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachFn func(*models.SubscriptionModel, interface{}) error) error {
 
-	if err != nil {
-		return err
-	}
-	defer rows.Close()
+	return s.DB.Transaction(func(tx *gorm.DB) error {
 
-	for rows.Next() {
-		var sub models.SubscriptionModel
-		if err := s.DB.ScanRows(rows, &sub); err != nil {
+		rows, err := tx.Model(&models.SubscriptionModel{}).
+			Order("last_updated DESC").
+			Where("last_updated < ?", time.Now().Add(-since)).
+			Rows()
+
+		if err != nil {
 			return err
-		} else {
-			forEachFn(&sub)
 		}
-	}
-	return nil
+
+		defer rows.Close()
+		for rows.Next() {
+			var sub models.SubscriptionModel
+			if err := tx.ScanRows(rows, &sub); err != nil {
+				return err
+			}
+			if err := forEachFn(&sub, tx); err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
