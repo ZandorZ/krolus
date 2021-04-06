@@ -3,7 +3,7 @@ version: "3"
 tasks:
     migrate:
         cmds:
-            - rm ./db/dev.db
+            - rm ./db/*
             - cd ./migrations; go build -o migrate
             - ./migrations/migrate
     serve-web:

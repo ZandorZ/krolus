@@ -11,14 +11,13 @@ var dataManager *data.Manager
 
 func NewManager(path string) *data.Manager {
 
-	db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
-		SkipDefaultTransaction: true,
-	})
-	if err != nil {
-		panic("failed to connect database")
-	}
-
 	if dataManager == nil {
+		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
+			SkipDefaultTransaction: true,
+		})
+		if err != nil {
+			panic("failed to connect database")
+		}
 		dataManager = &data.Manager{
 			Subscription: newSubscriptionManagerSqte(db),
 			Item:         newItemManagerSqte(db),
