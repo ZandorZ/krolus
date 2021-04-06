@@ -66,7 +66,7 @@ func (f *FeedStore) listenSubNews() {
 func (f *FeedStore) LoadMoreItems(request map[string]interface{}) (models.PaginatedItemCollection, error) {
 
 	if request == nil {
-		return models.PaginatedItemCollection{}, fmt.Errorf("Error loading more items. Request is empty")
+		return models.PaginatedItemCollection{}, fmt.Errorf("error loading more items. Request is empty")
 	}
 
 	req := &models.PaginatedRequest{}
@@ -78,7 +78,7 @@ func (f *FeedStore) LoadMoreItems(request map[string]interface{}) (models.Pagina
 	if req.NodeID != "" {
 		node := f.treeState.MapNodes.Get(req.NodeID)
 		if node == nil {
-			return models.PaginatedItemCollection{}, fmt.Errorf("Node: %s not found", req.NodeID)
+			return models.PaginatedItemCollection{}, fmt.Errorf("node: %s not found", req.NodeID)
 		}
 		req.LeafIDs = node.DescendentLeaves()
 	}

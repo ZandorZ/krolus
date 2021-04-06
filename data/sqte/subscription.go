@@ -9,14 +9,14 @@ import (
 
 // SubscriptionManagerSqte ...
 type SubscriptionManagerSqte struct {
-	*gorm.DB
+	*baseSqte
 }
 
-func newSubscriptionManagerSqte(db *gorm.DB) *SubscriptionManagerSqte {
+func newSubscriptionManagerSqte(base *baseSqte) *SubscriptionManagerSqte {
 	// Migrate the schema
-	db.AutoMigrate(&models.SubscriptionModel{})
+	base.AutoMigrate(&models.SubscriptionModel{})
 
-	return &SubscriptionManagerSqte{db}
+	return &SubscriptionManagerSqte{base}
 }
 
 // Add ...
@@ -60,6 +60,7 @@ func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachF
 
 	return s.DB.Transaction(func(tx *gorm.DB) error {
 
+		s.tx = tx
 		rows, err := tx.Model(&models.SubscriptionModel{}).
 			Order("last_updated DESC").
 			Where("last_updated < ?", time.Now().Add(-since)).
@@ -79,6 +80,8 @@ func (s *SubscriptionManagerSqte) ForEachOlderThan(since time.Duration, forEachF
 				return err
 			}
 		}
+		s.tx = nil
+
 		return nil
 	})
 }

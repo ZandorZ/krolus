@@ -15,14 +15,20 @@ func NewManager(path string) *data.Manager {
 		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
 			// SkipDefaultTransaction: true,
 		})
+		base := &baseSqte{DB: db}
 		if err != nil {
 			panic("failed to connect database")
 		}
 		dataManager = &data.Manager{
-			Subscription: newSubscriptionManagerSqte(db),
-			Item:         newItemManagerSqte(db),
+			Subscription: newSubscriptionManagerSqte(base),
+			Item:         newItemManagerSqte(base),
 		}
 	}
 
 	return dataManager
+}
+
+type baseSqte struct {
+	*gorm.DB
+	tx *gorm.DB
 }

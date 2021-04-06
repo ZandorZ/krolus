@@ -7,14 +7,14 @@ import (
 )
 
 type ItemManagerSqte struct {
-	*gorm.DB
+	*baseSqte
 }
 
-func newItemManagerSqte(db *gorm.DB) *ItemManagerSqte {
+func newItemManagerSqte(base *baseSqte) *ItemManagerSqte {
 	// Migrate the schema
-	db.AutoMigrate(&models.ItemModel{})
+	base.AutoMigrate(&models.ItemModel{})
 
-	return &ItemManagerSqte{db}
+	return &ItemManagerSqte{base}
 }
 
 // Add saves an item
@@ -51,9 +51,11 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 	itemsP := models.PaginatedItemCollection{}
 	var items models.ItemCollection
 
-	tx := i.DB.Session(&gorm.Session{SkipDefaultTransaction: true})
+	if i.tx == nil {
+		i.tx = i.DB.Session(&gorm.Session{})
+	}
 
-	query := tx.Model(&models.ItemModel{})
+	query := i.tx.Model(&models.ItemModel{})
 
 	if len(request.LeafIDs) > 0 {
 		query.Where("Subscription IN (?)", request.LeafIDs)
@@ -90,13 +92,20 @@ func (i *ItemManagerSqte) Get(ID string) (*models.ItemModel, error) {
 // GetUpdate get and updates field New to false
 func (i *ItemManagerSqte) GetUpdate(itemID string) (*models.ItemModel, error) {
 	var item models.ItemModel
-	err := i.DB.Transaction(func(tx *gorm.DB) error {
-		if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
-			return err
-		}
-		return tx.Model(&item).Update("new", false).Error
-	})
-	return &item, err
+
+	if i.tx == nil {
+		i.tx = i.DB.Session(&gorm.Session{})
+	}
+
+	if err := i.tx.First(&item, "id = ?", itemID).Error; err != nil {
+		return nil, err
+	}
+
+	if err := i.tx.Model(&item).Update("new", false).Error; err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
 
 // UpdateFavorite updates the favorite field
