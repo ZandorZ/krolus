@@ -26,7 +26,10 @@ func (s *SubscriptionManagerSqte) Add(sub *models.SubscriptionModel) error {
 
 // Update ...
 func (s *SubscriptionManagerSqte) Update(sub *models.SubscriptionModel) error {
-	return s.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
+	if s.tx == nil {
+		s.tx = s.DB.Session(&gorm.Session{})
+	}
+	return s.tx.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
 }
 
 // Remove ...

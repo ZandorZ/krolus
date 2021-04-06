@@ -58,7 +58,6 @@ func (p *GenericParser) Parse(sub *models.SubscriptionModel) (models.ItemCollect
 	for _, item := range feed.Items {
 		newItem := patcher.Patch(item)
 		newItem.Subscription = sub.ID
-		newItem.SubscriptionName = sub.Title
 		newItem.ID = uuid.New().String()
 
 		if newItem.Published.After(sub.LastUpdate) {

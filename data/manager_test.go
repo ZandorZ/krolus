@@ -181,7 +181,7 @@ func Test_Item(t *testing.T) {
 					Description:       fmt.Sprintf("This is a %d test", i),
 					Link:              fmt.Sprintf("http://www.example%d.com", i),
 					Published:         time.Now().Add(-time.Hour * time.Duration(2+i)),
-					SubscriptionModel: *sm,
+					SubscriptionModel: sm,
 					New:               true,
 				})
 			}

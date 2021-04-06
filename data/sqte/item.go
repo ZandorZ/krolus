@@ -55,7 +55,7 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 		i.tx = i.DB.Session(&gorm.Session{})
 	}
 
-	query := i.tx.Model(&models.ItemModel{})
+	query := i.tx.Model(&models.ItemModel{}).Preload("SubscriptionModel")
 
 	if len(request.LeafIDs) > 0 {
 		query.Where("Subscription IN (?)", request.LeafIDs)
@@ -72,6 +72,13 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 		Find(&items).
 		Error; err != nil {
 		return itemsP, err
+	}
+
+	for i := range items {
+		if items[i].SubscriptionModel != nil {
+			items[i].SubscriptionName = items[i].SubscriptionModel.Title
+		}
+		items[i].SubscriptionModel = nil
 	}
 
 	itemsP.Items = items

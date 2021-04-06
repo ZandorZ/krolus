@@ -22,7 +22,7 @@ type ItemModel struct {
 	Published         time.Time
 	Subscription      string
 	SubscriptionName  string
-	SubscriptionModel SubscriptionModel `gorm:"foreignKey:Subscription"`
+	SubscriptionModel *SubscriptionModel `gorm:"foreignKey:Subscription" json:"-"`
 	Provider          string
 	Thumbnail         string
 	Type              string

@@ -21,8 +21,6 @@ func (s *SubscriptionManagerBH) Add(sub *models.SubscriptionModel) error {
 // Update ...
 func (s *SubscriptionManagerBH) Update(sub *models.SubscriptionModel) error {
 
-	//TODO: rename SubscriptionName in Items[]
-
 	return s.Store.UpdateMatching(&models.SubscriptionModel{}, badgerhold.Where("ID").Eq(sub.ID), func(record interface{}) error {
 		update, ok := record.(*models.SubscriptionModel)
 		if !ok {
