@@ -33,5 +33,5 @@ func (m *MediaStore) Download(ID string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return m.dl.Download(item.Link)
+	return m.dl.Download(item)
 }
