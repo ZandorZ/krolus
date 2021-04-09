@@ -9,7 +9,6 @@ import (
 	"krolus/treex/persistence"
 	"os/user"
 
-	"github.com/leaanthony/mewn"
 	"github.com/wailsapp/wails"
 )
 
@@ -79,15 +78,12 @@ func (k *KrolusApp) Start(options Options) {
 		panic(err)
 	}
 
-	js := mewn.String("./front/frontend/dist/frontend/main.js")
-	css := mewn.String("./front/frontend/dist/frontend/styles.css")
-
 	appW := wails.CreateApp(&wails.AppConfig{
 		Width:            1024,
 		Height:           768,
 		Title:            "krolus",
-		JS:               js,
-		CSS:              css,
+		JS:               options.Js,
+		CSS:              options.Css,
 		Resizable:        true,
 		DisableInspector: false,
 	})
