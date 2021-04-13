@@ -21,7 +21,11 @@ func newSubscriptionManagerSqte(base *baseSqte) *SubscriptionManagerSqte {
 
 // Add ...
 func (s *SubscriptionManagerSqte) Add(sub *models.SubscriptionModel) error {
-	return s.Create(sub).Error
+	tx := s.tx
+	if tx == nil {
+		tx = s.DB.Session(&gorm.Session{})
+	}
+	return tx.Create(sub).Error
 }
 
 // Update ...
