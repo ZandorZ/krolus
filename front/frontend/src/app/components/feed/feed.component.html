@@ -1,4 +1,5 @@
 <mat-toolbar>
+    <mat-progress-bar color="accent" mode="buffer" *ngIf="loading$ | async"></mat-progress-bar>
     <mat-toolbar-row>
         <button mat-icon-button (click)="toggleHideMenu()"
             [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">
@@ -37,7 +38,6 @@
             </button>
         </span>
     </mat-toolbar-row>
-
 </mat-toolbar>
 
 <div #scrollcont class="scroll-container" [appLoadingMask]="loading$ | async">

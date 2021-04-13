@@ -24,6 +24,7 @@ import { ItemComponent } from './components/item/item.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IframePlayerComponent } from './components/iframe-player/iframe-player.component';
@@ -74,6 +75,7 @@ import { LoadingMaskDirective } from './directives/loading-mask.directive';
         MatInputModule,
         MatProgressBarModule,
         MatListModule,
+        MatSnackBarModule,
         MatPaginatorModule,
         MatSidenavModule,
         {

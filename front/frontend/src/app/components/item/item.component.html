@@ -1,5 +1,6 @@
 <div id="item-container">
     <mat-toolbar>
+        <mat-progress-bar *ngIf="loading" mode="buffer"></mat-progress-bar>
         <mat-toolbar-row>
             <span class="item-icon" [ngSwitch]="model?.Type">
                 <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
@@ -15,7 +16,7 @@
                     matTooltipPosition="above">
                     <mat-icon>open_in_new</mat-icon>
                 </button>
-                <button mat-icon-button (click)="donwloadItem()" matTooltip="Download content"
+                <button [disabled]="loading" mat-icon-button (click)="donwloadItem()" matTooltip="Download content"
                     matTooltipPosition="above">
                     <mat-icon>download</mat-icon>
                 </button>
@@ -24,11 +25,10 @@
                 </button>
             </span>
         </mat-toolbar-row>
-
     </mat-toolbar>
 
 
-    <div id="main">
+    <div id="main" [appLoadingMask]="loading">
 
         <!-- videos -->
 

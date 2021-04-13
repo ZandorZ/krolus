@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output, ViewEncapsulation } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ItemModel } from 'src/app/models/item.model';
 import { MediaStore } from 'src/app/services/state/media.store';
@@ -22,29 +23,30 @@ export class ItemComponent implements OnChanges {
     open = new EventEmitter<string>();
 
     content: SafeHtml;
+    loading = false;
 
-    constructor(private sanitizer: DomSanitizer, private mediaStore: MediaStore) {
-
-
-
+    constructor(private sanitizer: DomSanitizer, private mediaStore: MediaStore, private _snackBar: MatSnackBar) {
     }
-
 
     ngOnChanges(): void {
         if (!!this.model) this.model.New = false;
         this.content = "";
     }
 
-
     openLink() {
         this.open.emit(this.model.Link);
     }
 
     async donwloadItem() {
-        //@ts-ignore
-        const cont = await this.mediaStore.downloadItem(this.model.ID);
 
-        this.content = this.sanitizer.bypassSecurityTrustHtml(cont);
+        this.loading = true;
+        try {
+            const cont = await this.mediaStore.downloadItem(this.model.ID);
+            this.content = this.sanitizer.bypassSecurityTrustHtml(cont);
+        } catch (error) {
+            this._snackBar.open(error, 'OK', { verticalPosition: 'top' });
+        }
+        this.loading = false;
     }
 
 }
