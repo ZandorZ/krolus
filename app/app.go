@@ -16,18 +16,15 @@ func GetPath(production bool) string {
 
 	var basePath string
 
+	usr, err := user.Current()
+	if err != nil {
+		panic(err)
+	}
+
 	if production {
-		usr, err := user.Current()
-		if err != nil {
-			panic(err)
-		}
 		basePath = usr.HomeDir + "/.krolus"
 	} else {
-		// ex, err := os.Executable()
-		// if err != nil {
-		// 	panic(err)
-		// }
-		basePath = "./db"
+		basePath = usr.HomeDir + "/Projects/krolus/db"
 	}
 
 	return basePath
@@ -44,7 +41,6 @@ func (k *KrolusApp) Start(options Options) {
 	basePath := GetPath(options.Production)
 
 	man := sqte.NewManager(basePath + "/mine.db")
-	// defer bh.CloseDB()
 
 	ob := feed.NewObserver()
 

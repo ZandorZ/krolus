@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"krolus/app"
 	"krolus/data"
@@ -20,9 +21,18 @@ var manager *data.Manager
 var basePath string
 var treeState *treex.State
 var filePersist persistence.Persister
+var opmlFile string
+var production bool
+var export bool
 
 func init() {
-	basePath = app.GetPath(true)
+
+	flag.StringVar(&opmlFile, "file", "test.xml", "opml filename")
+	flag.BoolVar(&production, "production", false, "production mode")
+	flag.BoolVar(&export, "export", false, "export mode")
+	flag.Parse()
+
+	basePath = app.GetPath(production)
 	manager = sqte.NewManager(basePath + "/mine.db")
 
 	var err error
@@ -137,14 +147,17 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	xmlFile := path.Dir(ex) + "/mine.xml"
+	xmlFile := path.Dir(ex) + "/" + opmlFile
 
-	// if err := exportOPML(xmlFile); err != nil {
-	// 	panic(err)
-	// }
+	if export {
+		if err := exportOPML(xmlFile); err != nil {
+			panic(err)
+		}
 
-	if err := importOPML(xmlFile); err != nil {
-		panic(err)
+	} else {
+		if err := importOPML(xmlFile); err != nil {
+			panic(err)
+		}
 	}
 
 }

@@ -2,8 +2,7 @@
 /build
 /db
 /migrations/migrate
-/front/wbiew
 
 /*.gob
 /go.sum
-front/wview
+/front/wview
