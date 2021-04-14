@@ -21,6 +21,7 @@ type SubscriptionModel struct {
 	Description   string
 	URL           string
 	LastUpdate    time.Time `gorm:"column:last_updated"`
+	LastItem      string    `gorm:"column:last_item"`
 	Status        uint
 	AlertNewItems bool
 }

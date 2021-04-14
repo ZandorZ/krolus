@@ -54,24 +54,43 @@ func (p *GenericParser) Parse(sub *models.SubscriptionModel) (models.ItemCollect
 		patcher = p()
 	}
 
-	var last time.Time
+	var lastUpdate time.Time
+	var lastItem string
 	for _, item := range feed.Items {
+
 		newItem := patcher.Patch(item)
 		newItem.Subscription = sub.ID
 		newItem.ID = uuid.New().String()
 
-		if newItem.Published.After(sub.LastUpdate) {
-			if newItem.Published.After(last) {
-				last = newItem.Published
+		if item.Link != sub.LastItem && newItem.Published.After(sub.LastUpdate) {
+			if newItem.Published.After(lastUpdate) {
+				lastUpdate = newItem.Published
 			}
 			items = append(items, *newItem)
+			lastItem = item.Link
 		}
 	}
 
-	if &last != nil {
-		sub.LastUpdate = last
+	if lastItem != "" {
+		sub.LastUpdate = lastUpdate
+		sub.LastItem = lastItem
 	}
 
 	return items, nil
 
 }
+
+// func (p *GenericParser) patchItem(item *gofeed.Item) (*models.ItemModel, error) {
+
+// 	u, err := url.Parse(item.Link)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	patcher := patchers.PatchMap["*"]()
+// 	if p, ok := patchers.PatchMap[u.Hostname()]; ok {
+// 		patcher = p()
+// 	}
+
+// 	return patcher.Patch(item)
+// }
