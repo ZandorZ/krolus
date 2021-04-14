@@ -50,7 +50,7 @@ func (t *TorClient) Close() {
 }
 
 // NewGenericClient ...
-func NewGenericClient() *http.Client {
+func NewGenericClient() *http.Client { //TODO: see https://github.com/bradfitz/exp-httpclient
 	return &http.Client{
 		Timeout: 30 * time.Second,
 	}
