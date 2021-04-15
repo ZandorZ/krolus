@@ -2,7 +2,7 @@ version: "3"
 
 tasks:
     clear-prod:
-        dir: /home/zandor/.krolus
+        dir: $HOME/.krolus
         cmds:
             - cmd: rm -f ./*
               silent: true
@@ -51,3 +51,8 @@ tasks:
     build:
         cmds:
             - wails build
+    deploy:
+        # deps: [build]
+        dir: ./build
+        cmds:
+            - cp krolus $HOME/Apps
