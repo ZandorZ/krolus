@@ -25,6 +25,12 @@
         </span>
         <span class="flex"></span>
         <span class="buttons">
+            <ng-container *ngIf="updateBtn">
+                <button mat-icon-button matTooltip="Load new items" matTooltipPosition="below" class="update"
+                    (click)="loadMoreItems()">
+                    <mat-icon>sync</mat-icon>
+                </button>
+            </ng-container>
             <button mat-icon-button matTooltip="Search text" matTooltipPosition="below">
                 <mat-icon>search</mat-icon>
             </button>

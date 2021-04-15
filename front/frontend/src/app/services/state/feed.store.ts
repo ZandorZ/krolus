@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from 'rxjs-observable-store';
 import { ItemCollection, ItemModel, PaginatedItemCollection, PaginatedRequest } from 'src/app/models/item.model'
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { isNode, TreexNode } from 'src/treex/model';
 
@@ -18,27 +18,21 @@ export class FeedState {
 })
 export class FeedStore extends Store<FeedState> {
 
-    //alerts$: BehaviorSubject<SubscriptionModel>;
+    // alerts$: BehaviorSubject<SubscriptionModel>;
+    update$: Subject<void>;
 
     currentReq: PaginatedRequest;
 
     constructor() {
         super(new FeedState);
+
+        this.update$ = new Subject();
         //  this.alerts$ = new BehaviorSubject<SubscriptionModel>(null);
         //@ts-ignore                
-        wails.Events.On("feed.update", async _ => this.dispatchUpdate());
+        wails.Events.On("feed.update", _ => this.update$.next());
         //@ts-ignore                
-        //wails.Events.On("feed.alert", (sub: SubscriptionModel) => this.dispatchAlert(sub));
+        //wails.Events.On("feed.alert", (sub: SubscriptionModel) => this.alerts$.next(sub));
     }
-
-    private async dispatchUpdate() {
-        await this.loadRemote();
-    }
-
-    // private dispatchAlert(sub: SubscriptionModel) {
-    //     console.warn('Feed Alert:', sub.Title);
-    //     this.alerts$.next(sub);
-    // }
 
     async loadMoreItems(selected: TreexNode, req: PaginatedRequest) {
 
@@ -60,6 +54,14 @@ export class FeedStore extends Store<FeedState> {
     }
 
 
+    selectItem(item: ItemModel) {
+        this.patchState(item, "Selected");
+    }
+
+    unSelectItem() {
+        this.patchState(undefined, "Selected");
+    }
+
     // getAlerts(throttle: number): Observable<SubscriptionModel> {
     //     return this.alerts$
     //         .asObservable()
@@ -68,12 +70,8 @@ export class FeedStore extends Store<FeedState> {
     //         );
     // }
 
-    selectItem(item: ItemModel) {
-        this.patchState(item, "Selected");
-    }
-
-    unSelectItem() {
-        this.patchState(undefined, "Selected");
+    getUpdate(): Observable<void> {
+        return this.update$.asObservable();
     }
 
     getTotal(): Observable<number> {

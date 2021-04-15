@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
@@ -37,6 +37,8 @@ export class FeedComponent implements OnChanges {
     selected$: Observable<ItemModel>;
     items$: Observable<ItemCollection>;
     total$: Observable<number>;
+    updateBtn = false;
+
     request: PaginatedRequest = {
         ItemsPerPage: this.pageSize,
         Page: 0,
@@ -47,13 +49,19 @@ export class FeedComponent implements OnChanges {
     @ViewChild('paginator')
     paginator: MatPaginator;
 
-    constructor(private store: FeedStore, private itemStore: ItemStore) {
+    constructor(private store: FeedStore, private itemStore: ItemStore, private changeRef: ChangeDetectorRef) {
         this.loading$ = this.store.isLoading();
         this.items$ = this.store.getItems();
         this.total$ = this.store.getTotal();
         this.selected$ = this.store.getSelected();
+        this.store.getUpdate().subscribe(_ => this.onUpdate());
         this.hidemenu = new EventEmitter();
         this.selectHeader = new EventEmitter();
+    }
+
+    onUpdate() {
+        this.updateBtn = true;
+        this.changeRef.markForCheck();
     }
 
     toggleHideMenu() {
@@ -72,6 +80,7 @@ export class FeedComponent implements OnChanges {
     }
 
     async loadMoreItems() {
+        this.updateBtn = false;
         await this.store.loadMoreItems(this.node, this.request);
         this.myScrollContainer.nativeElement.scrollTo(0, 0);
     }

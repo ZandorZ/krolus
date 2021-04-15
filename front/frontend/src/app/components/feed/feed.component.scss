@@ -45,3 +45,36 @@
 .buttons {
     display: none;
 }
+
+mat-progress-bar {
+    position: absolute !important;
+}
+
+.update {
+    animation: animateHeart 1.2s infinite ease-out;
+}
+
+@keyframes animateHeart {
+    0% {
+        transform: scale(0.9);
+        box-shadow: 0 0 0 2px rgba(95, 74, 74, 0.2);
+    }
+    5% {
+        transform: scale(1.1);
+    }
+    10% {
+        transform: scale(1);
+    }
+    15% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 5px rgba(121, 89, 89, 0.4);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    100% {
+        transform: scale(1);
+        color: red;
+    }
+}
