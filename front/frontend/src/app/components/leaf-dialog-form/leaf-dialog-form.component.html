@@ -9,7 +9,7 @@
                 <input matInput name="XURL" formControlName="XURL" autocomplete="off" placeholder="Feed URL"
                     tabindex="1" required />
                 <mat-error>{{getErrorMessage('XURL')}}</mat-error>
-                <mat-progress-bar *ngIf="querying" mode="indeterminate"></mat-progress-bar>
+                <mat-progress-bar *ngIf="querying" mode="indeterminate" color="accent"></mat-progress-bar>
             </mat-form-field>
             <mat-form-field>
                 <input matInput name="Title" formControlName="Title" autocomplete="off" placeholder="Title" tabindex="2"
