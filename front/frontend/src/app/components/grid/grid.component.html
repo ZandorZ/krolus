@@ -3,8 +3,7 @@
         [ngClass]="{'new' : item.New, 'selected': item.ID == selected?.ID}">
         <mat-card-header>
             <mat-card-title [matTooltip]="item?.Title" matTooltipPosition="above">{{item?.Title.length > 75 &&
-                item?.Type != 'unknown' ? item?.Title.substring(0,75) + "..." :
-                item.Title }}
+                !!item?.Thumbnail ? item?.Title.substring(0,75) + "..." : item.Title }}
             </mat-card-title>
             <div class="content" [ngStyle]="{backgroundImage:'url('+item.Thumbnail+')'}">
             </div>

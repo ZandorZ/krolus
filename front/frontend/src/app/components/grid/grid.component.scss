@@ -55,7 +55,7 @@ mat-card-header {
     flex: 1 1 auto;
     background-position: center center;
     background-repeat: no-repeat;
-    -moz-background-size: 100% auto; /* Gecko 1.9.2 (Firefox 3.6) */
+    -moz-background-size: 100% auto;
     -o-background-size: 100% auto;
     background-size: 100% auto;
     -webkit-background-size: 100% auto;
@@ -65,7 +65,7 @@ mat-card-header {
     margin-bottom: 5px;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    max-height: 210px;
 }
 
 .details {
