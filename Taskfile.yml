@@ -17,25 +17,25 @@ tasks:
             - cmd: go build -o migrate
               silent: true
     export-prod:
-        deps: [migrate, clear-prod]
+        deps: [migrate]
         dir: ./migrations
         cmds:
-            - ./migrate -export=true -production=true -file=mine.xml
+            - ./migrate -export=true -production=true -file=prod.xml
     export-dev:
-        deps: [migrate, clear-dev]
+        deps: [migrate]
         dir: ./migrations
         cmds:
-            - ./migrate -export=true -production=false -file=test.xml
+            - ./migrate -export=true -production=false -file=dev.xml
     import-prod:
         deps: [migrate, clear-prod]
         dir: ./migrations
         cmds:
-            - ./migrate -export=false -production=true -file=mine.xml
+            - ./migrate -export=false -production=true -file=prod.xml
     import-dev:
         deps: [migrate, clear-dev]
         dir: ./migrations
         cmds:
-            - ./migrate -export=false -production=false -file=test.xml
+            - ./migrate -export=false -production=false -file=dev.xml
     web:
         dir: ./front/frontend
         cmds:
