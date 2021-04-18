@@ -3,7 +3,6 @@ package feed
 import (
 	"krolus/feed/patchers"
 	"krolus/models"
-	"net/url"
 	"time"
 
 	"github.com/google/uuid"
@@ -44,21 +43,11 @@ func (p *GenericParser) Parse(sub *models.SubscriptionModel) (models.ItemCollect
 		return nil, err
 	}
 
-	u, err := url.Parse(sub.XURL)
-	if err != nil {
-		return nil, err
-	}
-
-	patcher := patchers.PatchMap["*"]()
-	if p, ok := patchers.PatchMap[u.Hostname()]; ok {
-		patcher = p()
-	}
-
 	var lastUpdate time.Time
 	var lastItem string
 	for _, item := range feed.Items {
 
-		newItem := patcher.Patch(item)
+		newItem := patchers.GetPatcher(item.Link)(item)
 		newItem.Subscription = sub.ID
 		newItem.ID = uuid.New().String()
 
@@ -77,20 +66,4 @@ func (p *GenericParser) Parse(sub *models.SubscriptionModel) (models.ItemCollect
 	}
 
 	return items, nil
-
 }
-
-// func (p *GenericParser) patchItem(item *gofeed.Item) (*models.ItemModel, error) {
-
-// 	u, err := url.Parse(item.Link)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-
-// 	patcher := patchers.PatchMap["*"]()
-// 	if p, ok := patchers.PatchMap[u.Hostname()]; ok {
-// 		patcher = p()
-// 	}
-
-// 	return patcher.Patch(item)
-// }

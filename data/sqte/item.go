@@ -56,7 +56,7 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 		tx = i.DB.Session(&gorm.Session{})
 	}
 
-	query := tx.Model(&models.ItemModel{}).Preload("SubscriptionModel")
+	query := tx.Model(&models.ItemModel{}).Select("id", "title", "published", "thumbnail", "subscription", "new", "favorite").Preload("SubscriptionModel")
 
 	if len(request.LeafIDs) > 0 {
 		query.Where("Subscription IN (?)", request.LeafIDs)

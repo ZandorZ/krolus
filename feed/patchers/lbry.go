@@ -1,59 +1,48 @@
 package patchers
 
-import (
-	"fmt"
-	"krolus/models"
-	"regexp"
+// // Lbry ...
+// type Lbry struct {
+// }
 
-	"github.com/mmcdole/gofeed"
-)
+// // NewLbryPatcher ....
+// func NewLbryPatcher() Patcher {
+// 	return &Lbry{}
+// }
 
-// Lbry ...
-type Lbry struct {
-}
+// func (l *Lbry) extractName(url string) (string, error) {
 
-// NewLbryPatcher ....
-func NewLbryPatcher() Patcher {
-	return &Lbry{}
-}
+// 	re, err := regexp.Compile(`https:\/\/odysee.com\/(.*)\/(.*):(.*)`)
+// 	if err != nil {
+// 		return "", err
+// 	}
 
-func (l *Lbry) extractName(url string) (string, error) {
+// 	found := re.FindAllStringSubmatch(url, 2)
+// 	if len(found) > 0 {
+// 		return found[0][2], nil
+// 	}
 
-	re, err := regexp.Compile(`lbry:\/\/(.*)#(.*)`)
+// 	return "", fmt.Errorf("pattern not found")
+// }
 
-	if err != nil {
-		return "", err
-	}
+// // Patch ...
+// func (l *Lbry) Patch(item *gofeed.Item) *models.ItemModel {
 
-	found := re.FindAllStringSubmatch(url, 2)
+// 	embed := ""
+// 	name, err := l.extractName(item.Link)
+// 	if err == nil {
+// 		embed = fmt.Sprintf("https://odysee.com/$/embed/%s/%s", name, item.GUID)
+// 	}
 
-	if len(found) > 0 {
-		return found[0][1], nil
-	}
-
-	return "", fmt.Errorf("pattern not found")
-
-}
-
-// Patch ...
-func (l *Lbry) Patch(item *gofeed.Item) *models.ItemModel {
-
-	embed := ""
-	name, err := l.extractName(item.Link)
-	if err == nil {
-		embed = fmt.Sprintf("https://odysee.com/$/embed/%s/%s", name, item.GUID)
-	}
-
-	return &models.ItemModel{
-		ID:          item.GUID,
-		Title:       item.Title,
-		Link:        item.Link,
-		Description: item.Description,
-		Thumbnail:   item.Enclosures[0].URL,
-		Published:   item.PublishedParsed.Local(),
-		New:         true,
-		Provider:    "lbry",
-		Type:        "video",
-		Embed:       embed,
-	}
-}
+// 	return &models.ItemModel{
+// 		ID:          item.GUID,
+// 		Title:       item.Title,
+// 		Link:        item.Link,
+// 		Description: item.Description,
+// 		Thumbnail:   item.Enclosures[0].URL,
+// 		Published:   item.PublishedParsed.Local(),
+// 		New:         true,
+// 		Provider:    "lbry",
+// 		Type:        "video",
+// 		Embed:       embed,
+// 	}
+// }

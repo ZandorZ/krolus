@@ -4,28 +4,19 @@ import (
 	"krolus/models"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
 
-// Generic ...
-type Generic struct {
-}
-
-// NewGenericPatcher ....
-func NewGenericPatcher() Patcher {
-	return &Generic{}
-}
-
 // Patch ...
-func (g *Generic) Patch(item *gofeed.Item) *models.ItemModel {
+func GenericPatch(item *gofeed.Item) *models.ItemModel {
 
 	img := ""
 	if item.Image != nil {
 		img = item.Image.URL
-	} else if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "image/jpeg" {
-		img = item.Enclosures[0].URL
 	}
+	// else if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "image/jpeg" {
+	// 	img = item.Enclosures[0].URL
+	// }
 
 	d := item.PublishedParsed
 	if d == nil {
@@ -38,7 +29,6 @@ func (g *Generic) Patch(item *gofeed.Item) *models.ItemModel {
 	}
 
 	return &models.ItemModel{
-		ID:          uuid.New().String(),
 		Title:       item.Title,
 		Link:        item.Link,
 		Description: item.Description,

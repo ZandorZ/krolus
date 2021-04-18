@@ -1,73 +1,64 @@
 package patchers
 
-import (
-	"fmt"
-	"html"
-	"krolus/models"
-	"regexp"
+// // Reddit ...
+// type Reddit struct {
+// }
 
-	"github.com/mmcdole/gofeed"
-)
+// // NewRedditPatcher ....
+// func NewRedditPatcher() Patcher {
+// 	return &Reddit{}
+// }
 
-// Reddit ...
-type Reddit struct {
-}
+// // Patch ...
+// func (r *Reddit) Patch(item *gofeed.Item) *models.ItemModel {
 
-// NewRedditPatcher ....
-func NewRedditPatcher() Patcher {
-	return &Reddit{}
-}
+// 	thumb := ""
+// 	if item.Extensions != nil {
+// 		thumb = item.Extensions["media"]["thumbnail"][0].Attrs["url"]
+// 	}
 
-// Patch ...
-func (r *Reddit) Patch(item *gofeed.Item) *models.ItemModel {
+// 	_item := &models.ItemModel{
+// 		ID:          item.GUID,
+// 		Title:       item.Title,
+// 		Link:        item.Link,
+// 		Description: item.Content,
+// 		Thumbnail:   thumb,
+// 		Published:   item.PublishedParsed.Local(),
+// 		New:         true,
+// 		Provider:    "reddit",
+// 		Type:        "unknown",
+// 		Embed:       item.Link,
+// 	}
 
-	thumb := ""
-	if item.Extensions != nil {
-		thumb = item.Extensions["media"]["thumbnail"][0].Attrs["url"]
-	}
+// 	if id, ok := extractYoutube(_item.Description); ok {
+// 		_item.Type = "video"
+// 		_item.Embed = embedYoutube(id)
+// 	}
 
-	_item := &models.ItemModel{
-		ID:          item.GUID,
-		Title:       item.Title,
-		Link:        item.Link,
-		Description: item.Content,
-		Thumbnail:   thumb,
-		Published:   item.PublishedParsed.Local(),
-		New:         true,
-		Provider:    "reddit",
-		Type:        "unknown",
-		Embed:       item.Link,
-	}
+// 	if img, ok := extractImage(_item.Description); ok {
+// 		_item.Type = "image"
+// 		_item.Embed = img
+// 	}
 
-	if id, ok := extractYoutube(_item.Description); ok {
-		_item.Type = "video"
-		_item.Embed = embedYoutube(id)
-	}
+// 	return _item
+// }
 
-	if img, ok := extractImage(_item.Description); ok {
-		_item.Type = "image"
-		_item.Description = img
-	}
+// func extractImage(content string) (string, bool) {
 
-	return _item
-}
+// 	content = html.UnescapeString(content)
 
-func extractImage(content string) (string, bool) {
+// 	re, err := regexp.Compile(`<a href="((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg))">\[link\]</a>`)
 
-	content = html.UnescapeString(content)
+// 	if err != nil {
+// 		panic(err)
+// 	}
 
-	re, err := regexp.Compile(`<a href="((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg))">\[link\]</a>`)
+// 	found := re.FindAllStringSubmatch(content, 2)
 
-	if err != nil {
-		panic(err)
-	}
+// 	if len(found) > 0 {
+// 		return fmt.Sprintf("<img src='%s'>", found[0][1]), true
+// 	}
 
-	found := re.FindAllStringSubmatch(content, 2)
+// 	return "", false
 
-	if len(found) > 0 {
-		return fmt.Sprintf("<img src='%s'>", found[0][1]), true
-	}
-
-	return "", false
-
-}
+// }

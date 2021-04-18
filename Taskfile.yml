@@ -52,7 +52,7 @@ tasks:
         cmds:
             - wails build
     deploy:
-        # deps: [build]
+        deps: [build]
         dir: ./build
         cmds:
             - cp krolus $HOME/Apps
