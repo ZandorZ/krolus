@@ -13,11 +13,11 @@ type Aggregator struct {
 	*Looper
 	*Pool
 
-	feedParser Parser
-	ob         Observer
-	dataMng    *data.Manager
-	logger     *logger.CustomLogger
-	subInfos   *SubInfos
+	checker  Checker
+	ob       Observer
+	dataMng  *data.Manager
+	logger   *logger.CustomLogger
+	subInfos *SubInfos
 
 	interval   time.Duration
 	maxWorkers int
@@ -25,13 +25,13 @@ type Aggregator struct {
 }
 
 // NewAggregator ...
-func NewAggregator(parser Parser, interval time.Duration, maxWorkers int, ob Observer, man *data.Manager, logger *logger.CustomLogger) *Aggregator {
+func NewAggregator(checker Checker, interval time.Duration, maxWorkers int, ob Observer, man *data.Manager, logger *logger.CustomLogger) *Aggregator {
 
 	// TODO: create options?
 	agg := &Aggregator{
 		interval:   interval,
 		batchSize:  maxWorkers * 4,
-		feedParser: parser,
+		checker:    checker,
 		maxWorkers: maxWorkers,
 		ob:         ob,
 		dataMng:    man,
@@ -49,7 +49,7 @@ func NewAggregator(parser Parser, interval time.Duration, maxWorkers int, ob Obs
 func (a *Aggregator) eachLoop(now time.Time) {
 	a.logger.Warnf("Starting loop at %s", now.Format(time.RFC822))
 
-	if err := a.dataMng.Subscription.ForEachOlderThan(a.interval, a.eachSub); err != nil {
+	if err := a.dataMng.Subscription.ForEachOlderThan(a.interval, a.eachCheckSub); err != nil {
 		a.logger.Errorf("Error loading subs: %v", err)
 	}
 
@@ -64,40 +64,32 @@ func (a *Aggregator) eachLoop(now time.Time) {
 
 // CheckSub ...
 func (a *Aggregator) CheckSub(sub *models.SubscriptionModel) error {
+	//TODO: Fix this
+	a.checkSub(sub)
+	a.saveBatchItems(nil)
+	return nil
+}
 
-	//TODO: fix this /////////////////////////////////////////////////////////////////////////
+func (a *Aggregator) checkSub(sub *models.SubscriptionModel) {
+
 	a.logger.Infof("Checking: %s, since: %s", sub.Title, sub.LastUpdate)
-	items, err := a.feedParser.Parse(sub)
+	items, err := a.checker.Check(sub)
 	if err != nil {
 		a.logger.Errorf("Error parsing sub: %s, %v", sub.Title, err)
+		return
 	}
-
 	a.logger.Debugf("Total items: %d", len(items))
 	if len(items) > 0 {
 		a.logger.Infof("%d new items in %s, since %s", len(items), sub.Title, sub.LastUpdate)
 		a.subInfos.Put(sub, &items)
 	}
-
-	a.saveBatchItems(nil)
-	/////////////////////////////////////////////////////////////////////////////////////////
-
-	return nil
 }
 
-// eachSub ...
-func (a *Aggregator) eachSub(sub *models.SubscriptionModel, tx interface{}) error {
+// eachCheckSub ...
+func (a *Aggregator) eachCheckSub(sub *models.SubscriptionModel, tx interface{}) error {
 
 	a.Pool.Add(func() {
-		a.logger.Infof("Checking: %s, since: %s", sub.Title, sub.LastUpdate)
-		items, err := a.feedParser.Parse(sub)
-		if err != nil {
-			a.logger.Errorf("Error parsing sub: %s, %v", sub.Title, err)
-		}
-		a.logger.Debugf("Total items: %d", len(items))
-		if len(items) > 0 {
-			a.logger.Infof("%d new items in %s, since %s", len(items), sub.Title, sub.LastUpdate)
-			a.subInfos.Put(sub, &items)
-		}
+		a.checkSub(sub)
 	})
 
 	// group by batchsize
@@ -115,18 +107,16 @@ func (a *Aggregator) saveBatchItems(tx interface{}) {
 
 	if a.subInfos.Len() > 0 {
 		a.logger.Debugf("Adding batch ...")
-		err := a.dataMng.Item.AddInBatch(a.subInfos.Infos(), tx)
-		if err != nil {
+		if err := a.dataMng.Item.AddInBatch(a.subInfos.Infos(), tx); err != nil {
 			a.logger.Errorf("Error adding items into batch: %v", err)
+			return
 		}
-		if err == nil {
-			a.ob.Publish(a.subInfos.Infos())
-			a.subInfos.Reset()
-		}
+		a.ob.Publish(a.subInfos.Infos())
+		a.subInfos.Reset()
 	}
 }
 
-// Start ....
+// Start starts loop
 func (a *Aggregator) Start(flag bool) {
 	go a.Looper.Start(flag)
 }

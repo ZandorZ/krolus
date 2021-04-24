@@ -5,12 +5,11 @@ import (
 	"net/http"
 )
 
-// Parser ...
-type Parser interface {
-	Parse(*models.SubscriptionModel) (models.ItemCollection, error)
-}
-
-// Requester ..
 type Requester interface {
 	Request(url string) (*http.Response, error)
+}
+
+type Checker interface {
+	Requester
+	Check(*models.SubscriptionModel) (models.ItemCollection, error)
 }

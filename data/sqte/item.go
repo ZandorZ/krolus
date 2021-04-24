@@ -36,8 +36,8 @@ func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx i
 			if err := tx.CreateInBatches(slice, len(slice)).Error; err != nil {
 				return err
 			}
-		}
-		if err := tx.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
+		} //date & link
+		if err := tx.Model(sub).UpdateColumns(models.SubscriptionModel{Provider: sub.Provider, LastUpdate: sub.LastUpdate, LastItemLink: sub.LastItemLink}).Error; err != nil {
 			return err
 		}
 	}

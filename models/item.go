@@ -17,10 +17,11 @@ const (
 type ItemModel struct {
 	ID                string
 	Title             string
-	Link              string
+	Link              string `gorm:"primaryKey"`
 	Description       string
+	Content           string
 	Published         time.Time
-	Subscription      string
+	Subscription      string `gorm:"primaryKey"`
 	SubscriptionName  string
 	SubscriptionModel *SubscriptionModel `gorm:"foreignKey:Subscription" json:"-"`
 	Provider          string
@@ -28,7 +29,6 @@ type ItemModel struct {
 	Type              string
 	Saved             bool
 	New               bool
-	Embed             string
 	Favorite          bool
 }
 

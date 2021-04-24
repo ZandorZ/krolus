@@ -37,23 +37,19 @@ type KrolusApp struct {
 func (k *KrolusApp) Start(options Options) {
 
 	k.options = options
-
 	basePath := GetPath(options.Production)
-
 	man := sqte.NewManager(basePath + "/mine.db")
-
 	ob := feed.NewObserver()
 
 	//if options.Tor {
 	// torClient := feed.NewTorClient()
 	// defer torClient.Close()
 	//}
-
 	httpClient := feed.NewGenericClient()
 	defer httpClient.CloseIdleConnections()
 
 	agg := feed.NewAggregator(
-		feed.NewParser(
+		feed.NewChecker(
 			feed.NewRequester(httpClient),
 		),
 		options.Interval,
@@ -69,7 +65,7 @@ func (k *KrolusApp) Start(options Options) {
 	if err != nil {
 		panic(err)
 	}
-	treeState, err := treex.NewState(models.NewNode(".", "."), filePersist)
+	treeState, err := treex.NewState(models.NewNode("Root", "Root folder"), filePersist)
 	if err != nil {
 		panic(err)
 	}
