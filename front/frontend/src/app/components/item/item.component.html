@@ -33,7 +33,7 @@
         <!-- videos -->
 
         <div *ngIf="model?.Type == 'video'" style="height: 50%;">
-            <app-iframe-player [url]="model?.Embed">
+            <app-iframe-player [url]="model?.Content">
             </app-iframe-player>
         </div>
 
@@ -41,7 +41,7 @@
         <div *ngIf="model?.Type == 'video'" style="height: 48%; overflow: auto;" class="description mat-body-1">
             <div *ngIf="model?.Provider == 'youtube' || model?.Provider == 'bitchute'" [innerText]="model?.Description">
             </div>
-            <div *ngIf="model?.Provider == 'lbry' || model?.Provider == 'reddit'" [innerHTML]="model?.Description">
+            <div *ngIf="model?.Provider == 'lbry'" [innerHTML]="model?.Description">
             </div>
         </div>
 

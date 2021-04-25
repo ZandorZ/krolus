@@ -36,11 +36,12 @@ func (c *FacadeChecker) newItems(sub *models.SubscriptionModel, f *gofeed.Feed) 
 	var lastItemLink string
 
 	items := funk.Filter(f.Items, func(i *gofeed.Item) bool {
+
 		if i.Link != sub.LastItemLink && i.PublishedParsed.After(sub.LastUpdate) {
 			if i.PublishedParsed.After(lastUpdate) {
 				lastUpdate = *i.PublishedParsed
+				lastItemLink = i.Link
 			}
-			lastItemLink = i.Link
 			return true
 		}
 		return false

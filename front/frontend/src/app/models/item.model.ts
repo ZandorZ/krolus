@@ -11,7 +11,7 @@ export interface ItemModel {
     Provider: string
     Type: string
     Thumbnail: string
-    Embed: string
+    Content: string
     Favorite: boolean
 }
 

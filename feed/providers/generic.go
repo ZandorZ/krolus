@@ -35,6 +35,10 @@ var genericPatcher PatchFunc = func(item *models.ItemModel) {
 
 }
 
+var genericFetcher FetcherFunc = func(item *models.ItemModel) {
+
+}
+
 func getImage(item *gofeed.Item) string {
 	img := ""
 	if item.Image != nil {

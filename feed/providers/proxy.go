@@ -9,6 +9,7 @@ import (
 
 var ConvertersMap map[string]ConvertFunc
 var PatchersMap map[string]PatchFunc
+var FetchersMap map[string]FetcherFunc
 
 func init() {
 	ConvertersMap = map[string]ConvertFunc{
@@ -21,10 +22,15 @@ func init() {
 		"www.reddit.com":  redditPatcher,
 		"www.youtube.com": youtubePatcher,
 	}
+	FetchersMap = map[string]FetcherFunc{
+		"*":               genericFetcher,
+		"www.youtube.com": youtubeFetcher,
+	}
 }
 
 type Proxy struct {
 	Patcher
+	Fetcher
 	ConvertFunc
 }
 
@@ -43,7 +49,11 @@ func (p *Proxy) Convert(sub *models.SubscriptionModel, f *gofeed.Feed) models.It
 }
 
 func (p *Proxy) Patch(item *models.ItemModel) {
-	getPatcher(item.Link)(item)
+	getPatcher(getDomain(item.Link))(item)
+}
+
+func (p *Proxy) Fetch(item *models.ItemModel) {
+	getFetcher(getDomain(item.Link))(item)
 }
 
 func getConverter(domain string) ConvertFunc {
@@ -60,6 +70,14 @@ func getPatcher(domain string) PatchFunc {
 		patch = p
 	}
 	return patch
+}
+
+func getFetcher(domain string) FetcherFunc {
+	fetcher := FetchersMap["*"]
+	if f, ok := FetchersMap[domain]; ok {
+		fetcher = f
+	}
+	return fetcher
 }
 
 func getDomain(link string) string {

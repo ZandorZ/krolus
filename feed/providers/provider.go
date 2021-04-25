@@ -19,6 +19,7 @@ type Patcher interface {
 }
 
 //////////////////////////////////////////////////////////////////
+type FetcherFunc func(*models.ItemModel)
 type Fetcher interface {
 	Fetch(*models.ItemModel)
 }

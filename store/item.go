@@ -2,6 +2,7 @@ package store
 
 import (
 	"krolus/data"
+	"krolus/feed/providers"
 	"krolus/models"
 	"krolus/treex"
 
@@ -37,11 +38,9 @@ func (i *ItemStore) FetchItem(itemID string, updateNew bool) (models.ItemModel, 
 			return models.ItemModel{}, err
 		}
 		//////////////////////////////////////////////////
-	} else {
-		item, err = i.manager.Item.Get(itemID)
-		return *item, err
 	}
-
+	item, err = i.manager.Item.Get(itemID)
+	providers.NewProxy("..").Fetch(item)
 	return *item, err
 }
 
