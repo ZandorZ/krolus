@@ -13,10 +13,9 @@ func GenericPatch(item *gofeed.Item) *models.ItemModel {
 	img := ""
 	if item.Image != nil {
 		img = item.Image.URL
+	} else if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "image/jpeg" {
+		img = item.Enclosures[0].URL
 	}
-	// else if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "image/jpeg" {
-	// 	img = item.Enclosures[0].URL
-	// }
 
 	d := item.PublishedParsed
 	if d == nil {
@@ -32,6 +31,7 @@ func GenericPatch(item *gofeed.Item) *models.ItemModel {
 		Title:       item.Title,
 		Link:        item.Link,
 		Description: item.Description,
+		Content:     item.Content,
 		Thumbnail:   img,
 		Published:   date,
 		New:         true,

@@ -25,6 +25,9 @@ func init() {
 	FetchersMap = map[string]FetcherFunc{
 		"*":               genericFetcher,
 		"www.youtube.com": youtubeFetcher,
+		"youtu.be":        youtubeFetcher,
+		"www.reddit.com":  redditFetcher,
+		"reddit.com":      redditFetcher,
 	}
 }
 
@@ -53,7 +56,7 @@ func (p *Proxy) Patch(item *models.ItemModel) {
 }
 
 func (p *Proxy) Fetch(item *models.ItemModel) {
-	getFetcher(getDomain(item.Link))(item)
+	getFetcher(getDomain(item.Link))(p, item)
 }
 
 func getConverter(domain string) ConvertFunc {

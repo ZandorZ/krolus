@@ -35,7 +35,7 @@ var genericPatcher PatchFunc = func(item *models.ItemModel) {
 
 }
 
-var genericFetcher FetcherFunc = func(item *models.ItemModel) {
+var genericFetcher FetcherFunc = func(proxy *Proxy, item *models.ItemModel) {
 
 }
 

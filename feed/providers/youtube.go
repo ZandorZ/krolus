@@ -10,7 +10,7 @@ import (
 )
 
 var youtubePatcher PatchFunc = func(item *models.ItemModel) {
-	item.Type = models.TypeVideo
+
 }
 
 var yotubeConverter ConvertFunc = func(sub *models.SubscriptionModel, feed *gofeed.Feed) models.ItemCollection {
@@ -29,19 +29,20 @@ var yotubeConverter ConvertFunc = func(sub *models.SubscriptionModel, feed *gofe
 			Thumbnail:    item.Extensions["media"]["group"][0].Children["thumbnail"][0].Attrs["url"],
 			Published:    item.PublishedParsed.Local(),
 			Provider:     "youtube",
-			Type:         "video",
+			Type:         models.TypeVideo,
 			Subscription: sub.ID,
 		}
 	}
 	return items
 }
 
-var youtubeFetcher FetcherFunc = func(item *models.ItemModel) {
-	id, _ := extractYoutube(item.Link)
+var youtubeFetcher FetcherFunc = func(proxy *Proxy, item *models.ItemModel) {
+	id, _ := extractYoutubeID(item.Link)
+	item.Type = models.TypeVideo
 	item.Content = fmt.Sprintf("https://www.youtube.com/embed/%s?ecver=1&amp;iv_load_policy=3&amp;rel=0&amp;showinfo=0&amp;yt:stretch=16:9&amp;autohide=1&amp;color=red&amp;width=560&amp;width=560&amp;version=3&amp;vq=hd720", id)
 }
 
-func extractYoutube(content string) (string, bool) {
+func extractYoutubeID(content string) (string, bool) {
 	re, err := regexp.Compile(`^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*`)
 
 	if err != nil {
