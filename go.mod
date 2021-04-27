@@ -6,7 +6,7 @@ require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/PuerkitoBio/goquery v1.6.0 // indirect
 	github.com/cretz/bine v0.1.0
-	github.com/fatih/color v1.10.0
+	github.com/fatih/color v1.10.0 // indirect
 	github.com/franela/goblin v0.0.0-20210113153425-413781f5e6c8
 	github.com/gilliek/go-opml v1.0.0
 	github.com/go-shiori/go-readability v0.0.0-20201011032228-bdc871772408
@@ -23,8 +23,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/thoas/go-funk v0.8.0
-	github.com/timshannon/badgerhold/v3 v3.0.0-20210208141506-eb78b03f8097
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/wailsapp/wails v1.16.2
 	github.com/webview/webview v0.0.0-20210330151455-f540d88dde4e
