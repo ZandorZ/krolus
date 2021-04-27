@@ -40,7 +40,7 @@ func (i *ItemStore) FetchItem(itemID string, updateNew bool) (models.ItemModel, 
 		//////////////////////////////////////////////////
 	}
 	item, err = i.manager.Item.Get(itemID)
-	providers.NewProxy("..").Fetch(item)
+	providers.NewProxy().Fetch(item)
 	return *item, err
 }
 

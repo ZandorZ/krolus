@@ -62,34 +62,29 @@ func (a *Aggregator) eachLoop(now time.Time) {
 	a.logger.Warnf("Finish loop at %s", now.Format(time.RFC822))
 }
 
-// CheckSub ...
-func (a *Aggregator) CheckSub(sub *models.SubscriptionModel) error {
-	//TODO: Fix this
-	a.checkSub(sub)
-	a.saveBatchItems(nil)
-	return nil
-}
-
-func (a *Aggregator) checkSub(sub *models.SubscriptionModel) {
+func (a *Aggregator) checkAddInfo(sub *models.SubscriptionModel) error {
 
 	a.logger.Infof("Checking: %s, since: %s", sub.Title, sub.LastUpdate)
 	items, err := a.checker.Check(sub)
 	if err != nil {
-		a.logger.Errorf("Error parsing sub: %s, %v", sub.Title, err)
-		return
+		return err
 	}
+
 	a.logger.Debugf("Total items: %d", len(items))
 	if len(items) > 0 {
 		a.logger.Infof("%d new items in %s, since %s", len(items), sub.Title, sub.LastUpdate)
 		a.subInfos.Put(sub, &items)
 	}
+	return nil
 }
 
 // eachCheckSub ...
 func (a *Aggregator) eachCheckSub(sub *models.SubscriptionModel, tx interface{}) error {
 
 	a.Pool.Add(func() {
-		a.checkSub(sub)
+		if err := a.checkAddInfo(sub); err != nil {
+			a.logger.Errorf("Error parsing sub: %s, %v", sub.Title, err)
+		}
 	})
 
 	// group by batchsize
@@ -109,7 +104,6 @@ func (a *Aggregator) saveBatchItems(tx interface{}) {
 		a.logger.Debugf("Adding batch ...")
 		if err := a.dataMng.Item.AddInBatch(a.subInfos.Infos(), tx); err != nil {
 			a.logger.Errorf("Error adding items into batch: %v", err)
-			return
 		}
 		a.ob.Publish(a.subInfos.Infos())
 		a.subInfos.Reset()
@@ -119,4 +113,24 @@ func (a *Aggregator) saveBatchItems(tx interface{}) {
 // Start starts loop
 func (a *Aggregator) Start(flag bool) {
 	go a.Looper.Start(flag)
+}
+
+// CheckSub checks a sub and adds new items
+func (a *Aggregator) CheckSub(sub *models.SubscriptionModel) error {
+
+	items, err := a.checker.Check(sub)
+	if err != nil {
+		return err
+	}
+
+	infos := make(models.SubscriptionItemsMap)
+	infos[sub] = &items
+
+	if err := a.dataMng.Item.AddInBatch(infos, nil); err != nil {
+		return err
+	}
+
+	a.ob.Publish(infos)
+
+	return nil
 }

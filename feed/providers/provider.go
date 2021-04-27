@@ -6,25 +6,23 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-///////////////////////////////////////////////////////////////////
-type ConvertFunc func(*models.SubscriptionModel, *gofeed.Feed) models.ItemCollection
+//////////////////////////////////////////////////////////////////
 type Converter interface {
-	Convert(*models.SubscriptionModel, *gofeed.Feed) models.ItemCollection
+	Convert(item *gofeed.Item) *models.ItemModel
 }
 
 //////////////////////////////////////////////////////////////////
-type PatchFunc func(*models.ItemModel)
-type Patcher interface {
-	Patch(*models.ItemModel)
-}
-
-//////////////////////////////////////////////////////////////////
-type FetcherFunc func(*Proxy, *models.ItemModel)
 type Fetcher interface {
-	Fetch(*Proxy, *models.ItemModel)
+	Fetch(*models.ItemModel)
 }
 
 ////////////////////////////////////////////////////////////////
 type Downloader interface {
 	Download(*models.ItemModel) error
+}
+
+type Provider interface {
+	Converter
+	Fetcher
+	Downloader
 }

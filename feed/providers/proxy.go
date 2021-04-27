@@ -2,88 +2,97 @@ package providers
 
 import (
 	"krolus/models"
-	"net/url"
+	"time"
 
 	"github.com/mmcdole/gofeed"
 )
 
-var ConvertersMap map[string]ConvertFunc
-var PatchersMap map[string]PatchFunc
-var FetchersMap map[string]FetcherFunc
-
-func init() {
-	ConvertersMap = map[string]ConvertFunc{
-		"*":               genericConverter,
-		"www.reddit.com":  redditConverter,
-		"www.youtube.com": yotubeConverter,
-	}
-	PatchersMap = map[string]PatchFunc{
-		"*":               genericPatcher,
-		"www.reddit.com":  redditPatcher,
-		"www.youtube.com": youtubePatcher,
-	}
-	FetchersMap = map[string]FetcherFunc{
-		"*":               genericFetcher,
-		"www.youtube.com": youtubeFetcher,
-		"youtu.be":        youtubeFetcher,
-		"www.reddit.com":  redditFetcher,
-		"reddit.com":      redditFetcher,
-	}
-}
-
 type Proxy struct {
-	Patcher
-	Fetcher
-	ConvertFunc
+	registers RegisterMap
 }
 
-func NewProxy(link string) *Proxy {
+func NewProxy() *Proxy {
 	return &Proxy{
-		ConvertFunc: getConverter(getDomain(link)),
+		registers: RegisterMap{
+			"generic": &Register{
+				Name:    "generic",
+				Domains: []string{},
+				Provide: NewGenericProvider,
+			},
+			"itunes": &Register{
+				Name:    "itunes",
+				Domains: []string{},
+				Provide: NewItunesProvider,
+			},
+			"reddit": &Register{
+				Name:    "reddit",
+				Domains: []string{"reddit.com", "www.reddit.com"},
+				Provide: NewRedditProvider,
+			},
+			"youtube": &Register{
+				Name:    "youtube",
+				Domains: []string{"youtu.be", "youtube.com", "www.youtube.com"},
+				Provide: NewYoutubeProvider,
+			},
+		},
 	}
 }
 
-func (p *Proxy) Convert(sub *models.SubscriptionModel, f *gofeed.Feed) models.ItemCollection {
-	items := p.ConvertFunc(sub, f)
-	for _, i := range items {
-		p.Patch(&i)
+// GetNewItems returns collection of new items from sub
+func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) models.ItemCollection {
+
+	items := models.ItemCollection{}
+
+	//first time
+	if time.Time.IsZero(sub.LastUpdate) {
+
+		for _, item := range f.Items {
+			newItem := *p.Convert(item)
+			newItem.Subscription = sub.ID
+			items = append(items, newItem)
+		}
+
+		newest := items.NewestItem()
+		sub.LastItemLink = newest.Link
+		sub.LastUpdate = newest.Published
+		sub.Provider = p.registers.GetRegisterByURL(sub.XURL).Name
+
+		return items
 	}
+
+	////////////////////////////////////////////
+
+	var lastUpdate time.Time
+	var lastItemLink string
+	//only new
+	for _, item := range f.Items {
+		newItem := *p.Convert(item)
+		newItem.Subscription = sub.ID
+		if newItem.Link != sub.LastItemLink && newItem.Published.After(sub.LastUpdate) {
+			items = append(items, newItem)
+			if newItem.Published.After(lastUpdate) {
+				lastUpdate = newItem.Published
+				lastItemLink = newItem.Link
+			}
+		}
+	}
+
+	if lastItemLink != "" {
+		sub.LastUpdate = lastUpdate
+		sub.LastItemLink = lastItemLink
+	}
+
 	return items
 }
 
-func (p *Proxy) Patch(item *models.ItemModel) {
-	getPatcher(getDomain(item.Link))(item)
+func (p *Proxy) Convert(item *gofeed.Item) *models.ItemModel {
+	return p.registers.GetRegisterByURL(item.Link).Provide(p).Convert(item)
 }
 
 func (p *Proxy) Fetch(item *models.ItemModel) {
-	getFetcher(getDomain(item.Link))(p, item)
+	p.registers.GetRegisterByURL(item.Link).Provide(p).Fetch(item)
 }
 
-func getConverter(domain string) ConvertFunc {
-	conv := ConvertersMap["*"]
-	if c, ok := ConvertersMap[domain]; ok {
-		conv = c
-	}
-	return conv
-}
-
-func getPatcher(domain string) PatchFunc {
-	patch := PatchersMap["*"]
-	if p, ok := PatchersMap[domain]; ok {
-		patch = p
-	}
-	return patch
-}
-
-func getFetcher(domain string) FetcherFunc {
-	fetcher := FetchersMap["*"]
-	if f, ok := FetchersMap[domain]; ok {
-		fetcher = f
-	}
-	return fetcher
-}
-
-func getDomain(link string) string {
-	u, _ := url.Parse(link)
-	return u.Hostname()
+func (p *Proxy) Download(item *models.ItemModel) error {
+	return p.registers.GetRegisterByURL(item.Link).Provide(p).Download(item)
 }

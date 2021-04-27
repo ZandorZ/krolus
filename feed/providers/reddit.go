@@ -3,58 +3,61 @@ package providers
 import (
 	"html"
 	"krolus/models"
-	"net/url"
 	"regexp"
 
 	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
 
-var redditPatcher PatchFunc = func(item *models.ItemModel) {
-
+type RedditProvider struct {
+	*Proxy
 }
 
-var redditConverter ConvertFunc = func(sub *models.SubscriptionModel, feed *gofeed.Feed) models.ItemCollection {
-
-	items := make(models.ItemCollection, len(feed.Items))
-
-	sub.Provider = "reddit"
-	for i, item := range feed.Items {
-		items[i] = models.ItemModel{
-			ID:           uuid.New().String(),
-			Title:        item.Title,
-			Link:         item.Link,
-			Description:  item.Description,
-			Content:      item.Content,
-			New:          true,
-			Thumbnail:    getThumbReddit(item),
-			Published:    item.PublishedParsed.Local(),
-			Provider:     "reddit",
-			Type:         "unknown",
-			Subscription: sub.ID,
-		}
+func NewRedditProvider(p *Proxy) Provider {
+	return &RedditProvider{
+		Proxy: p,
 	}
-	return items
 }
 
-var redditFetcher FetcherFunc = func(proxy *Proxy, item *models.ItemModel) {
+func (p *RedditProvider) Convert(item *gofeed.Item) *models.ItemModel {
+
+	return &models.ItemModel{
+		ID:          uuid.New().String(),
+		Title:       item.Title,
+		Link:        item.Link,
+		Description: item.Description,
+		Content:     item.Content,
+		New:         true,
+		Thumbnail:   p.getThumbReddit(item),
+		Published:   item.PublishedParsed.Local(),
+		Provider:    "reddit",
+		Type:        "unknown",
+	}
+}
+
+func (p *RedditProvider) Fetch(item *models.ItemModel) {
 	item.Description = item.Content
-	item.Link = extractLinkReddit(item.Content)
-	u, err := url.Parse(item.Link)
-	if err != nil || u.Hostname() == "reddit.com" || u.Hostname() == "www.reddit.com" {
-		return
+	item.Link = p.extractLinkReddit(item.Content)
+
+	//avoid recursion
+	if p.Proxy.registers.GetRegisterByURL(item.Link).Name != "reddit" {
+		p.Proxy.Fetch(item)
 	}
-	proxy.Fetch(item)
+
 }
 
-func getThumbReddit(item *gofeed.Item) string {
+func (p *RedditProvider) Download(item *models.ItemModel) error {
+	return nil
+}
+
+func (p *RedditProvider) getThumbReddit(item *gofeed.Item) string {
 	if item.Extensions != nil {
 		return item.Extensions["media"]["thumbnail"][0].Attrs["url"]
 	}
 	return ""
 }
 
-func extractLinkReddit(content string) string {
+func (p *RedditProvider) extractLinkReddit(content string) string {
 
 	content = html.UnescapeString(content)
 	// pattern := `<a href="(((https?\:\/\/)|(www\.))(\S+))">\[link\]</a>`

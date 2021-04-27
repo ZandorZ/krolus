@@ -10,6 +10,7 @@ import (
 	"krolus/treex"
 	treexModels "krolus/treex/models"
 	"krolus/treex/persistence"
+	"log"
 	"os"
 	"path"
 
@@ -88,7 +89,7 @@ func traverseTreex(outlines *[]opml.Outline, parent *treexModels.Node) {
 		tempOuts[i].Text = leaf.Description
 		sub, err := manager.Subscription.Get(leaf.ID)
 		if err != nil {
-			panic(err)
+			log.Printf("%s", err)
 		}
 		tempOuts[i].HTMLURL = sub.URL
 		tempOuts[i].XMLURL = sub.XURL

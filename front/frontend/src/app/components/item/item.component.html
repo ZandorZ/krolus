@@ -31,10 +31,18 @@
     <div id="main" [appLoadingMask]="loading">
 
         <!-- videos -->
-
         <div *ngIf="model?.Type == 'video'" style="height: 50%;">
             <app-iframe-player [url]="model?.Content">
             </app-iframe-player>
+        </div>
+
+
+        <!-- audio -->
+        <div *ngIf="model?.Type == 'audio'">
+            <audio controls>
+                <source [src]="model?.Link" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <!-- description -->
@@ -46,11 +54,18 @@
         </div>
 
 
-        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && content" [innerHTML]="content">
+        <div class="content mat-body-1" *ngIf="model?.Type == 'unknown' && content" [innerHTML]="content">
         </div>
 
-        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && model?.Description"
+        <div class="content mat-body-1" *ngIf="model?.Type == 'unknown'" [innerHTML]="model?.Content">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'video' && model?.Description"
             [innerHTML]="model?.Description">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'audio' && model?.Description"
+            [innerText]="model?.Description">
         </div>
 
     </div>

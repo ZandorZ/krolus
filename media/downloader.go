@@ -1,7 +1,6 @@
 package media
 
 import (
-	"krolus/feed/providers"
 	"krolus/models"
 	"time"
 
@@ -15,8 +14,6 @@ type Downloader struct {
 
 // Download ...
 func (d *Downloader) Download(item *models.ItemModel) (string, error) {
-
-	providers.NewProxy("..").Fetch(item)
 
 	article, err := readability.FromURL(item.Link, 30*time.Second)
 	if err != nil {
