@@ -42,44 +42,36 @@ func NewProxy() *Proxy {
 func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) models.ItemCollection {
 
 	items := models.ItemCollection{}
+	latest := models.ItemModel{}
+	firstTime := false
 
 	//first time
 	if time.Time.IsZero(sub.LastUpdate) {
-
-		for _, item := range f.Items {
-			newItem := *p.Convert(item)
-			newItem.Subscription = sub.ID
-			items = append(items, newItem)
-		}
-
-		newest := items.NewestItem()
-		sub.LastItemLink = newest.Link
-		sub.LastUpdate = newest.Published
 		sub.Provider = p.registers.GetRegisterByURL(sub.XURL).Name
-
-		return items
+		firstTime = true
 	}
 
-	////////////////////////////////////////////
-
-	var lastUpdate time.Time
-	var lastItemLink string
-	//only new
 	for _, item := range f.Items {
+
 		newItem := *p.Convert(item)
 		newItem.Subscription = sub.ID
-		if newItem.Link != sub.LastItemLink && newItem.Published.After(sub.LastUpdate) {
+
+		if firstTime {
 			items = append(items, newItem)
-			if newItem.Published.After(lastUpdate) {
-				lastUpdate = newItem.Published
-				lastItemLink = newItem.Link
+			if latest.Published.Before(newItem.Published) {
+				latest = newItem
+			}
+		} else if newItem.Link != sub.LastItemLink && newItem.Published.After(sub.LastUpdate) {
+			items = append(items, newItem)
+			if newItem.Published.After(latest.Published) {
+				latest = newItem
 			}
 		}
 	}
 
-	if lastItemLink != "" {
-		sub.LastUpdate = lastUpdate
-		sub.LastItemLink = lastItemLink
+	if len(items) > 0 {
+		sub.LastItemLink = latest.Link
+		sub.LastUpdate = latest.Published
 	}
 
 	return items

@@ -35,20 +35,6 @@ type ItemModel struct {
 // ItemCollection collections of items
 type ItemCollection []ItemModel
 
-// NewestItem gets the newest item from collection
-func (i ItemCollection) NewestItem() *ItemModel {
-	if len(i) == 0 {
-		return nil
-	}
-	newest := &i[0]
-	for _, item := range i {
-		if item.Published.After(newest.Published) {
-			newest = &item
-		}
-	}
-	return newest
-}
-
 // PaginatedItemCollection ...
 type PaginatedItemCollection struct {
 	Page  int
