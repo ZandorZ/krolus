@@ -40,6 +40,7 @@ func (k *KrolusApp) Start(options Options) {
 	basePath := GetPath(options.Production)
 	man := sqte.NewManager(basePath + "/mine.db")
 	ob := feed.NewObserver()
+	myLogger := &wails.CustomLogger{}
 
 	//if options.Tor {
 	// torClient := feed.NewTorClient()
@@ -56,7 +57,7 @@ func (k *KrolusApp) Start(options Options) {
 		options.Workers,
 		ob,
 		man,
-		&wails.CustomLogger{},
+		myLogger,
 	)
 	agg.Start(true)
 
@@ -84,7 +85,7 @@ func (k *KrolusApp) Start(options Options) {
 	appW.Bind(store.NewTreeStore(agg, man, treeState, ob.Add("tree")))
 	appW.Bind(store.NewFeedStore(man, treeState, ob.Add("feed")))
 	if err := appW.Run(); err != nil {
-		panic(err)
+		myLogger.Fatalf("App error: %e", err)
 	}
 
 }

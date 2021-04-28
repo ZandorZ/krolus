@@ -28,8 +28,8 @@ func (p *RedditProvider) Convert(item *gofeed.Item) *models.ItemModel {
 		Description: item.Description,
 		Content:     item.Content,
 		New:         true,
-		Thumbnail:   p.getThumbReddit(item),
-		Published:   item.PublishedParsed.Local(),
+		Thumbnail:   p.getThumb(item),
+		Published:   getDate(item),
 		Provider:    "reddit",
 		Type:        "unknown",
 	}
@@ -37,27 +37,26 @@ func (p *RedditProvider) Convert(item *gofeed.Item) *models.ItemModel {
 
 func (p *RedditProvider) Fetch(item *models.ItemModel) {
 	item.Description = item.Content
-	item.Link = p.extractLinkReddit(item.Content)
+	item.Link = p.extractLink(item.Content)
 
 	//avoid recursion
 	if p.Proxy.registers.GetRegisterByURL(item.Link).Name != "reddit" {
 		p.Proxy.Fetch(item)
 	}
-
 }
 
 func (p *RedditProvider) Download(item *models.ItemModel) error {
 	return nil
 }
 
-func (p *RedditProvider) getThumbReddit(item *gofeed.Item) string {
+func (p *RedditProvider) getThumb(item *gofeed.Item) string {
 	if item.Extensions != nil {
 		return item.Extensions["media"]["thumbnail"][0].Attrs["url"]
 	}
 	return ""
 }
 
-func (p *RedditProvider) extractLinkReddit(content string) string {
+func (p *RedditProvider) extractLink(content string) string {
 
 	content = html.UnescapeString(content)
 	// pattern := `<a href="(((https?\:\/\/)|(www\.))(\S+))">\[link\]</a>`
@@ -74,3 +73,23 @@ func (p *RedditProvider) extractLinkReddit(content string) string {
 
 	return ""
 }
+
+// func extractImage(content string) (string, bool) {
+
+// 	content = html.UnescapeString(content)
+
+// 	re, err := regexp.Compile(`<a href="((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg))">\[link\]</a>`)
+
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	found := re.FindAllStringSubmatch(content, 2)
+
+// 	if len(found) > 0 {
+// 		return fmt.Sprintf("<img src='%s'>", found[0][1]), true
+// 	}
+
+// 	return "", false
+
+// }

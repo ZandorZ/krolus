@@ -19,18 +19,21 @@ func NewItunesProvider(p *Proxy) Provider {
 
 func (p *ITunesProvider) Convert(item *gofeed.Item) *models.ItemModel {
 
-	return &models.ItemModel{
+	newItem := &models.ItemModel{
 		ID:          uuid.New().String(),
 		Title:       item.Title,
-		Link:        p.itunesGetLink(item),
 		Description: item.Description,
 		Content:     item.Content,
 		New:         true,
 		Thumbnail:   item.ITunesExt.Image,
 		Published:   item.PublishedParsed.Local(),
 		Provider:    "itunes",
-		Type:        models.TypeAudio,
 	}
+
+	p.patchLink(newItem, item)
+	p.patchText(newItem, item)
+
+	return newItem
 }
 
 func (p *ITunesProvider) Fetch(item *models.ItemModel) {
@@ -41,10 +44,21 @@ func (p *ITunesProvider) Download(item *models.ItemModel) error {
 	return nil
 }
 
-func (p *ITunesProvider) itunesGetLink(item *gofeed.Item) string {
-	link := ""
+func (p *ITunesProvider) patchLink(newItem *models.ItemModel, item *gofeed.Item) {
+
 	if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "audio/mpeg" {
-		link = item.Enclosures[0].URL
+		newItem.Link = item.Enclosures[0].URL
+		newItem.Type = models.TypeAudio
 	}
-	return link
+
+	if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "video/mpeg" {
+		newItem.Link = item.Enclosures[0].URL
+		newItem.Type = models.TypeVideo
+	}
+}
+
+func (p *ITunesProvider) patchText(newItem *models.ItemModel, item *gofeed.Item) {
+	if newItem.Description == "" && newItem.Content == "" {
+		newItem.Description = item.ITunesExt.Summary
+	}
 }
