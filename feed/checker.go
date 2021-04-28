@@ -3,6 +3,7 @@ package feed
 import (
 	"krolus/feed/providers"
 	"krolus/models"
+	"sync"
 
 	"github.com/mmcdole/gofeed"
 )
@@ -11,7 +12,8 @@ import (
 type FacadeChecker struct {
 	Requester
 	*gofeed.Parser
-	proxy *providers.Proxy
+	proxy          *providers.Proxy
+	feedParserPool sync.Pool
 }
 
 // request and parse
@@ -22,10 +24,13 @@ func (c *FacadeChecker) request(url string) (*gofeed.Feed, error) {
 	}
 	defer response.Body.Close()
 
-	f, err := c.Parse(response.Body)
+	fp := c.feedParserPool.Get().(*gofeed.Parser)
+	f, err := fp.Parse(response.Body)
 	if err != nil {
 		return nil, err
 	}
+	c.feedParserPool.Put(fp)
+
 	return f, nil
 }
 
@@ -46,5 +51,10 @@ func NewChecker(req Requester) Checker {
 		Requester: req,
 		Parser:    gofeed.NewParser(),
 		proxy:     providers.NewProxy(),
+		feedParserPool: sync.Pool{
+			New: func() interface{} {
+				return gofeed.NewParser()
+			},
+		},
 	}
 }
