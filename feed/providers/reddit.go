@@ -63,7 +63,7 @@ func (p *RedditProvider) extractLink(content string) string {
 	pattern := `<a href\s*=\s*["\']?([^"\'\s>]+)["\']?>\[link\]`
 	re, err := regexp.Compile(pattern)
 	if err != nil {
-		panic(err)
+		return ""
 	}
 
 	found := re.FindAllStringSubmatch(content, 2)

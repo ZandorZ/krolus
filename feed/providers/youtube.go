@@ -49,7 +49,7 @@ func (p *YoutubeProvider) extractID(content string) (string, bool) {
 	re, err := regexp.Compile(`^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*`)
 
 	if err != nil {
-		panic(err)
+		return "", false
 	}
 	found := re.FindAllStringSubmatch(content, 2)
 
