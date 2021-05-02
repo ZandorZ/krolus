@@ -1,15 +1,25 @@
 package providers
 
+type ProvideFunc func(*Proxy) Provider
+
 type Register struct {
 	Domains []string
-	Provide func(*Proxy) Provider
+	Provide ProvideFunc
 	Name    string
 }
 
 type RegisterMap map[string]*Register
 
+func (r RegisterMap) AddRegister(name string, provide ProvideFunc, domains ...string) {
+	r[name] = &Register{
+		Name:    name,
+		Domains: domains,
+		Provide: provide,
+	}
+}
+
 func (r RegisterMap) GetRegisterByURL(link string) *Register {
-	reg := r["generic"]
+	reg := r[GENERIC]
 	domain := getDomain(link)
 	for _, v := range r {
 		for _, d := range v.Domains {

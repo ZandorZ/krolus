@@ -5,9 +5,10 @@ import (
 	"krolus/models"
 	"regexp"
 
-	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
+
+const REDDIT = "reddit"
 
 type RedditProvider struct {
 	*Proxy
@@ -19,30 +20,21 @@ func NewRedditProvider(p *Proxy) Provider {
 	}
 }
 
-func (p *RedditProvider) Convert(item *gofeed.Item) *models.ItemModel {
-
-	return &models.ItemModel{
-		ID:          uuid.New().String(),
-		Title:       item.Title,
-		Link:        item.Link,
-		Description: item.Description,
-		Content:     item.Content,
-		New:         true,
-		Thumbnail:   p.getThumb(item),
-		Published:   getDate(item),
-		Provider:    "reddit",
-		Type:        "unknown",
-	}
+func (p *RedditProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
+	model.Provider = REDDIT
+	model.Thumbnail = p.getThumb(item)
 }
 
 func (p *RedditProvider) Fetch(item *models.ItemModel) {
+
 	item.Description = item.Content
 	item.Link = p.extractLink(item.Content)
 
 	//avoid recursion
-	if p.Proxy.registers.GetRegisterByURL(item.Link).Name != "reddit" {
+	if p.Proxy.registers.GetRegisterByURL(item.Link).Name != REDDIT {
 		p.Proxy.Fetch(item)
 	}
+
 }
 
 func (p *RedditProvider) Download(item *models.ItemModel) error {

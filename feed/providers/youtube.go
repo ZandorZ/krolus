@@ -6,9 +6,10 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
+
+const YOUTUBE = "youtube"
 
 type YoutubeProvider struct {
 	*Proxy
@@ -20,19 +21,12 @@ func NewYoutubeProvider(p *Proxy) Provider {
 	}
 }
 
-func (p *YoutubeProvider) Convert(item *gofeed.Item) *models.ItemModel {
-	return &models.ItemModel{
-		ID:          uuid.New().String(),
-		Title:       item.Title,
-		Link:        item.Link,
-		Description: p.getDescription(item),
-		Content:     "",
-		New:         true,
-		Thumbnail:   p.getThumbnail(item),
-		Published:   getDate(item),
-		Provider:    "youtube",
-		Type:        models.TypeVideo,
-	}
+func (p *YoutubeProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
+	model.Description = p.getDescription(item)
+	model.Content = ""
+	model.Thumbnail = p.getThumbnail(item)
+	model.Provider = YOUTUBE
+	model.Type = models.TypeVideo
 }
 
 func (p *YoutubeProvider) Fetch(item *models.ItemModel) {

@@ -4,6 +4,7 @@ import (
 	"krolus/models"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -12,29 +13,15 @@ type Proxy struct {
 }
 
 func NewProxy() *Proxy {
+
+	registers := make(RegisterMap)
+	registers.AddRegister(GENERIC, NewGenericProvider)
+	registers.AddRegister(ITUNES, NewItunesProvider)
+	registers.AddRegister(REDDIT, NewRedditProvider, "reddit.com", "www.reddit.com")
+	registers.AddRegister(YOUTUBE, NewYoutubeProvider, "youtu.be", "youtube.com", "www.youtube.com")
+
 	return &Proxy{
-		registers: RegisterMap{
-			"generic": &Register{
-				Name:    "generic",
-				Domains: []string{},
-				Provide: NewGenericProvider,
-			},
-			"itunes": &Register{
-				Name:    "itunes",
-				Domains: []string{},
-				Provide: NewItunesProvider,
-			},
-			"reddit": &Register{
-				Name:    "reddit",
-				Domains: []string{"reddit.com", "www.reddit.com"},
-				Provide: NewRedditProvider,
-			},
-			"youtube": &Register{
-				Name:    "youtube",
-				Domains: []string{"youtu.be", "youtube.com", "www.youtube.com"},
-				Provide: NewYoutubeProvider,
-			},
-		},
+		registers: registers,
 	}
 }
 
@@ -53,18 +40,19 @@ func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) model
 
 	for _, item := range f.Items {
 
-		newItem := *p.Convert(item)
+		newItem := p.newItemFrom(item)
+		p.Convert(item, newItem)
 		newItem.Subscription = sub.ID
 
 		if firstTime {
-			items = append(items, newItem)
+			items = append(items, *newItem)
 			if latest.Published.Before(newItem.Published) {
-				latest = newItem
+				latest = *newItem
 			}
 		} else if newItem.Link != sub.LastItemLink && newItem.Published.After(sub.LastUpdate) {
-			items = append(items, newItem)
+			items = append(items, *newItem)
 			if newItem.Published.After(latest.Published) {
-				latest = newItem
+				latest = *newItem
 			}
 		}
 	}
@@ -77,8 +65,26 @@ func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) model
 	return items
 }
 
-func (p *Proxy) Convert(item *gofeed.Item) *models.ItemModel {
-	return p.registers.GetRegisterByURL(item.Link).Provide(p).Convert(item)
+func (p *Proxy) newItemFrom(item *gofeed.Item) *models.ItemModel {
+	return &models.ItemModel{
+		ID:          uuid.New().String(),
+		Title:       item.Title,
+		Link:        item.Link,
+		Description: item.Description,
+		Content:     item.Content,
+		Thumbnail:   getImage(item),
+		Published:   getDate(item),
+		New:         true,
+	}
+}
+
+func (p *Proxy) Convert(item *gofeed.Item, model *models.ItemModel) {
+	//special case
+	if item.ITunesExt != nil {
+		p.registers.GetRegisterByKey(ITUNES).Provide(p).Convert(item, model)
+		return
+	}
+	p.registers.GetRegisterByURL(item.Link).Provide(p).Convert(item, model)
 }
 
 func (p *Proxy) Fetch(item *models.ItemModel) {

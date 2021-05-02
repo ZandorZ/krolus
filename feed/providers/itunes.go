@@ -3,9 +3,10 @@ package providers
 import (
 	"krolus/models"
 
-	"github.com/google/uuid"
 	"github.com/mmcdole/gofeed"
 )
+
+const ITUNES = "itunes"
 
 type ITunesProvider struct {
 	*Proxy
@@ -17,23 +18,13 @@ func NewItunesProvider(p *Proxy) Provider {
 	}
 }
 
-func (p *ITunesProvider) Convert(item *gofeed.Item) *models.ItemModel {
+func (p *ITunesProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
+	model.Provider = ITUNES
+	model.Thumbnail = item.ITunesExt.Image
+	model.Published = item.PublishedParsed.Local()
 
-	newItem := &models.ItemModel{
-		ID:          uuid.New().String(),
-		Title:       item.Title,
-		Description: item.Description,
-		Content:     item.Content,
-		New:         true,
-		Thumbnail:   item.ITunesExt.Image,
-		Published:   item.PublishedParsed.Local(),
-		Provider:    "itunes",
-	}
-
-	p.patchLink(newItem, item)
-	p.patchText(newItem, item)
-
-	return newItem
+	p.patchLink(item, model)
+	p.patchText(item, model)
 }
 
 func (p *ITunesProvider) Fetch(item *models.ItemModel) {
@@ -44,7 +35,7 @@ func (p *ITunesProvider) Download(item *models.ItemModel) error {
 	return nil
 }
 
-func (p *ITunesProvider) patchLink(newItem *models.ItemModel, item *gofeed.Item) {
+func (p *ITunesProvider) patchLink(item *gofeed.Item, newItem *models.ItemModel) {
 
 	if len(item.Enclosures) > 0 && item.Enclosures[0].Type == "audio/mpeg" {
 		newItem.Link = item.Enclosures[0].URL
@@ -57,7 +48,7 @@ func (p *ITunesProvider) patchLink(newItem *models.ItemModel, item *gofeed.Item)
 	}
 }
 
-func (p *ITunesProvider) patchText(newItem *models.ItemModel, item *gofeed.Item) {
+func (p *ITunesProvider) patchText(item *gofeed.Item, newItem *models.ItemModel) {
 	if newItem.Description == "" && newItem.Content == "" {
 		newItem.Description = item.ITunesExt.Summary
 	}
