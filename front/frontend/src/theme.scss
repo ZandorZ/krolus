@@ -46,7 +46,7 @@ body.dark-theme {
     @include components-theme($dark-theme);
 
     a:-webkit-any-link:hover {
-        color: mat-color($dark-primary);
+        color: mat-color($dark-accent);
     }
     a:-webkit-any-link {
         color: mat-color($dark-primary, lighter);
@@ -69,6 +69,10 @@ body.light-theme {
 
     a:-webkit-any-link {
         color: red;
+    }
+
+    a:-webkit-any-link:hover {
+        color: mat-color($dark-accent);
     }
 }
 
