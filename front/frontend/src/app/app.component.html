@@ -13,7 +13,7 @@
             </mat-drawer-content>
 
             <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">
-                <app-item *ngIf="!!item" [model]="item" (close)="onCloseItem()" (open)="onOpenURL($event)">
+                <app-item *ngIf="!!item" [model]="item" (close)="onCloseItem()" (open)="onOpenItem($event)">
                 </app-item>
             </mat-drawer>
 

@@ -18,7 +18,7 @@ type Fetcher interface {
 
 ////////////////////////////////////////////////////////////////
 type Downloader interface {
-	Download(*models.ItemModel) error
+	Download(*models.ItemModel)
 }
 
 type Provider interface {

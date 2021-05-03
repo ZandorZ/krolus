@@ -92,6 +92,6 @@ func (p *Proxy) Fetch(item *models.ItemModel) {
 	p.registers.GetRegisterByURL(item.Link).Provide(p).Fetch(item)
 }
 
-func (p *Proxy) Download(item *models.ItemModel) error {
-	return p.registers.GetRegisterByURL(item.Link).Provide(p).Download(item)
+func (p *Proxy) Download(item *models.ItemModel) {
+	p.registers.GetRegisterByURL(item.Link).Provide(p).Download(item)
 }

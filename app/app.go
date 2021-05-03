@@ -3,6 +3,7 @@ package app
 import (
 	"krolus/data/sqte"
 	"krolus/feed"
+	"krolus/media"
 	"krolus/store"
 	"krolus/treex"
 	"krolus/treex/models"
@@ -49,17 +50,17 @@ func (k *KrolusApp) Start(options Options) {
 	httpClient := feed.NewGenericClient()
 	defer httpClient.CloseIdleConnections()
 
+	req := feed.NewRequester(httpClient, options.Agent)
+
 	agg := feed.NewAggregator(
-		feed.NewChecker(
-			feed.NewRequester(httpClient),
-		),
+		feed.NewChecker(req),
 		options.Interval,
 		options.Workers,
 		ob,
 		man,
 		myLogger,
 	)
-	agg.Start(true)
+	agg.Start(options.CheckAtStart)
 
 	// treex
 	filePersist, err := persistence.NewFile(basePath + "/tree.x_")
@@ -80,7 +81,7 @@ func (k *KrolusApp) Start(options Options) {
 		Resizable:        true,
 		DisableInspector: false,
 	})
-	appW.Bind(store.NewMediaStore(man))
+	appW.Bind(store.NewMediaStore(man, media.NewDownloader(req)))
 	appW.Bind(store.NewItemStore(man, treeState))
 	appW.Bind(store.NewTreeStore(agg, man, treeState, ob.Add("tree")))
 	appW.Bind(store.NewFeedStore(man, treeState, ob.Add("feed")))

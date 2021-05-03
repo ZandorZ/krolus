@@ -31,8 +31,8 @@ func (p *ITunesProvider) Fetch(item *models.ItemModel) {
 
 }
 
-func (p *ITunesProvider) Download(item *models.ItemModel) error {
-	return nil
+func (p *ITunesProvider) Download(item *models.ItemModel) {
+
 }
 
 func (p *ITunesProvider) patchLink(item *gofeed.Item, newItem *models.ItemModel) {

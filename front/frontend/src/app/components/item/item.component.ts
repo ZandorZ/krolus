@@ -34,7 +34,7 @@ export class ItemComponent implements OnChanges {
     }
 
     openLink() {
-        this.open.emit(this.model.Link);
+        this.open.emit(this.model.ID);
     }
 
     async donwloadItem() {

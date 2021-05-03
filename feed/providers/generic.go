@@ -27,6 +27,6 @@ func (g *GenericProvider) Fetch(item *models.ItemModel) {
 
 }
 
-func (g *GenericProvider) Download(item *models.ItemModel) error {
-	return nil
+func (g *GenericProvider) Download(item *models.ItemModel) {
+
 }

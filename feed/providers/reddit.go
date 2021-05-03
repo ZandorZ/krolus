@@ -34,11 +34,10 @@ func (p *RedditProvider) Fetch(item *models.ItemModel) {
 	if p.Proxy.registers.GetRegisterByURL(item.Link).Name != REDDIT {
 		p.Proxy.Fetch(item)
 	}
-
 }
 
-func (p *RedditProvider) Download(item *models.ItemModel) error {
-	return nil
+func (p *RedditProvider) Download(item *models.ItemModel) {
+	item.Link = p.extractLink(item.Content)
 }
 
 func (p *RedditProvider) getThumb(item *gofeed.Item) string {

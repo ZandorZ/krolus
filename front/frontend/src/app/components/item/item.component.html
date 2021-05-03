@@ -5,7 +5,9 @@
             <span class="item-icon" [ngSwitch]="model?.Type">
                 <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
                 <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
-                <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
+                <mat-icon *ngSwitchCase="'page'">article</mat-icon>
+                <mat-icon *ngSwitchCase="'unknown'">help_outline</mat-icon>
+                <mat-icon *ngSwitchCase="'audio'">audiotrack</mat-icon>
             </span>
             <span class="title" [innerHTML]="model?.Title"></span>
 
