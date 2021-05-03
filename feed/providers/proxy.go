@@ -75,6 +75,7 @@ func (p *Proxy) newItemFrom(item *gofeed.Item) *models.ItemModel {
 		Thumbnail:   getImage(item),
 		Published:   getDate(item),
 		New:         true,
+		Type:        models.TypeUnknown,
 	}
 }
 
