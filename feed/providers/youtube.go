@@ -32,7 +32,7 @@ func (p *YoutubeProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 func (p *YoutubeProvider) Fetch(item *models.ItemModel) {
 	id, _ := p.extractID(item.Link)
 	item.Type = models.TypeVideo
-	item.Content = fmt.Sprintf("https://www.youtube.com/embed/%s?ecver=1&amp;iv_load_policy=3&amp;rel=0&amp;showinfo=0&amp;yt:stretch=16:9&amp;autohide=1&amp;color=red&amp;width=560&amp;width=560&amp;version=3&amp;vq=hd720", id)
+	item.Content = fmt.Sprintf("https://www.youtube.com/embed/%s?ecver=1&amp;autoplay=1&amp;iv_load_policy=3&amp;rel=0&amp;yt:stretch=1:1&amp;autohide=1&amp;color=red", id)
 }
 
 func (p *YoutubeProvider) Download(item *models.ItemModel) {
