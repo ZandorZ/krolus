@@ -144,7 +144,6 @@ func Test_Item(t *testing.T) {
 		id := uuid.New().String()
 		title := "First item test"
 		err := manager.Item.Add(&models.ItemModel{
-			ID:          id,
 			Title:       title,
 			Description: "This is the first test",
 			Published:   time.Now().Add(-time.Hour * 1),

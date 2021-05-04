@@ -2,6 +2,7 @@ package store
 
 import (
 	"krolus/data"
+	"krolus/feed/providers"
 	"krolus/models"
 	"krolus/treex"
 
@@ -37,17 +38,24 @@ func (i *ItemStore) FetchItem(itemID string, updateNew bool) (models.ItemModel, 
 			return models.ItemModel{}, err
 		}
 		//////////////////////////////////////////////////
-	} else {
-		item, err = i.manager.Item.Get(itemID)
-		return *item, err
 	}
+	item, err = i.manager.Item.Get(itemID)
+
+	//TODO: decouple proxy
+	providers.NewProxy().Fetch(item)
 
 	return *item, err
 }
 
 // OpenItem ...
-func (i *ItemStore) OpenItem(url string) error {
-	return browser.OpenURL(url)
+func (i *ItemStore) OpenItem(itemID string) error {
+
+	item, err := i.manager.Item.GetUpdate(itemID)
+	if err != nil {
+		return err
+	}
+
+	return browser.OpenURL(item.Link)
 
 }
 

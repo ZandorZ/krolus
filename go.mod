@@ -23,7 +23,6 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/stretchr/testify v1.7.0
-	github.com/timshannon/badgerhold/v3 v3.0.0-20210208141506-eb78b03f8097
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
 	github.com/wailsapp/wails v1.16.2
 	github.com/webview/webview v0.0.0-20210330151455-f540d88dde4e

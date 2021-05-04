@@ -21,9 +21,10 @@ type SubscriptionModel struct {
 	Description   string
 	URL           string
 	LastUpdate    time.Time `gorm:"column:last_updated"`
-	LastItem      string    `gorm:"column:last_item"`
+	LastItemLink  string    `gorm:"column:last_item"`
 	Status        uint
 	AlertNewItems bool
+	Provider      string
 }
 
 // TableName overrides the table name

@@ -50,7 +50,7 @@ tasks:
             - wails serve
     build:
         cmds:
-            - wails build
+            - wails build -d
     deploy:
         deps: [build]
         dir: ./build

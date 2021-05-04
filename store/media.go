@@ -2,6 +2,7 @@ package store
 
 import (
 	"krolus/data"
+	"krolus/feed/providers"
 	"krolus/media"
 
 	"github.com/wailsapp/wails"
@@ -14,10 +15,10 @@ type MediaStore struct {
 }
 
 // NewMediaStore ...
-func NewMediaStore(manager *data.Manager) *MediaStore {
+func NewMediaStore(manager *data.Manager, downloader *media.Downloader) *MediaStore {
 	return &MediaStore{
 		manager: manager,
-		dl:      new(media.Downloader),
+		dl:      downloader,
 	}
 }
 
@@ -33,5 +34,9 @@ func (m *MediaStore) Download(ID string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	//TODO: decouple proxy
+	providers.NewProxy().Download(item)
+
 	return m.dl.Download(item)
 }

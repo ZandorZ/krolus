@@ -3,6 +3,7 @@ package app
 import (
 	"krolus/data/sqte"
 	"krolus/feed"
+	"krolus/media"
 	"krolus/store"
 	"krolus/treex"
 	"krolus/treex/models"
@@ -37,39 +38,36 @@ type KrolusApp struct {
 func (k *KrolusApp) Start(options Options) {
 
 	k.options = options
-
 	basePath := GetPath(options.Production)
-
 	man := sqte.NewManager(basePath + "/mine.db")
-
 	ob := feed.NewObserver()
+	myLogger := &wails.CustomLogger{}
 
 	//if options.Tor {
 	// torClient := feed.NewTorClient()
 	// defer torClient.Close()
 	//}
-
 	httpClient := feed.NewGenericClient()
 	defer httpClient.CloseIdleConnections()
 
+	req := feed.NewRequester(httpClient, options.Agent)
+
 	agg := feed.NewAggregator(
-		feed.NewParser(
-			feed.NewRequester(httpClient),
-		),
+		feed.NewChecker(req),
 		options.Interval,
 		options.Workers,
 		ob,
 		man,
-		&wails.CustomLogger{},
+		myLogger,
 	)
-	agg.Start(true)
+	agg.Start(options.CheckAtStart)
 
 	// treex
 	filePersist, err := persistence.NewFile(basePath + "/tree.x_")
 	if err != nil {
 		panic(err)
 	}
-	treeState, err := treex.NewState(models.NewNode(".", "."), filePersist)
+	treeState, err := treex.NewState(models.NewNode("Root", "Root folder"), filePersist)
 	if err != nil {
 		panic(err)
 	}
@@ -83,12 +81,12 @@ func (k *KrolusApp) Start(options Options) {
 		Resizable:        true,
 		DisableInspector: false,
 	})
-	appW.Bind(store.NewMediaStore(man))
+	appW.Bind(store.NewMediaStore(man, media.NewDownloader(req)))
 	appW.Bind(store.NewItemStore(man, treeState))
 	appW.Bind(store.NewTreeStore(agg, man, treeState, ob.Add("tree")))
 	appW.Bind(store.NewFeedStore(man, treeState, ob.Add("feed")))
 	if err := appW.Run(); err != nil {
-		panic(err)
+		myLogger.Fatalf("App error: %e", err)
 	}
 
 }

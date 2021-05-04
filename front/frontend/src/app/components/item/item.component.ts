@@ -30,11 +30,11 @@ export class ItemComponent implements OnChanges {
 
     ngOnChanges(): void {
         if (!!this.model) this.model.New = false;
-        this.content = "";
+        this.content = this.sanitizer.bypassSecurityTrustHtml(this.model.Description);
     }
 
     openLink() {
-        this.open.emit(this.model.Link);
+        this.open.emit(this.model.ID);
     }
 
     async donwloadItem() {

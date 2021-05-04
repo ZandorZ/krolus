@@ -5,7 +5,9 @@
             <span class="item-icon" [ngSwitch]="model?.Type">
                 <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
                 <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
-                <mat-icon *ngSwitchCase="'unknown'">article</mat-icon>
+                <mat-icon *ngSwitchCase="'page'">article</mat-icon>
+                <mat-icon *ngSwitchCase="'unknown'">help_outline</mat-icon>
+                <mat-icon *ngSwitchCase="'audio'">audiotrack</mat-icon>
             </span>
             <span class="title" [innerHTML]="model?.Title"></span>
 
@@ -31,26 +33,60 @@
     <div id="main" [appLoadingMask]="loading">
 
         <!-- videos -->
-
         <div *ngIf="model?.Type == 'video'" style="height: 50%;">
-            <app-iframe-player [url]="model?.Embed">
-            </app-iframe-player>
+
+            <div *ngIf="model?.Provider == 'itunes' else blockEmbed">
+                <video controls width="100%" style="height:100%">
+                    <source [src]="model?.Link" type="video/mp4">
+                    Sorry, your browser doesn't support embedded videos.
+                </video>
+            </div>
+            <ng-template #blockEmbed>
+                <app-iframe-player [url]="model?.Content">
+                </app-iframe-player>
+            </ng-template>
+
+        </div>
+
+
+        <!-- audio -->
+        <div *ngIf="model?.Type == 'audio'">
+            <audio controls>
+                <source [src]="model?.Link" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
         <!-- description -->
         <div *ngIf="model?.Type == 'video'" style="height: 48%; overflow: auto;" class="description mat-body-1">
             <div *ngIf="model?.Provider == 'youtube' || model?.Provider == 'bitchute'" [innerText]="model?.Description">
             </div>
-            <div *ngIf="model?.Provider == 'lbry' || model?.Provider == 'reddit'" [innerHTML]="model?.Description">
+            <div *ngIf="model?.Provider == 'lbry' || model?.Provider == 'reddit' || model?.Provider == 'itunes'"
+                [innerHTML]="model?.Description">
             </div>
         </div>
 
 
-        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && content" [innerHTML]="content">
+        <div class="content mat-body-1" *ngIf="model?.Type == 'unknown' && content" [innerHTML]="content">
         </div>
 
-        <div class="content mat-body-1" *ngIf="model?.Type != 'video' && model?.Description"
+        <div class="content mat-body-1" *ngIf="model?.Type == 'unknown'" [innerHTML]="model?.Content">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'unknown'">
+            {{model?.Description}}
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'video' && model?.Description"
             [innerHTML]="model?.Description">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'audio' && model?.Description"
+            [innerText]="model?.Description">
+        </div>
+
+        <div class="content mat-body-1" *ngIf="model?.Type == 'image'">
+            <img [src]="model?.Link">
         </div>
 
     </div>

@@ -64,9 +64,9 @@ export class AppComponent implements OnInit {
         this.opened = !hidden;
     }
 
-    async onOpenURL(url: string) {
+    async onOpenItem(id: string) {
         //@ts-ignore
-        await window.backend.ItemStore.OpenItem(url); //TODO: wrong access
+        await window.backend.ItemStore.OpenItem(id); //TODO: wrong access
     }
 
     async onSelectHeader(header: TreexNodeHeader) {

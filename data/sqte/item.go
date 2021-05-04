@@ -36,8 +36,8 @@ func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx i
 			if err := tx.CreateInBatches(slice, len(slice)).Error; err != nil {
 				return err
 			}
-		}
-		if err := tx.Model(sub).UpdateColumn("LastUpdate", sub.LastUpdate).Error; err != nil {
+		} //date & link
+		if err := tx.Model(sub).UpdateColumns(models.SubscriptionModel{Provider: sub.Provider, LastUpdate: sub.LastUpdate, LastItemLink: sub.LastItemLink}).Error; err != nil {
 			return err
 		}
 	}
@@ -56,7 +56,7 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 		tx = i.DB.Session(&gorm.Session{})
 	}
 
-	query := tx.Model(&models.ItemModel{}).Select("id", "title", "published", "thumbnail", "subscription", "new", "favorite").Preload("SubscriptionModel")
+	query := tx.Model(&models.ItemModel{}).Select("id", "title", "published", "thumbnail", "subscription", "new", "favorite", "type").Preload("SubscriptionModel")
 
 	if len(request.LeafIDs) > 0 {
 		query.Where("Subscription IN (?)", request.LeafIDs)
