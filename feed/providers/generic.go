@@ -20,7 +20,12 @@ func NewGenericProvider(p *Proxy) Provider {
 
 func (g *GenericProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	model.Provider = GENERIC
+
 	model.Type = models.TypeUnknown //TODO: verify link (image, video, pdf, mp3)
+
+	if isImage(item.Link) {
+		model.Type = models.TypeImage
+	}
 }
 
 func (g *GenericProvider) Fetch(item *models.ItemModel) {

@@ -23,6 +23,9 @@ func NewRedditProvider(p *Proxy) Provider {
 func (p *RedditProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	model.Provider = REDDIT
 	model.Thumbnail = p.getThumb(item)
+	if isImage(p.extractLink(item.Content)) {
+		model.Type = models.TypeImage
+	}
 }
 
 func (p *RedditProvider) Fetch(item *models.ItemModel) {

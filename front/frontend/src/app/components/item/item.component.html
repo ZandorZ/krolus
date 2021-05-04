@@ -85,5 +85,9 @@
             [innerText]="model?.Description">
         </div>
 
+        <div class="content mat-body-1" *ngIf="model?.Type == 'image'">
+            <img [src]="model?.Link">
+        </div>
+
     </div>
 </div>

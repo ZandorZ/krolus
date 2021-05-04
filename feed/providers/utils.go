@@ -2,6 +2,7 @@ package providers
 
 import (
 	"net/url"
+	"regexp"
 	"time"
 
 	"github.com/mmcdole/gofeed"
@@ -31,4 +32,12 @@ func getDate(item *gofeed.Item) time.Time {
 func getDomain(link string) string {
 	u, _ := url.Parse(link)
 	return u.Hostname()
+}
+
+func isImage(src string) bool {
+	re, err := regexp.Compile(`(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg|webp)`)
+	if err != nil {
+		return false
+	}
+	return re.MatchString(src)
 }
