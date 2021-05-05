@@ -1,6 +1,6 @@
 import { Store } from 'rxjs-observable-store';
 import { Injectable, NgZone } from '@angular/core';
-import { combineLatest, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { delay, distinctUntilChanged, distinctUntilKeyChanged, filter, map } from 'rxjs/operators';
 import { getHeadersFromPath, getPath, isNode, LoadingDictionary, NodeModel, TreexNode } from 'src/treex/model';
 import { TreexNodeHeader, TreexState } from 'src/treex/state/store';

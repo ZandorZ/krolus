@@ -48,8 +48,16 @@ func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx i
 // AllPaginated ...
 func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.PaginatedItemCollection, error) {
 
-	itemsP := models.PaginatedItemCollection{}
 	var items models.ItemCollection
+	itemsP := models.PaginatedItemCollection{
+		Page:  request.Page,
+		Items: items,
+		Total: 0,
+	}
+
+	if request.LeafIDs == nil {
+		return itemsP, nil
+	}
 
 	tx := i.tx
 	if tx == nil {
