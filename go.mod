@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/PuerkitoBio/goquery v1.6.0 // indirect
+	github.com/corpix/uarand v0.1.1
 	github.com/cretz/bine v0.1.0
 	github.com/fatih/color v1.10.0 // indirect
 	github.com/franela/goblin v0.0.0-20210113153425-413781f5e6c8

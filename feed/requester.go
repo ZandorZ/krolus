@@ -3,20 +3,23 @@ package feed
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/corpix/uarand"
 )
 
 // NewRequester ..
-func NewRequester(httpClient *http.Client, agent string) Requester {
+func NewRequester(httpClient *http.Client) Requester {
 	return &MyRequester{
-		Client: httpClient,
-		agent:  agent,
+		Client:  httpClient,
+		counter: 0,
 	}
 }
 
 // MyRequester ...
 type MyRequester struct {
 	*http.Client
-	agent string
+	counter int
+	agent   string
 }
 
 // Request ...
@@ -27,6 +30,7 @@ func (f *MyRequester) Request(url string) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	f.updateAgent()
 	request.Header.Set("User-Agent", f.agent)
 
 	// Make request
@@ -40,5 +44,12 @@ func (f *MyRequester) Request(url string) (*http.Response, error) {
 	}
 
 	return res, nil
+}
 
+func (f *MyRequester) updateAgent() {
+	if f.agent == "" || f.counter >= 10 {
+		f.agent = uarand.GetRandom()
+		f.counter = 0
+	}
+	f.counter++
 }

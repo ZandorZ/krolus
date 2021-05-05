@@ -50,7 +50,7 @@ func (k *KrolusApp) Start(options Options) {
 	httpClient := feed.NewGenericClient()
 	defer httpClient.CloseIdleConnections()
 
-	req := feed.NewRequester(httpClient, options.Agent)
+	req := feed.NewRequester(httpClient)
 
 	agg := feed.NewAggregator(
 		feed.NewChecker(req),

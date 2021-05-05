@@ -10,5 +10,4 @@ type Options struct {
 	Workers      int
 	Tor          bool //experimental
 	CheckAtStart bool
-	Agent        string
 }
