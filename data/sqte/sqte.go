@@ -32,3 +32,11 @@ type baseSqte struct {
 	*gorm.DB
 	tx *gorm.DB
 }
+
+func (b *baseSqte) getTx() *gorm.DB {
+	tx := b.tx
+	if tx == nil {
+		tx = b.DB
+	}
+	return tx
+}

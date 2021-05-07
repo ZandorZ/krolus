@@ -11,6 +11,7 @@ import (
 	"os/user"
 
 	"github.com/wailsapp/wails"
+	"github.com/wailsapp/wails/lib/logger"
 )
 
 func GetPath(production bool) string {
@@ -41,7 +42,7 @@ func (k *KrolusApp) Start(options Options) {
 	basePath := GetPath(options.Production)
 	man := sqte.NewManager(basePath + "/mine.db")
 	ob := feed.NewObserver()
-	myLogger := &wails.CustomLogger{}
+	myLogger := logger.NewCustomLogger("Krolus")
 
 	//if options.Tor {
 	// torClient := feed.NewTorClient()

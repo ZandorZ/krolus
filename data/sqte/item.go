@@ -27,7 +27,7 @@ func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx i
 
 	tx, ok := _tx.(*gorm.DB)
 	if !ok {
-		tx = i.DB.Session(&gorm.Session{})
+		tx = i.DB
 	}
 
 	for sub, items := range subBatch {
@@ -100,7 +100,7 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 // Get gets an item
 func (i *ItemManagerSqte) Get(ID string) (*models.ItemModel, error) {
 	var item models.ItemModel
-	err := i.DB.First(&item, "id = ?", ID).Error
+	err := i.getTx().First(&item, "id = ?", ID).Error
 	return &item, err
 }
 
@@ -108,35 +108,27 @@ func (i *ItemManagerSqte) Get(ID string) (*models.ItemModel, error) {
 func (i *ItemManagerSqte) GetUpdate(itemID string) (*models.ItemModel, error) {
 	var item models.ItemModel
 
-	tx := i.tx
-	if tx == nil {
-		tx = i.DB.Session(&gorm.Session{})
-	}
-
-	if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
-		return nil, err
-	}
-
-	if err := tx.Model(&item).Update("new", false).Error; err != nil {
-		return nil, err
-	}
-
-	return &item, nil
+	err := i.getTx().Transaction(func(tx *gorm.DB) error {
+		if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
+			return err
+		}
+		return tx.Model(&item).Update("new", false).Error
+	})
+	return &item, err
 }
 
 // UpdateFavorite updates the favorite field
 func (i *ItemManagerSqte) UpdateFavorite(itemID string) error {
-	tx := i.tx
-	if tx == nil {
-		tx = i.DB.Session(&gorm.Session{})
-	}
 
 	var item models.ItemModel
-	if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
-		return err
-	}
 
-	return tx.Model(&item).Update("favorite", !item.Favorite).Error
+	err := i.getTx().Transaction(func(tx *gorm.DB) error {
+		if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
+			return err
+		}
+		return tx.Model(&item).Update("favorite", !item.Favorite).Error
+	})
+	return err
 }
 
 func (i *ItemManagerSqte) All() (models.ItemCollection, error) {

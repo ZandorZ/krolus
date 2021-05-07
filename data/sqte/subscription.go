@@ -21,20 +21,12 @@ func newSubscriptionManagerSqte(base *baseSqte) *SubscriptionManagerSqte {
 
 // Add ...
 func (s *SubscriptionManagerSqte) Add(sub *models.SubscriptionModel) error {
-	tx := s.tx
-	if tx == nil {
-		tx = s.DB.Session(&gorm.Session{})
-	}
-	return tx.Create(sub).Error
+	return s.getTx().Create(sub).Error
 }
 
 // Update ...
 func (s *SubscriptionManagerSqte) Update(sub *models.SubscriptionModel) error {
-	tx := s.tx
-	if tx == nil {
-		tx = s.DB.Session(&gorm.Session{})
-	}
-	return tx.Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
+	return s.getTx().Model(sub).Where("id = ?", sub.ID).Updates(&sub).Error
 }
 
 // Remove ...

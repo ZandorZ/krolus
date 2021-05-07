@@ -40,6 +40,9 @@ func (i *ItemStore) FetchItem(itemID string, updateNew bool) (models.ItemModel, 
 		//////////////////////////////////////////////////
 	}
 	item, err = i.manager.Item.Get(itemID)
+	if err != nil {
+		return *item, err
+	}
 
 	//TODO: decouple proxy
 	providers.NewProxy().Fetch(item)
