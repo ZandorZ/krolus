@@ -5,6 +5,7 @@ import (
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var dataManager *data.Manager
@@ -14,6 +15,7 @@ func NewManager(path string) *data.Manager {
 	if dataManager == nil {
 		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
 			// SkipDefaultTransaction: true,
+			Logger: logger.Default.LogMode(logger.Silent),
 		})
 		base := &baseSqte{DB: db}
 		if err != nil {

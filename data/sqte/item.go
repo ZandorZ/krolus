@@ -4,6 +4,7 @@ import (
 	"krolus/models"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type ItemManagerSqte struct {
@@ -33,7 +34,9 @@ func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx i
 	for sub, items := range subBatch {
 		sliced := SplitItems(*items, 30)
 		for _, slice := range sliced {
-			if err := tx.CreateInBatches(slice, len(slice)).Error; err != nil {
+			if err := tx.Clauses(clause.OnConflict{
+				UpdateAll: true,
+			}).CreateInBatches(slice, len(slice)).Error; err != nil {
 				return err
 			}
 		} //date & link
