@@ -1,5 +1,6 @@
 <div class="main">
     <mat-icon *ngIf="!loading && !source">panorama</mat-icon>
-    <img *ngIf="!loading && !!source" [src]="source" class="mat-elevation-z7" />
+    <img *ngIf="!loading && !!source" [src]="source" class="mat-elevation-z7" [style.filter]="filter"
+        [style.opacity]="opacity" />
     <app-loading *ngIf="loading" color="grey" opacity="0.5"></app-loading>
 </div>

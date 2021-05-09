@@ -14,6 +14,8 @@ export class PreloadImgComponent implements OnInit {
 
     loading = false;
     source: string;
+    filter = 'blur(4px)';
+    opacity = '0.3';
 
     constructor() { }
 
@@ -35,12 +37,18 @@ export class PreloadImgComponent implements OnInit {
 
     private loadImage(src: string) {
 
+        this.opacity = '0.3'
+        this.filter = 'blur(5px)';
         this.loading = true;
         const img = new Image();
         img.src = src;
         img.onload = () => {
             this.loading = false;
             this.source = src;
+            setTimeout(() => {
+                this.filter = 'none';
+                this.opacity = '1';
+            }, 200);
         };
     }
 
