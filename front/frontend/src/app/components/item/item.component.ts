@@ -29,7 +29,9 @@ export class ItemComponent implements OnChanges {
     }
 
     ngOnChanges(): void {
-        if (!!this.model) this.model.New = false;
+        if (!!this.model) {
+            this.model.New = false;
+        }
         this.content = this.sanitizer.bypassSecurityTrustHtml(this.model.Description);
     }
 

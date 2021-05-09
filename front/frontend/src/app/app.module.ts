@@ -37,6 +37,8 @@ import { FilterMenuComponent } from './components/filter-menu/filter-menu.compon
 import { FilterDialogFormComponent } from './components/filter-menu/dialog/filter-dialog-form';
 import { PagesizeComponent } from './components/pagesize/pagesize.component';
 import { LoadingMaskDirective } from './directives/loading-mask.directive';
+import { PreloadImgComponent } from './components/preload-img/preload-img.component';
+import { LoadingComponent } from './components/loading/loading.component';
 
 
 @NgModule({
@@ -56,6 +58,8 @@ import { LoadingMaskDirective } from './directives/loading-mask.directive';
         FilterMenuComponent,
         PagesizeComponent,
         LoadingMaskDirective,
+        PreloadImgComponent,
+        LoadingComponent,
     ],
     imports: [
         BrowserModule,

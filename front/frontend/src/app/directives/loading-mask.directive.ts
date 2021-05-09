@@ -34,11 +34,8 @@ export class LoadingMaskDirective implements OnChanges {
     }
 
     private addMask() {
-
         this.el.nativeElement.style.filter = 'blur(4px)';
         this.mask.style.display = 'block';
-
-
     }
 
     private removeMask() {

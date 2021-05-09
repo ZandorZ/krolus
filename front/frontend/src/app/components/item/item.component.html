@@ -86,7 +86,7 @@
         </div>
 
         <div class="content mat-body-1" *ngIf="model?.Type == 'image'">
-            <img [src]="model?.Link">
+            <app-preload-img [src]="model?.Link"></app-preload-img>
         </div>
 
     </div>

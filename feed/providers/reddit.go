@@ -67,23 +67,3 @@ func (p *RedditProvider) extractLink(content string) string {
 
 	return ""
 }
-
-// func extractImage(content string) (string, bool) {
-
-// 	content = html.UnescapeString(content)
-
-// 	re, err := regexp.Compile(`<a href="((?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg))">\[link\]</a>`)
-
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	found := re.FindAllStringSubmatch(content, 2)
-
-// 	if len(found) > 0 {
-// 		return fmt.Sprintf("<img src='%s'>", found[0][1]), true
-// 	}
-
-// 	return "", false
-
-// }
