@@ -18,7 +18,7 @@
         .mat-toolbar {
             background: map-get($background, card);
             .title,
-            .item-icon mat-icon {
+            app-item-icon mat-icon {
                 color: mat-color($accent) !important;
             }
         }
