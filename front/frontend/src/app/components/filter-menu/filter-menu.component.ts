@@ -37,7 +37,7 @@ export class FilterMenuComponent implements OnInit {
     }
 
     hasFilter(): boolean {
-        return this.filterRequest.Favorite != undefined || this.filterRequest.New != undefined;
+        return this.filterRequest.Favorite != undefined || this.filterRequest.New != undefined || this.filterRequest.Type != undefined;
     }
 
 }

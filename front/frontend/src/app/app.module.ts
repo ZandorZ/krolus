@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -74,6 +75,7 @@ import { ItemIconComponent } from './components/item-icon/item-icon.component';
         MatDialogModule,
         MatMenuModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatCardModule,
         MatRadioModule,
         MatSlideToggleModule,

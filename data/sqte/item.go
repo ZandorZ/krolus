@@ -2,6 +2,7 @@ package sqte
 
 import (
 	"krolus/models"
+	"strings"
 
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -68,9 +69,34 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 	}
 
 	query := tx.Model(&models.ItemModel{}).Select("id", "title", "published", "thumbnail", "subscription", "new", "favorite", "type").Preload("SubscriptionModel")
+	queryStrings := []string{}
+	queryParams := []interface{}{}
 
 	if len(request.LeafIDs) > 0 {
-		query.Where("Subscription IN (?)", request.LeafIDs)
+		queryStrings = append(queryStrings, "Subscription IN (?)")
+		queryParams = append(queryParams, request.LeafIDs)
+	}
+
+	if request.Filter != nil {
+		if request.Filter.Favorite != nil {
+			queryStrings = append(queryStrings, "Favorite = ?")
+			queryParams = append(queryParams, request.Filter.Favorite)
+		}
+		if request.Filter.New != nil {
+			queryStrings = append(queryStrings, "New = ?")
+			queryParams = append(queryParams, request.Filter.New)
+		}
+		if request.Filter.Type != nil && len(*request.Filter.Type) > 0 {
+			typesFilter := []string{}
+			for _, typeItem := range *request.Filter.Type {
+				typesFilter = append(typesFilter, "Type = '"+typeItem+"'")
+			}
+			queryStrings = append(queryStrings, "("+strings.Join(typesFilter, " OR ")+")")
+		}
+	}
+
+	if len(queryStrings) > 0 {
+		query.Where(strings.Join(queryStrings, " AND "), queryParams...)
 	}
 
 	var count int64

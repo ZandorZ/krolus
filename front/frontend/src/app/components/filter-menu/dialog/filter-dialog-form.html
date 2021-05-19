@@ -10,7 +10,7 @@
         <mat-slide-toggle (change)="onChangeItem($event, 'New')" [(ngModel)]="newOption">
             New
         </mat-slide-toggle>
-        <mat-radio-group [disabled]="!newOption" [(ngModel)]="data.New">
+        <mat-radio-group *ngIf="newOption" [(ngModel)]="data.New">
             <mat-radio-button [value]="true">Unseen</mat-radio-button>
             <mat-radio-button [value]="false">Seen</mat-radio-button>
         </mat-radio-group>
@@ -20,10 +20,21 @@
         <mat-slide-toggle (change)="onChangeItem($event, 'Favorite')" [(ngModel)]="favoriteOption">
             Favorite
         </mat-slide-toggle>
-        <mat-radio-group [disabled]="!favoriteOption" [(ngModel)]="data.Favorite">
+        <mat-radio-group *ngIf="favoriteOption" [(ngModel)]="data.Favorite">
             <mat-radio-button [value]="true">Yes</mat-radio-button>
             <mat-radio-button [value]="false">Not</mat-radio-button>
         </mat-radio-group>
+    </span>
+
+    <span class="filter-item">
+        <mat-slide-toggle (change)="onChangeItem($event, 'Types')" [(ngModel)]="typesOption">
+            Type
+        </mat-slide-toggle>
+        <mat-button-toggle-group multiple="true" [(ngModel)]="data.Type" *ngIf="typesOption">
+            <mat-button-toggle [value]="itemType.key" *ngFor="let itemType of itemTypes | keyvalue">
+                <mat-icon>{{itemType.value}}</mat-icon>
+            </mat-button-toggle>
+        </mat-button-toggle-group>
     </span>
 
     <span class="filter-item">
@@ -31,12 +42,6 @@
             Period
         </mat-slide-toggle>
 
-    </span>
-
-    <span class="filter-item">
-        <mat-slide-toggle>
-            Type
-        </mat-slide-toggle>
     </span>
 
 </mat-dialog-content>

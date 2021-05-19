@@ -46,7 +46,7 @@ export interface ItemType {
 }
 
 export const ItemTypes: ItemType = {
-    "text": "artcile",
+    "text": "article",
     "video": "ondemand_video",
     "audio": "audiotrack",
     "unknown": "help_outline",

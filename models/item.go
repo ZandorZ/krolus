@@ -55,4 +55,5 @@ type PaginatedRequest struct {
 type FilterRequest struct {
 	New      *bool
 	Favorite *bool
+	Type     *[]string
 }

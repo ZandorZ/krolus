@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { FilterRequest } from 'src/app/models/item.model';
+import { FilterRequest, ItemType, ItemTypes } from 'src/app/models/item.model';
 
 
 @Component({
@@ -13,9 +13,10 @@ export class FilterDialogFormComponent implements OnInit {
 
 
     data: FilterRequest;
-
     favoriteOption = false;
     newOption = false;
+    typesOption = false;
+    itemTypes: ItemType;
 
     constructor(public dialogRef: MatDialogRef<FilterDialogFormComponent>,
         @Inject(MAT_DIALOG_DATA) _data?: FilterRequest) {
@@ -23,19 +24,19 @@ export class FilterDialogFormComponent implements OnInit {
         this.data = { ..._data };
         this.newOption = this.data.New != undefined;
         this.favoriteOption = this.data.Favorite != undefined;
+        this.typesOption = this.data.Type != undefined;
+        this.itemTypes = ItemTypes;
     }
 
     ngOnInit() {
     }
 
     onClear(): void {
-        this.favoriteOption = false;
-        this.newOption = false;
+        this.favoriteOption = this.newOption = this.typesOption = false;
         this.data = {};
     }
 
     isFilled(): boolean {
-        //return this.data.label.trim().length > 0 && this.data.description.trim().length > 0;
         return false;
     }
 
@@ -52,6 +53,13 @@ export class FilterDialogFormComponent implements OnInit {
                 this.data.Favorite = true;
             } else {
                 delete this.data.Favorite;
+            }
+        }
+        if (field == 'Types') {
+            if (event.checked) {
+                this.data.Type = [];
+            } else {
+                delete this.data.Type;
             }
         }
     }

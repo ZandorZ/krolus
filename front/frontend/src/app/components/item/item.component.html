@@ -2,7 +2,7 @@
     <mat-toolbar>
         <mat-progress-bar *ngIf="loading" mode="buffer"></mat-progress-bar>
         <mat-toolbar-row>
-            <app-item-icon class="item-icon" [ItemType]="model.Type"></app-item-icon>
+            <app-item-icon [ItemType]="model.Type"></app-item-icon>
             <span class="title" [innerHTML]="model?.Title"></span>
 
             <span class="flex"></span>
