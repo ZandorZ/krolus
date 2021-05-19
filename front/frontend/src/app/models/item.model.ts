@@ -40,3 +40,15 @@ export interface FilterRequest {
         End?: Date
     }
 }
+
+export interface ItemType {
+    [name: string]: string
+}
+
+export const ItemTypes: ItemType = {
+    "text": "artcile",
+    "video": "ondemand_video",
+    "audio": "audiotrack",
+    "unknown": "help_outline",
+    "image": "photo_camera_back"
+}
