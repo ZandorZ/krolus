@@ -32,6 +32,11 @@ type ItemModel struct {
 	Favorite          bool
 }
 
+// TableName overrides the table name
+func (ItemModel) TableName() string {
+	return "items"
+}
+
 // ItemCollection collections of items
 type ItemCollection []ItemModel
 
