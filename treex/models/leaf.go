@@ -17,6 +17,7 @@ type Leaf struct {
 	Icon          string `json:"icon"`
 	ItemsCount    int    `json:"items_count"`
 	NewItemsCount int    `json:"new_items_count"`
+	Favorite      bool   `json:"favorite"`
 }
 
 // NewLeaf ...

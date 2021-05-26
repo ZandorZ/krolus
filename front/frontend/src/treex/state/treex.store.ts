@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { TreexNodeHeader, TreexState } from './store';
-import { LoadingDictionary, NodeModel, TreexNode } from '../model';
+import { LeafModel, LoadingDictionary, NodeModel, TreexNode } from '../model';
 var objectPath = require("object-path");
 
 const tree: NodeModel = {
@@ -24,7 +24,6 @@ export class TreexStore extends Store<TreexState> {
     constructor() {
         super(myState);
     }
-
 
     async loadAncestors(id: string, isLeaf: boolean) {
 
@@ -61,6 +60,14 @@ export class TreexStore extends Store<TreexState> {
     }
 
     collapseAll(): void {
+
+    }
+
+    toggleFavorites(): void {
+
+    }
+
+    toggleLeafFavorite(leaf: LeafModel): void {
 
     }
 

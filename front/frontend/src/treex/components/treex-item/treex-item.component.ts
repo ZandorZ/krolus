@@ -34,6 +34,8 @@ export class TreexItemComponent implements OnInit {
     @Output()
     editLeaf: EventEmitter<LeafModel> = new EventEmitter();
 
+    @Output()
+    addFavorite: EventEmitter<LeafModel> = new EventEmitter();
 
 
     constructor(public dialog: MatDialog) { }
@@ -76,6 +78,10 @@ export class TreexItemComponent implements OnInit {
 
     clickEdit() {
         this.editLeaf.emit(this.model);
+    }
+
+    clickFav() {
+        this.addFavorite.emit(this.model);
     }
 
 }

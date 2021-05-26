@@ -10,6 +10,7 @@ export interface LeafModel {
     color?: string
     items_count?: number
     new_items_count?: number
+    favorite?: boolean
 }
 
 export interface NodeModel extends LeafModel {

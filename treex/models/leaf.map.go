@@ -35,3 +35,14 @@ func (l *LeafMap) Get(ID string) *Leaf {
 func (l *LeafMap) Len() int {
 	return len(l.Leaves)
 }
+
+// Filter
+func (l *LeafMap) Filter(filterFunc func(*Leaf) bool) LeafCollection {
+	leaves := LeafCollection{}
+	for _, leaf := range l.Leaves {
+		if filterFunc(leaf) {
+			leaves = append(leaves, leaf)
+		}
+	}
+	return leaves
+}

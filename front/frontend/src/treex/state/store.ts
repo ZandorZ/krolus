@@ -15,6 +15,7 @@ export class TreexState {
     selectedPath: string;
     dragged: TreexNode;
     loading: LoadingDictionary = {};
+    favorite: boolean;
 }
 
 export interface ITreexStore {

@@ -97,6 +97,27 @@ func (s *State) UnLoadAll() {
 	}
 }
 
+// GetFavorites ...
+func (s *State) GetFavorites() *models.Node {
+
+	favs := s.MapLeaves.Filter(func(leaf *models.Leaf) bool {
+		return leaf.Favorite
+	})
+	favs.Sort()
+
+	return &models.Node{
+		Leaf: &models.Leaf{
+			ID:          s.Root.ID,
+			Label:       s.Root.Label,
+			ParentID:    "",
+			Description: s.Root.Description,
+		},
+		NodesCount: len(favs),
+		MemLeaves:  &favs,
+		MemNodes:   &models.NodeCollection{},
+	}
+}
+
 // LoadNode ...
 func (s *State) LoadNode(ID string) error {
 	s.lock.RLock()
@@ -311,6 +332,25 @@ func (s *State) RemoveLeaf(id string) error {
 		return err
 	}
 
+	return nil
+}
+
+// TogleLeafFavorite ...
+func (s *State) TogleLeafFavorite(ID string) error {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	leaf := s.MapLeaves.Get(ID)
+	if leaf == nil {
+		return fmt.Errorf("leaf: %s not found", ID)
+	}
+
+	leaf.Favorite = !leaf.Favorite
+
+	// saving
+	if err := s.Save(); err != nil {
+		return err
+	}
 	return nil
 }
 

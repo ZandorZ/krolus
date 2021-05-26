@@ -85,6 +85,19 @@ func (t *TreeStore) UnLoadAll() error {
 	return t.store.Set(t.treeState.Root)
 }
 
+// FilterFavorites ...
+func (t *TreeStore) FilterFavorites(enabled bool) error {
+	if enabled {
+		return t.store.Set(t.treeState.GetFavorites())
+	}
+	return t.store.Set(t.treeState.Root)
+}
+
+// ToggleLeafFavorite ...
+func (t *TreeStore) ToggleLeafFavorite(leafID string) error {
+	return t.treeState.TogleLeafFavorite(leafID)
+}
+
 // MoveLeaf ...
 func (t *TreeStore) MoveLeaf(leafID, nodeID string) error {
 	if err := t.treeState.MoveLeaf(leafID, nodeID); err != nil {

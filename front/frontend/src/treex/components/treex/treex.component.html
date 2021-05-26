@@ -2,6 +2,9 @@
     <mat-toolbar-row>
         <span class="flex-container">Subscriptions</span>
         <span class="buttons">
+            <button mat-icon-button (click)="store.toggleFavorites()" matTooltip="Favorites" matTooltipPosition="below">
+                <mat-icon>{{ (filterFavorites$ | async) ? 'star' : 'star_border' }} </mat-icon>
+            </button>
             <button mat-icon-button (click)="store.collapseAll()" matTooltip="Collapse all" matTooltipPosition="below">
                 <mat-icon>unfold_less</mat-icon>
             </button>
@@ -73,9 +76,9 @@
     </ng-container>
 
     <ng-container *ngFor="let leaf of model?.leaves">
-        <treex-item (editLeaf)="showLeafDialogForm($event)" (removeLeaf)="onRemoveLeaf($event)"
-            (select)="selectLeaf(leaf)" [model]="leaf" [depth]="depth + 1" [selected]="isLeafSelected(leaf)"
-            (dragStart)="onDragStartLeaf(leaf)" (dragEnd)="onDragEnd()"></treex-item>
+        <treex-item (addFavorite)="store.toggleLeafFavorite($event)" (editLeaf)="showLeafDialogForm($event)"
+            (removeLeaf)="onRemoveLeaf($event)" (select)="selectLeaf(leaf)" [model]="leaf" [depth]="depth + 1"
+            [selected]="isLeafSelected(leaf)" (dragStart)="onDragStartLeaf(leaf)" (dragEnd)="onDragEnd()"></treex-item>
     </ng-container>
 
 </mat-action-list>

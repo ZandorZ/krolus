@@ -21,6 +21,11 @@
         <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="clickFav()">
+            <mat-icon>{{ model.favorite ? "star": "star_outline"}}</mat-icon>
+            {{ model.favorite ? "Remove": "Add"}}
+            Favorite
+        </button>
         <button mat-menu-item (click)="clickEdit()">
             <mat-icon>mode_edit</mat-icon>Edit subscription
         </button>

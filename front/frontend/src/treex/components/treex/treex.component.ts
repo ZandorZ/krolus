@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { LeafDialogFormComponent } from 'src/app/components/leaf-dialog-form/leaf-dialog-form.component';
 import { NodeDialogFormComponent } from 'src/app/components/node-dialog-form/node-dialog-form.component';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class TreexComponent implements OnInit, AfterViewInit {
     @Input() loading: LoadingDictionary;
 
     myHeight: any;
+    filterFavorites$: Observable<boolean>;
 
     constructor(private el: ElementRef, public store: TreexStore, private dialog: MatDialog, private cd: ChangeDetectorRef) { }
 
@@ -55,6 +57,9 @@ export class TreexComponent implements OnInit, AfterViewInit {
 
         // root
         if (this.model == undefined && this.depth == 0) {
+
+            this.filterFavorites$ = this.store.onChanges("favorite");
+
             this.store
                 .onChanges("root").pipe(
                     filter(data => !!data),
