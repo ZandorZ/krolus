@@ -19,6 +19,9 @@ export class TreexItemComponent implements OnInit {
     @Input()
     selected: boolean;
 
+    @Input()
+    isFilteredFavorite: boolean;
+
     @Output()
     select: EventEmitter<void> = new EventEmitter();
 

@@ -1,14 +1,25 @@
 <mat-list-item class="leaf" [matTooltip]="model.description" matTooltipPosition="right"
     [ngClass]="{selected: selected, 'has-items': model?.new_items_count > 0}" (click)="onSelect($event)"
     [dndDraggable]="model" (dndStart)="onDragStart()" (dndEnd)="onDragEnd()">
-    <button mat-icon-button class="drag_handle" dndHandle>
-        <mat-icon>drag_indicator</mat-icon>
-    </button>
 
-    <span style="margin-left: 32px" [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
 
-    <span class="line" [ngStyle]="{'left': ((depth * 22) - 4) + 'px'}"
-        style="position:absolute; width: 20px; border: gray 1px solid; opacity: 0.4"></span>
+
+    <ng-container *ngIf="!isFilteredFavorite">
+
+        <button mat-icon-button class="drag_handle" dndHandle>
+            <mat-icon>drag_indicator</mat-icon>
+        </button>
+
+        <span style="margin-left: 32px" [ngStyle]="{'width': ((depth - 1) * 22) + 'px'}"></span>
+
+        <span class="line" [ngStyle]="{'left': ((depth * 22) - 4) + 'px'}"
+            style="position:absolute; width: 20px; border: gray 1px solid; opacity: 0.4"></span>
+
+    </ng-container>
+
+
+    <span *ngIf="isFilteredFavorite" style="margin-left: 20px"></span>
+
 
     <mat-icon class="folder" dndDragImageRef>{{model.icon ?
         model.icon: 'rss_feed'}}

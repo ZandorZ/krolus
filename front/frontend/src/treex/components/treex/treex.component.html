@@ -76,9 +76,10 @@
     </ng-container>
 
     <ng-container *ngFor="let leaf of model?.leaves">
-        <treex-item (addFavorite)="store.toggleLeafFavorite($event)" (editLeaf)="showLeafDialogForm($event)"
-            (removeLeaf)="onRemoveLeaf($event)" (select)="selectLeaf(leaf)" [model]="leaf" [depth]="depth + 1"
-            [selected]="isLeafSelected(leaf)" (dragStart)="onDragStartLeaf(leaf)" (dragEnd)="onDragEnd()"></treex-item>
+        <treex-item [isFilteredFavorite]="filterFavorites$ | async" (addFavorite)="store.toggleLeafFavorite($event)"
+            (editLeaf)="showLeafDialogForm($event)" (removeLeaf)="onRemoveLeaf($event)" (select)="selectLeaf(leaf)"
+            [model]="leaf" [depth]="depth + 1" [selected]="isLeafSelected(leaf)" (dragStart)="onDragStartLeaf(leaf)"
+            (dragEnd)="onDragEnd()"></treex-item>
     </ng-container>
 
 </mat-action-list>
