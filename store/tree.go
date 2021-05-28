@@ -19,6 +19,7 @@ type TreeStore struct {
 	obs        feed.Observable
 	aggregator *feed.Aggregator
 	manager    *data.Manager
+	isFlat     bool
 }
 
 // NewTreeStore ...
@@ -47,11 +48,17 @@ func (t *TreeStore) listenSubNews() {
 		// Update tree state
 		t.treeState.UpdateCounters(info)
 
-		t.store.Set(t.treeState.Root)
 		if err := t.treeState.Save(); err != nil {
 			t.logger.Errorf("Error saving treex: %v", err)
 		}
+
+		if t.isFlat {
+			t.store.Set(t.treeState.GetFavorites())
+		} else {
+			t.store.Set(t.treeState.Root)
+		}
 	}
+
 }
 
 // LoadNode  ...
@@ -87,6 +94,7 @@ func (t *TreeStore) UnLoadAll() error {
 
 // FilterFavorites ...
 func (t *TreeStore) FilterFavorites(enabled bool) error {
+	t.isFlat = enabled
 	if enabled {
 		return t.store.Set(t.treeState.GetFavorites())
 	}

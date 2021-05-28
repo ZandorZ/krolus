@@ -7,9 +7,6 @@ export class sanitizePipe implements PipeTransform {
     }
 
     transform(content: string, type: string) {
-
-        console.log('pipe: ', type)
-
         if (type == 'html')
             return this.sanitizer.bypassSecurityTrustHtml(content);
         if (type == 'url')
