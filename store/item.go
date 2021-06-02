@@ -53,7 +53,7 @@ func (i *ItemStore) FetchItem(itemID string, updateNew bool) (models.ItemModel, 
 // OpenItem ...
 func (i *ItemStore) OpenItem(itemID string) error {
 
-	item, err := i.manager.Item.GetUpdate(itemID)
+	item, err := i.manager.Item.Get(itemID)
 	if err != nil {
 		return err
 	}

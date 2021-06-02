@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"fmt"
 	"net/url"
 	"regexp"
 	"time"
@@ -35,7 +36,15 @@ func getDomain(link string) string {
 }
 
 func isImage(src string) bool {
-	re, err := regexp.Compile(`(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(png|jpg|jpeg|gif|svg|webp)`)
+	return isType(src, "png|jpg|jpeg|gif|svg|webp")
+}
+
+func isAudio(src string) bool {
+	return isType(src, "mp3")
+}
+
+func isType(src string, extensions string) bool {
+	re, err := regexp.Compile(fmt.Sprintf(`(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(%s)`, extensions))
 	if err != nil {
 		return false
 	}

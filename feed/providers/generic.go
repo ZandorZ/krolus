@@ -26,6 +26,10 @@ func (g *GenericProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	if isImage(item.Link) {
 		model.Type = models.TypeImage
 	}
+
+	if isAudio(item.Link) {
+		model.Type = models.TypeAudio
+	}
 }
 
 func (g *GenericProvider) Fetch(item *models.ItemModel) {

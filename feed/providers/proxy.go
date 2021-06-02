@@ -35,14 +35,19 @@ func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) model
 	//first time
 	if time.Time.IsZero(sub.LastUpdate) {
 		sub.Provider = p.registers.GetRegisterByURL(sub.XURL).Name
+		if f.ITunesExt != nil {
+			sub.Provider = ITUNES
+		}
 		firstTime = true
 	}
 
 	for _, item := range f.Items {
 
 		newItem := p.newItemFrom(item)
+		newItem.SubscriptionModel = sub
 		p.Convert(item, newItem)
 		newItem.Subscription = sub.ID
+		newItem.SubscriptionModel = nil //TODO: weird
 
 		if firstTime {
 			items = append(items, *newItem)
@@ -81,7 +86,7 @@ func (p *Proxy) newItemFrom(item *gofeed.Item) *models.ItemModel {
 
 func (p *Proxy) Convert(item *gofeed.Item, model *models.ItemModel) {
 	//special case
-	if item.ITunesExt != nil {
+	if item.ITunesExt != nil || model.SubscriptionModel.Provider == ITUNES {
 		p.registers.GetRegisterByKey(ITUNES).Provide(p).Convert(item, model)
 		return
 	}

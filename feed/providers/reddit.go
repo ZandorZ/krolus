@@ -53,7 +53,6 @@ func (p *RedditProvider) getThumb(item *gofeed.Item) string {
 func (p *RedditProvider) extractLink(content string) string {
 
 	content = html.UnescapeString(content)
-	// pattern := `<a href="(((https?\:\/\/)|(www\.))(\S+))">\[link\]</a>`
 	pattern := `<a href\s*=\s*["\']?([^"\'\s>]+)["\']?>\[link\]`
 	re, err := regexp.Compile(pattern)
 	if err != nil {

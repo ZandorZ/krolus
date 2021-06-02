@@ -20,7 +20,10 @@ func NewItunesProvider(p *Proxy) Provider {
 
 func (p *ITunesProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	model.Provider = ITUNES
-	model.Thumbnail = item.ITunesExt.Image
+
+	if item.ITunesExt != nil {
+		model.Thumbnail = item.ITunesExt.Image
+	}
 	model.Published = item.PublishedParsed.Local()
 
 	p.patchLink(item, model)
