@@ -376,8 +376,6 @@ func (s *State) EditLeaf(_leaf *models.Leaf) error {
 		}
 	}
 
-	leaf.Color = _leaf.Color
-	leaf.Icon = _leaf.Icon
 	leaf.Description = _leaf.Description
 
 	// saving

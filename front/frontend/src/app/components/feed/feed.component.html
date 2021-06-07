@@ -17,7 +17,12 @@
                 <ng-container *ngIf="header.path != '/'">
                     <button mat-button [matTooltip]="header.description" matTooltipPosition="below"
                         (click)="onSelectHeader(header)">
-                        <mat-icon>{{ header.leaf ? 'rss_feed' : 'folder' }}</mat-icon>
+                        <app-custom-icons [icon]="header.icon" *ngIf="header.icon && header.leaf; else folderIcon">
+                        </app-custom-icons>
+                        <ng-template #folderIcon>
+                            <mat-icon>{{header.leaf ? 'rss_feed': 'folder'}}</mat-icon>
+                        </ng-template>
+
                         {{header.label}}
                     </button>
                 </ng-container>

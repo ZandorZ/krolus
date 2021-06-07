@@ -14,9 +14,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; import { TreexStore } from './state/treex.store';
 import { TreexItemComponent } from './components/treex-item/treex-item.component';
+import { CustomIconsComponent } from 'src/app/components/custom-icons/custom-icons.component';
 
 @NgModule({
-    declarations: [TreexComponent, TreexItemComponent],
+    declarations: [TreexComponent, TreexItemComponent, CustomIconsComponent],
     imports: [
         CommonModule,
         DndModule,
@@ -28,7 +29,7 @@ import { TreexItemComponent } from './components/treex-item/treex-item.component
         MatMenuModule,
         MatTooltipModule,
     ],
-    exports: [TreexComponent, TreexItemComponent],
+    exports: [TreexComponent, TreexItemComponent, CustomIconsComponent],
     providers: [TreexStore],
 })
 export class TreexModule {

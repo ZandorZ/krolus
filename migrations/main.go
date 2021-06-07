@@ -6,6 +6,7 @@ import (
 	"krolus/app"
 	"krolus/data"
 	"krolus/data/sqte"
+	"krolus/feed/providers"
 	"krolus/models"
 	"krolus/treex"
 	treexModels "krolus/treex/models"
@@ -25,6 +26,7 @@ var filePersist persistence.Persister
 var opmlFile string
 var production bool
 var export bool
+var proxy *providers.Proxy
 
 func init() {
 
@@ -45,6 +47,8 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
+
+	proxy = providers.NewProxy()
 }
 
 func pretty(data interface{}) {
@@ -64,16 +68,21 @@ func traverseOPML(outlines []opml.Outline, parent *treexModels.Node) {
 			}
 		} else {
 			leaf := treexModels.NewLeaf(outline.Title, outline.Text)
-			parent.AddLeaf(leaf)
-			if err := manager.Subscription.Add(&models.SubscriptionModel{
+			sub := &models.SubscriptionModel{
 				ID:          leaf.ID,
 				Title:       leaf.Label,
 				XURL:        outline.XMLURL,
 				Description: outline.Text,
 				URL:         outline.HTMLURL,
-			}); err != nil {
+				Provider:    proxy.GetRegister().GetRegisterByURL(outline.XMLURL).Name,
+			}
+			if err := manager.Subscription.Add(sub); err != nil {
 				panic(err)
 			}
+			if sub.Provider != "generic" {
+				leaf.Icon = sub.Provider
+			}
+			parent.AddLeaf(leaf)
 		}
 	}
 }

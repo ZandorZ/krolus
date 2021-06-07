@@ -25,6 +25,10 @@ func NewProxy() *Proxy {
 	}
 }
 
+func (p *Proxy) GetRegister() RegisterMap {
+	return p.registers
+}
+
 // GetNewItems returns collection of new items from sub
 func (p *Proxy) GetNewItems(sub *models.SubscriptionModel, f *gofeed.Feed) models.ItemCollection {
 

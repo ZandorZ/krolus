@@ -144,15 +144,23 @@ func (t *TreeStore) AddSubscription(_sub map[string]interface{}, toID string) er
 	if err := t.manager.Subscription.Add(sub); err != nil {
 		return err
 	}
-	if err := t.treeState.AddLeaf(leaf, toID); err != nil {
+
+	//TODO: Feed.selectedLeaves is outdated if new sub is in selected
+	if err := t.aggregator.CheckSub(sub); err != nil {
 		return err
 	}
 
+	if sub.Provider != "generic" {
+		leaf.Icon = sub.Provider
+	}
+	if err := t.treeState.AddLeaf(leaf, toID); err != nil {
+		return err
+	}
 	if err := t.store.Set(t.treeState.Root); err != nil {
 		return err
 	}
-	//TODO: Feed.selectedLeaves is outdated if new sub is in selected
-	return t.aggregator.CheckSub(sub)
+
+	return nil
 }
 
 // EditNode ...

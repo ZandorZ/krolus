@@ -17,13 +17,15 @@
 
     </ng-container>
 
-
     <span *ngIf="isFilteredFavorite" style="margin-left: 20px"></span>
 
+    <app-custom-icons [icon]="model.icon" *ngIf="model.icon; else defaultIcon" class="folder" dndDragImageRef>
+    </app-custom-icons>
+    <ng-template #defaultIcon>
+        <mat-icon class="folder" dndDragImageRef>rss_feed</mat-icon>
+    </ng-template>
 
-    <mat-icon class="folder" dndDragImageRef>{{model.icon ?
-        model.icon: 'rss_feed'}}
-    </mat-icon>
+
     <span class="label flex-container mat-caption">
         <span>{{model?.label}}</span>
     </span>

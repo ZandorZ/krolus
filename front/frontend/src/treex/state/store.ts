@@ -5,6 +5,7 @@ export type TreexNodeHeader = {
     id: string
     label: string
     description: string
+    icon?: string
     leaf: boolean
     path?: string
 }

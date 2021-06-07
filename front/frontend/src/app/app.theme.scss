@@ -1,5 +1,6 @@
 @mixin app-theme($theme) {
     $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
     $accent: map-get($theme, accent);
     $primary: map-get($theme, primary);
     $warn: map-get($theme, warn);
@@ -11,6 +12,9 @@
         .bottom,
         .mat-paginator {
             background: mat-color($background, card) !important;
+        }
+        app-custom-icons {
+            fill: map-get($foreground, base);
         }
     }
 
@@ -28,6 +32,9 @@
         color: mat-color($accent);
         .mat-icon {
             color: mat-color($accent);
+        }
+        app-custom-icons {
+            fill: mat-color($accent);
         }
         background: map-get($background, hover) !important;
     }

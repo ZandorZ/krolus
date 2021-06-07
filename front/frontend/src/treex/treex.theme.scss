@@ -17,6 +17,9 @@
             color: mat-color($accent);
         }
 
+        app-custom-icons.folder {
+            fill: map-get($foreground, base);
+        }
         mat-icon.folder {
             color: map-get($foreground, base);
         }
@@ -36,6 +39,10 @@
 
             mat-icon.folder {
                 color: mat-color($accent);
+            }
+
+            app-custom-icons.folder {
+                fill: mat-color($accent) !important;
             }
 
             span.label {
@@ -62,6 +69,9 @@
                 mat-icon.folder,
                 span.label {
                     color: mat-color($accent) !important;
+                }
+                app-custom-icons.folder {
+                    fill: mat-color($accent) !important;
                 }
             }
         }
