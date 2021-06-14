@@ -1,6 +1,7 @@
 package store
 
 import (
+	"fmt"
 	"krolus/data"
 	"krolus/feed"
 	m "krolus/models"
@@ -58,7 +59,42 @@ func (t *TreeStore) listenSubNews() {
 			t.store.Set(t.treeState.Root)
 		}
 	}
+}
 
+// MarkAllRead ...
+func (t *TreeStore) MarkAllRead(_ids map[string]interface{}) error {
+
+	if _ids == nil {
+		return fmt.Errorf("request is empty")
+	}
+
+	subRm := m.SubscriptionReadMap{}
+	if err := mapstructure.Decode(_ids, &subRm); err != nil {
+		return err
+	}
+
+	var ids []string
+	for _, items := range subRm {
+		ids = append(ids, items...)
+	}
+	if err := t.manager.Item.MarkAsRead(ids...); err != nil {
+		return err
+	}
+
+	// Update tree state
+	t.treeState.UpdateReads(subRm)
+
+	if err := t.treeState.Save(); err != nil {
+		t.logger.Errorf("Error saving treex: %v", err)
+	}
+
+	if t.isFlat {
+		t.store.Set(t.treeState.GetFavorites())
+	} else {
+		t.store.Set(t.treeState.Root)
+	}
+
+	return nil
 }
 
 // LoadNode  ...

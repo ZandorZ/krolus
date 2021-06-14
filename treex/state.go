@@ -59,6 +59,17 @@ func (s *State) UpdateCounters(subInfos dataModels.SubscriptionItemsMap) {
 	}
 }
 
+func (s *State) UpdateReads(subReads dataModels.SubscriptionReadMap) {
+	s.lock.Lock()
+	defer s.lock.Unlock()
+
+	for sub, items := range subReads {
+		if leaf := s.MapLeaves.Get(sub); leaf != nil {
+			leaf.NewItemsCount -= len(items)
+		}
+	}
+}
+
 // LoadAncestors ...
 func (s *State) LoadAncestors(ID string, isLeaf bool) error {
 

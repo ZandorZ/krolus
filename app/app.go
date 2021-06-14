@@ -40,7 +40,7 @@ func (k *KrolusApp) Start(options Options) {
 
 	k.options = options
 	basePath := GetPath(options.Production)
-	man := sqte.NewManager(basePath + "/mine.db")
+	man := sqte.NewManager(basePath+"/mine.db", !options.Production)
 	ob := feed.NewObserver()
 	myLogger := logger.NewCustomLogger("Krolus")
 

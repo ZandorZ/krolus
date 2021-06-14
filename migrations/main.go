@@ -36,7 +36,7 @@ func init() {
 	flag.Parse()
 
 	basePath = app.GetPath(production)
-	manager = sqte.NewManager(basePath + "/mine.db")
+	manager = sqte.NewManager(basePath+"/mine.db", true)
 
 	var err error
 	filePersist, err = persistence.NewFile(basePath + "/tree.x_")

@@ -15,7 +15,7 @@ import (
 var manager *data.Manager
 
 func init() {
-	manager = sqte.NewManager("file:test.db?cache=shared&mode=memory")
+	manager = sqte.NewManager("file:test.db?cache=shared&mode=memory", true)
 	// manager = bh.NewManager("./")
 }
 

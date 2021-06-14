@@ -39,7 +39,7 @@
             <button mat-icon-button matTooltip="Search text" matTooltipPosition="below">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button matTooltip="Mark all as read" matTooltipPosition="below">
+            <button mat-icon-button (click)="markAllRead()" matTooltip="Mark all as read" matTooltipPosition="below">
                 <mat-icon>done_all</mat-icon>
             </button>
             <app-filter-menu (filter)="onChangeFilter($event)"></app-filter-menu>

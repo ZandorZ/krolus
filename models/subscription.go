@@ -37,3 +37,6 @@ type SubscriptionCollection []SubscriptionModel
 
 // SubscriptionItemsMap ...
 type SubscriptionItemsMap map[*SubscriptionModel]*ItemCollection
+
+// SubscriptionReadMap ...
+type SubscriptionReadMap map[string][]string

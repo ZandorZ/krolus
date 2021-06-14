@@ -10,13 +10,15 @@ import (
 
 var dataManager *data.Manager
 
-func NewManager(path string) *data.Manager {
+func NewManager(path string, debug bool) *data.Manager {
 
 	if dataManager == nil {
-		db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
-			// SkipDefaultTransaction: true,
-			Logger: logger.Default.LogMode(logger.Silent),
-		})
+		config := &gorm.Config{}
+		if debug {
+			config.Logger = logger.Default.LogMode(logger.Info)
+		}
+
+		db, err := gorm.Open(sqlite.Open(path), config)
 		base := &baseSqte{DB: db}
 		if err != nil {
 			panic("failed to connect database")

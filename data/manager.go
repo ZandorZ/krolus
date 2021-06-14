@@ -24,6 +24,7 @@ type ItemManager interface {
 	Get(string) (*models.ItemModel, error)
 	GetUpdate(string) (*models.ItemModel, error)
 	UpdateFavorite(string) error
+	MarkAsRead(...string) error
 	All() (models.ItemCollection, error)
 }
 

@@ -160,6 +160,13 @@ func (i *ItemManagerSqte) UpdateFavorite(itemID string) error {
 	return err
 }
 
+func (i *ItemManagerSqte) MarkAsRead(ids ...string) error {
+	err := i.getTx().Transaction(func(tx *gorm.DB) error {
+		return tx.Model(models.ItemModel{}).Where("id IN ?", ids).Updates(map[string]interface{}{"new": false}).Error
+	})
+	return err
+}
+
 func (i *ItemManagerSqte) All() (models.ItemCollection, error) {
 	var items models.ItemCollection
 	err := i.DB.Preload("SubscriptionModel").Find(&items).Error

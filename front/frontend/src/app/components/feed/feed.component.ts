@@ -110,6 +110,10 @@ export class FeedComponent implements OnChanges {
         await this.loadMoreItems();
     }
 
+    async markAllRead() {
+        await this.store.markAllRead();
+    }
+
     onSelecItem(item: ItemModel) {
         this.store.selectItem(item);
         item.New = false;

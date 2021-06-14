@@ -58,6 +58,35 @@ export class FeedStore extends Store<FeedState> {
         this.patchState(item, "Selected");
     }
 
+    async markAllRead() {
+
+        let ids: any = {};
+        for (let i in this.state.PaginatedItems.Items) {
+            if (this.state.PaginatedItems.Items[i].New) {
+                const sub = this.state.PaginatedItems.Items[i].Subscription;
+                if (!ids[sub]) {
+                    ids[sub] = [];
+                }
+                ids[sub].push(this.state.PaginatedItems.Items[i].ID);
+            }
+        }
+
+        if (Object.keys(ids).length == 0) {
+            return
+        }
+
+        try {
+            // @ts-ignore
+            await window.backend.TreeStore.MarkAllRead(ids);
+            await this.loadRemote();
+
+        } catch (e: any) {
+            console.error(e);
+        }
+
+    }
+
+
     unSelectItem() {
         this.patchState(undefined, "Selected");
     }
