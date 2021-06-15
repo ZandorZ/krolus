@@ -19,7 +19,7 @@
 
 <mat-list-item [matTooltip]="model.description" matTooltipPosition="right" *ngIf="depth > 0" dndDropzone
     [ngClass]="{selected: isSelected(), loading: isLoading()}" (click)="select($event)" (dndDrop)="onDrop($event)"
-    (dndStart)="onDragStart()" (dndEnd)="onDragEnd()" [dndDraggable]="model" [dndDisableDropIf]="!isDroppagle()">
+    (dndStart)="onDragStart()" (dndEnd)="onDragEnd()" [dndDraggable]="model" [dndDisableDropIf]="!isDroppable()">
 
     <button mat-icon-button class="drag_handle" dndHandle>
         <mat-icon>drag_indicator</mat-icon>

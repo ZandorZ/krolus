@@ -159,7 +159,12 @@ export class TreexComponent implements OnInit, AfterViewInit {
         }, 300);
     }
 
-    isDroppagle(): boolean {
+    isDroppable(): boolean {
+
+        //target is the same as dragged
+        if (!!this.dragged && !!this.model) {
+            if (this.model.id == this.dragged.id) return false;
+        }
 
         //leaf
         if (!!this.dragged && !!this.model.leaves && this.model.leaves.length > 0 && !!this.model.leaves.find(leaf => leaf.id == this.dragged.id)) {
