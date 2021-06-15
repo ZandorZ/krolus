@@ -1,6 +1,6 @@
 <div id="item-container">
     <mat-toolbar>
-        <mat-progress-bar *ngIf="loading" mode="buffer"></mat-progress-bar>
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
         <mat-toolbar-row>
             <app-item-icon [ItemType]="model.Type"></app-item-icon>
             <span class="title" [innerHTML]="model?.Title"></span>

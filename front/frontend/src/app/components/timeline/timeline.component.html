@@ -7,23 +7,16 @@
                     <mat-icon>{{ item.Favorite ? "star": "star_outline"}}</mat-icon>
                 </button>
             </div>
-            <div class="shrink-3-basis">
-                <button mat-icon-button [ngSwitch]="item?.Type">
-                    <mat-icon *ngSwitchCase="'video'">ondemand_video</mat-icon>
-                    <mat-icon *ngSwitchCase="'image'">photo_camera_back</mat-icon>
-                    <mat-icon *ngSwitchCase="'page'">article</mat-icon>
-                    <mat-icon *ngSwitchCase="'unknown'">help_outline</mat-icon>
-                    <mat-icon *ngSwitchCase="'audio'">audiotrack</mat-icon>
-                </button>
-            </div>
-
             <div class="shrink-2-basis">
                 <span class="subLink"
                     (click)="onSelectSub($event, {id: item.Subscription, label: item.SubscriptionName})">
                     {{item.SubscriptionName}}
                 </span>
             </div>
-            <div class="item flex-item-1">{{item.Title}}</div>
+            <div class="item flex-item-1">
+                <app-item-icon [ItemType]="item?.Type" [matTooltip]="item?.Title"></app-item-icon>
+                {{item.Title}}
+            </div>
             <div class="item mat-caption">
                 {{item.Published | customDate}}
             </div>

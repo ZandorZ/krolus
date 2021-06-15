@@ -2,7 +2,9 @@
     <mat-card (click)="onChange(item)" *ngFor="let item of items"
         [ngClass]="{'new' : item.New, 'selected': item.ID == selected?.ID}">
         <mat-card-header>
-            <mat-card-title [matTooltip]="item?.Title" matTooltipPosition="above">{{item?.Title.length > 75 &&
+            <mat-card-title matTooltipPosition="above">
+                <app-item-icon [ItemType]="item?.Type" [matTooltip]="item?.Title"></app-item-icon>
+                {{item?.Title.length > 75 &&
                 !!item?.Thumbnail ? item?.Title.substring(0,75) + "..." : item.Title }}
             </mat-card-title>
             <div class="content" [ngStyle]="{backgroundImage:'url('+item.Thumbnail+')'}">

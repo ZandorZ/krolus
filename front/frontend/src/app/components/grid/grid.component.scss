@@ -17,7 +17,7 @@
     opacity: 0.5;
     margin-bottom: 5px !important;
     font-size: 16px !important;
-    line-height: 20px !important;
+    line-height: 22px !important;
 }
 
 .mat-card-title {
@@ -63,6 +63,7 @@ mat-card-header {
     opacity: 0.5;
     filter: grayscale(1);
     margin-bottom: 5px;
+    margin-top: 5px;
     justify-content: center;
     align-items: center;
     max-height: 210px;
@@ -87,4 +88,7 @@ mat-card-header {
         overflow: hidden;
         text-overflow: ellipsis;
     }
+}
+
+app-item-icon {
 }
