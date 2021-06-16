@@ -45,10 +45,10 @@
 
         <!-- audio -->
         <div *ngIf="model?.Type == 'audio'">
-            <audio controls>
-                <source [src]="model?.Link" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
+            <ngx-audio-player [playlist]="[{title:model?.Title, link: model?.Link}]" [autoPlay]="true" muted="false"
+                [displayPlaylist]="false" [pageSizeOptions]="false" [displayArtist]="false" [displayDuration]="true"
+                [expanded]="false" [displayVolumeControls]="true" [displayRepeatControls]="true" [displayTitle]="false"
+                [disablePositionSlider]="false"></ngx-audio-player>
         </div>
 
         <!-- description -->

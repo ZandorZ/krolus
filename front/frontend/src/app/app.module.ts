@@ -14,6 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatMenuModule } from '@angular/material/menu';
 import { TreexModule } from 'src/treex/treex.module';
+import { NgxAudioPlayerModule } from 'ngx-audio-player';
 
 import { AppComponent } from './app.component';
 import { sanitizePipe } from './pipes/sanitize.pipe';
@@ -86,6 +87,7 @@ import { ItemIconComponent } from './components/item-icon/item-icon.component';
         MatSnackBarModule,
         MatPaginatorModule,
         MatSidenavModule,
+        NgxAudioPlayerModule,
         {
             ngModule: TreexModule,
             providers: [
