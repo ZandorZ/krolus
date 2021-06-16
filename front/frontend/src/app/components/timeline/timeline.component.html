@@ -8,20 +8,21 @@
                 </button>
             </div>
             <div class="shrink-2-basis">
+                <app-item-icon [ItemType]="item?.Type" [matTooltip]="item?.Title"></app-item-icon>
+                {{item.Title}}
+            </div>
+            <div class="item flex-item-1">
                 <span class="subLink"
                     (click)="onSelectSub($event, {id: item.Subscription, label: item.SubscriptionName})">
                     {{item.SubscriptionName}}
                 </span>
-            </div>
-            <div class="item flex-item-1">
-                <app-item-icon [ItemType]="item?.Type" [matTooltip]="item?.Title"></app-item-icon>
-                {{item.Title}}
             </div>
             <div class="item mat-caption">
                 {{item.Published | customDate}}
             </div>
         </section>
         <div class="menu-container">
+
             <button mat-icon-button matTooltip="Mark as read" matTooltipPosition="left">
                 <mat-icon>done</mat-icon>
             </button>

@@ -39,9 +39,6 @@
             <button mat-icon-button matTooltip="Search text" matTooltipPosition="below">
                 <mat-icon>search</mat-icon>
             </button>
-            <button mat-icon-button (click)="markAllRead()" matTooltip="Mark all as read" matTooltipPosition="below">
-                <mat-icon>done_all</mat-icon>
-            </button>
             <app-filter-menu (filter)="onChangeFilter($event)"></app-filter-menu>
             <button mat-icon-button (click)="typeGrid = !typeGrid" matTooltip="Change view" matTooltipPosition="below">
                 <mat-icon *ngIf="!typeGrid">apps</mat-icon>
@@ -62,12 +59,13 @@
 </div>
 
 <div class="bottom">
-    <span style="flex: 1">
-    </span>
-    <span style="margin-top: 8px;">
-        <app-pagesize (change)="onChangePageSize($event)"> </app-pagesize>
-    </span>
+    <app-pagesize (change)="onChangePageSize($event)"> </app-pagesize>
+    <span style="flex: 1"></span>
     <mat-paginator #paginator [showFirstLastButtons]="true" [length]="total$ | async" (page)="onChangePage($event)"
         hidePageSize="true" [pageSize]="pageSize">
     </mat-paginator>
+    <span style="flex: 1"></span>
+    <button mat-icon-button (click)="markAllRead()" matTooltip="Mark all as read" matTooltipPosition="below">
+        <mat-icon>done_all</mat-icon>
+    </button>
 </div>

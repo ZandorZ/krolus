@@ -28,8 +28,17 @@
 }
 
 .bottom {
-    height: 50px;
     display: flex;
+    padding-left: 15px;
+    padding-right: 20px;
+    padding-top: 8px;
+    vertical-align: middle;
+}
+
+::ng-deep .mat-paginator-container {
+    min-height: 40px !important;
+    height: 40px !important;
+    display: block;
 }
 
 .scroll-container {

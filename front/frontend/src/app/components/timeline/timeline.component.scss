@@ -81,13 +81,13 @@ mat-selection-list {
     height: 40px;
     line-height: 40px;
     white-space: nowrap;
-    flex-shrink: 1;
-    flex-basis: 230px;
+    flex-shrink: 2;
+    flex-basis: 70%;
     text-overflow: ellipsis;
     padding-right: 10px;
     // display: block;
     overflow: hidden;
-    width: 230px;
+    width: 70%;
 }
 .subLink:hover {
     text-decoration: underline;
