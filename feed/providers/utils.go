@@ -39,6 +39,10 @@ func isImage(src string) bool {
 	return isType(src, "png|jpg|jpeg|gif|svg|webp")
 }
 
+func isVideo(src string) bool {
+	return isType(src, "avi|mpeg|mpg")
+}
+
 func isAudio(src string) bool {
 	return isType(src, "mp3")
 }

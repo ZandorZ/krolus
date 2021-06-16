@@ -23,8 +23,12 @@ func NewRedditProvider(p *Proxy) Provider {
 func (p *RedditProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	model.Provider = REDDIT
 	model.Thumbnail = p.getThumb(item)
-	if isImage(p.extractLink(item.Content)) {
+	link := p.extractLink(item.Content)
+	if isImage(link) {
 		model.Type = models.TypeImage
+	}
+	if isVideo(link) || p.isVideoProvider(link) {
+		model.Type = models.TypeVideo
 	}
 }
 
@@ -48,6 +52,11 @@ func (p *RedditProvider) getThumb(item *gofeed.Item) string {
 		return item.Extensions["media"]["thumbnail"][0].Attrs["url"]
 	}
 	return ""
+}
+
+func (p *RedditProvider) isVideoProvider(src string) bool {
+	//TODO fix this
+	return p.Proxy.registers.GetRegisterByURL(src).Name == YOUTUBE
 }
 
 func (p *RedditProvider) extractLink(content string) string {
