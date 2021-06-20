@@ -83,8 +83,15 @@ export class AppComponent implements OnInit {
                 const path = getPath(this.treeStore.state.root, header.id).slice(1);
                 this.treeStore.updateSelected({ id: header.id, label: header.label }, path);
             }, 100);
-
         }
+    }
+
+    async onSelectItemSub(header: TreexNodeHeader) {
+        await this.treeStore.loadAncestors(header.id, header.leaf);
+        setTimeout(() => {
+            const path = getPath(this.treeStore.state.root, header.id).slice(1);
+            this.treeStore.updateSelected({ id: header.id, label: header.label }, path);
+        }, 100);
 
     }
 

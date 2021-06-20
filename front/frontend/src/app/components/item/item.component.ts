@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ItemModel } from 'src/app/models/item.model';
 import { MediaStore } from 'src/app/services/state/media.store';
+import { TreexNodeHeader } from 'src/treex/state/store';
 
 
 @Component({
@@ -21,6 +22,9 @@ export class ItemComponent implements OnChanges {
 
     @Output()
     open = new EventEmitter<string>();
+
+    @Output()
+    selectSub = new EventEmitter<TreexNodeHeader>();
 
     content: SafeHtml;
     loading = false;

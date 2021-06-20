@@ -1,15 +1,14 @@
 <div id="item-container">
     <mat-toolbar>
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-        <mat-toolbar-row>
-            <app-item-icon [ItemType]="model.Type"></app-item-icon>
+        <mat-toolbar-row id="mainRow">
+            <app-item-icon [ItemType]="model?.Type" [matTooltip]="model?.Title"></app-item-icon>
             <span class="title" [innerHTML]="model?.Title"></span>
 
             <span class="flex"></span>
 
             <span class="item-buttons">
-                <button mat-icon-button (click)="openLink()" matTooltip="Open link in new window"
-                    matTooltipPosition="above">
+                <button mat-icon-button (click)="openLink()" [matTooltip]="'Open link in new window'">
                     <mat-icon>open_in_new</mat-icon>
                 </button>
                 <button [disabled]="loading" mat-icon-button (click)="donwloadItem()" matTooltip="Download content"
@@ -21,13 +20,24 @@
                 </button>
             </span>
         </mat-toolbar-row>
+        <mat-toolbar-row id="secondaryRow">
+            <span class="mat-subheading-2"
+                (click)="selectSub.emit({id:model.Subscription, label: model.SubscriptionName, leaf:true})">
+                {{model?.SubscriptionName}}
+            </span>
+            <span class="flex">
+            </span>
+            <span class="mat-caption">
+                {{model?.Published | customDate}}
+            </span>
+        </mat-toolbar-row>
     </mat-toolbar>
 
 
     <div id="main" [appLoadingMask]="loading">
 
         <!-- videos -->
-        <div *ngIf="model?.Type == 'video'" style="height: 50%;">
+        <div *ngIf="model?.Type == 'video'" style="height: 50%">
 
             <div *ngIf="model?.Provider == 'itunes' else blockEmbed">
                 <video controls width="100%" style="height:100%">

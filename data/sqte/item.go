@@ -129,8 +129,11 @@ func (i *ItemManagerSqte) AllPaginated(request models.PaginatedRequest) (models.
 // Get gets an item
 func (i *ItemManagerSqte) Get(ID string) (*models.ItemModel, error) {
 	var item models.ItemModel
-	err := i.getTx().First(&item, "id = ?", ID).Error
-	return &item, err
+	if err := i.getTx().Preload("SubscriptionModel").First(&item, "id = ?", ID).Error; err != nil {
+		return nil, err
+	}
+	item.SubscriptionName = item.SubscriptionModel.Title
+	return &item, nil
 }
 
 // GetUpdate get and updates field New to false
@@ -138,9 +141,10 @@ func (i *ItemManagerSqte) GetUpdate(itemID string) (*models.ItemModel, error) {
 	var item models.ItemModel
 
 	err := i.getTx().Transaction(func(tx *gorm.DB) error {
-		if err := tx.First(&item, "id = ?", itemID).Error; err != nil {
+		if err := tx.Preload("SubscriptionModel").First(&item, "id = ?", itemID).Error; err != nil {
 			return err
 		}
+		item.SubscriptionName = item.SubscriptionModel.Title
 		return tx.Model(&item).Update("new", false).Error
 	})
 	return &item, err

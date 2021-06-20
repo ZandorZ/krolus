@@ -20,11 +20,17 @@
 
     app-item {
         .mat-toolbar {
-            background: map-get($background, card);
+            background: map-get($background, background);
             .title,
             app-item-icon mat-icon {
                 color: mat-color($accent) !important;
             }
+        }
+        #mainRow {
+            background: map-get($background, app-bar);
+        }
+        #secondaryRow {
+            color: mat-color($accent, lighter);
         }
     }
 

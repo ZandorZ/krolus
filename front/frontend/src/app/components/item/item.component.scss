@@ -2,6 +2,23 @@
     padding-left: 15px !important;
 }
 
+#secondaryRow {
+    height: 40px !important;
+    padding-right: 15px !important;
+
+    .mat-subheading-2 {
+        margin: 0px !important;
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        max-width: 80%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
 .title {
     // text-align: left;
     white-space: nowrap;
@@ -38,7 +55,7 @@
 
 .content {
     height: 100%;
-    padding: 10px;
+    padding: 15px;
     text-align: left;
     overflow: auto;
     font-size: large;
@@ -50,9 +67,8 @@
 #main {
     overflow: hidden;
     flex-direction: column;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 100px);
     text-align: center;
-    padding: 10px;
 
     img {
         max-width: 90%;
