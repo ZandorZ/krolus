@@ -20,6 +20,6 @@ func main() {
 		Interval:     30 * time.Minute,
 		Workers:      3,
 		CheckAtStart: true,
-		// Production:   true,
+		Production:   true,
 	})
 }

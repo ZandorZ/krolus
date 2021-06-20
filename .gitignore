@@ -7,3 +7,6 @@
 /go.sum
 /front/wview
 front/wview
+node_modules
+dist/
+front/wview

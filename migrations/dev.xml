@@ -5,7 +5,8 @@
     </head>
     <body>
         <outline text="Music" title="Music">
-            <outline text="Progresive Metal" title="Reddit/r/ProgresiveMetal" type="rss" xmlUrl="https://www.reddit.com/r/progressivemetal.rss" htmlUrl="https://www.reddit.com/r/progressivemetal" />
+            <outline text="Progresive Metal" title="ProgresiveMetal" type="rss" xmlUrl="https://www.reddit.com/r/progressivemetal.rss" htmlUrl="https://www.reddit.com/r/progressivemetal" />            
+            <outline text="The Corbett Report explore the world of politics, history, science and economics from a radically alternative perspective. From geopolitical conspiracies to monetary manipulation, repressed history and social engineering, The Corbett Report goes where other podcasts fear to tread." type="rss" xmlUrl="https://www.corbettreport.com/newrss.xml" htmlUrl="http://www.corbettreport.com" title="The Corbett Report Podcast"></outline>
         </outline>
         <outline text="Tech" title="Tech">            
             <outline text="Rob Braxman Tech" title="Rob Braxman Tech" type="rss" xmlUrl="https://lbryfeed.melroy.org/channel/RobBraxmanTech" htmlUrl="https://odysee.com/@RobBraxmanTech:6" />

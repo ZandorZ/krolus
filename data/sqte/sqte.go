@@ -15,7 +15,7 @@ func NewManager(path string, debug bool) *data.Manager {
 	if dataManager == nil {
 		config := &gorm.Config{}
 		if debug {
-			config.Logger = logger.Default.LogMode(logger.Info)
+			config.Logger = logger.Default.LogMode(logger.Warn)
 		}
 
 		db, err := gorm.Open(sqlite.Open(path), config)
