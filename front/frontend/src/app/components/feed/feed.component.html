@@ -55,8 +55,9 @@
         [items]="items$ | async">
     </app-timeline>
 
-    <app-grid *ngIf="typeGrid" [selected]="selected$ | async" (select)="onSelecItem($event)"
-        (selectSub)="onSelectSub($event)" [items]="items$ | async"></app-grid>
+    <app-grid *ngIf="typeGrid" [selected]="selected$ | async" (favorite)="onFavoriteItem($event)"
+        (markRead)="onMarkAsRead($event)" (select)="onSelecItem($event)" (selectSub)="onSelectSub($event)"
+        [items]="items$ | async"></app-grid>
 </div>
 
 <div class="bottom">

@@ -6,8 +6,20 @@
                 <app-item-icon [ItemType]="item?.Type" [matTooltip]="item?.Title"></app-item-icon>
                 {{item?.Title.length > 75 &&
                 !!item?.Thumbnail ? item?.Title.substring(0,75) + "..." : item.Title }}
+                <div class="menu-top menu-container" [ngClass]="{'hidden' : !item.Favorite}">
+                    <button mat-icon-button class="favorite" (click)="setFavorite($event, item)"
+                        [matTooltip]="item.Favorite ? 'Remove from favorites' : 'Add to favorites'">
+                        <mat-icon>{{ item.Favorite ? "star": "star_outline"}}</mat-icon>
+                    </button>
+                </div>
+                <div class="menu-bottom menu-container">
+                    <button *ngIf="item.New" mat-icon-button matTooltip="Mark as read"
+                        (click)="markAsRead($event, item)">
+                        <mat-icon>done</mat-icon>
+                    </button>
+                </div>
             </mat-card-title>
-            <div class="content" [ngStyle]="{backgroundImage:'url('+item.Thumbnail+')'}">
+            <div class=" content" [ngStyle]="{backgroundImage:'url('+item.Thumbnail+')'}">
             </div>
             <div class="details mat-caption">
                 <span class="subLink"

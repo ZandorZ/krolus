@@ -89,8 +89,12 @@ mat-selection-list {
     overflow: hidden;
     width: 70%;
 }
-.subLink:hover {
-    text-decoration: underline;
+
+.subLink {
+    &:hover {
+        text-decoration: underline;
+    }
+    padding-right: 10px;
 }
 
 .favorite {
