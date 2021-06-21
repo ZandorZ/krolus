@@ -68,10 +68,10 @@
             &:hover {
                 mat-icon.folder,
                 span.label {
-                    color: mat-color($accent) !important;
+                    color: mat-color($accent, lighter) !important;
                 }
                 app-custom-icons.folder {
-                    fill: mat-color($accent) !important;
+                    fill: mat-color($accent, lighter) !important;
                 }
             }
         }

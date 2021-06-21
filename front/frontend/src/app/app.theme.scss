@@ -50,12 +50,19 @@
 
         &:hover {
             .mat-list-text {
-                color: mat-color($accent);
+                color: mat-color($accent, lighter);
             }
         }
 
         .menu-container {
             background: map-get($background, card);
+        }
+    }
+
+    mat-card-title {
+        .menu-container {
+            background: map-get($background, card);
+            border-radius: 50%;
         }
     }
 
@@ -110,7 +117,7 @@
                 .mat-card-title,
                 .details {
                     opacity: 1;
-                    color: mat-color($accent, darker);
+                    color: mat-color($accent, lighter);
                 }
 
                 .content {
@@ -121,7 +128,7 @@
             .details {
                 .subLink {
                     &:hover {
-                        color: mat-color($accent, main);
+                        color: mat-color($accent, lighter);
                         text-decoration: underline;
                     }
                 }
