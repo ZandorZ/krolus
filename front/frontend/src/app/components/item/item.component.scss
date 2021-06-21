@@ -5,6 +5,7 @@
 #secondaryRow {
     height: 40px !important;
     padding-right: 15px !important;
+    opacity: 0.7;
 
     .mat-subheading-2 {
         margin: 0px !important;
@@ -39,6 +40,9 @@
     &:hover {
         .item-buttons {
             display: inherit;
+        }
+        #secondaryRow {
+            opacity: 1;
         }
     }
 }

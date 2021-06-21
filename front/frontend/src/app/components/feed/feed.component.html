@@ -1,5 +1,5 @@
 <mat-toolbar>
-    <mat-progress-bar color="accent" mode="buffer" *ngIf="loading$ | async"></mat-progress-bar>
+    <mat-progress-bar color="accent" mode="indeterminate" *ngIf="loading$ | async"></mat-progress-bar>
     <mat-toolbar-row>
         <button mat-icon-button (click)="toggleHideMenu()"
             [matTooltip]="hiddenmenu ? 'Show tree menu' : 'Hide tree menu'" matTooltipPosition="below">

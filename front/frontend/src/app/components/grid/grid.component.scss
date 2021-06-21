@@ -1,20 +1,24 @@
+.menu-container {
+    .mat-icon-button {
+        width: 30px !important;
+        height: 30px !important;
+        line-height: 30px !important;
+    }
+}
+
 .menu-top {
-    width: 40px;
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 2px;
+    right: 2px;
     z-index: 200;
-    margin: 5px;
 }
 
 .menu-bottom {
     display: none;
-    width: 40px;
     position: absolute;
-    bottom: 0px;
-    right: 0px;
+    bottom: 2px;
+    right: 2px;
     z-index: 200;
-    margin: 5px;
 }
 
 .container {
@@ -57,6 +61,7 @@ mat-card {
     margin-top: 10px;
     display: inline-block;
     padding: 10px;
+    padding-top: 5px !important;
     cursor: pointer;
     .animated {
         animation: fadeIn ease 0.6s;
