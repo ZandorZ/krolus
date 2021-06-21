@@ -4,6 +4,7 @@ import { ItemCollection, ItemModel, PaginatedItemCollection, PaginatedRequest } 
 import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { isNode, TreexNode } from 'src/treex/model';
+import { SubscriptionReadMap } from 'src/app/models/subscription.model';
 
 
 
@@ -60,7 +61,7 @@ export class FeedStore extends Store<FeedState> {
 
     async markAllRead() {
 
-        let ids: any = {};
+        let ids: SubscriptionReadMap = {};
         for (let i in this.state.PaginatedItems.Items) {
             if (this.state.PaginatedItems.Items[i].New) {
                 const sub = this.state.PaginatedItems.Items[i].Subscription;
@@ -75,6 +76,10 @@ export class FeedStore extends Store<FeedState> {
             return
         }
 
+        await this.markAsRead(ids);
+    }
+
+    async markAsRead(ids: SubscriptionReadMap) {
         try {
             // @ts-ignore
             await window.backend.TreeStore.MarkAllRead(ids);
@@ -83,7 +88,6 @@ export class FeedStore extends Store<FeedState> {
         } catch (e: any) {
             console.error(e);
         }
-
     }
 
 

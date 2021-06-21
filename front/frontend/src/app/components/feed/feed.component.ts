@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Even
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { FilterRequest, ItemCollection, ItemModel, PaginatedRequest } from 'src/app/models/item.model';
+import { SubscriptionReadMap } from 'src/app/models/subscription.model';
 import { FeedStore } from 'src/app/services/state/feed.store';
 import { ItemStore } from 'src/app/services/state/item.store';
 import { LeafModel, TreexNode } from 'src/treex/model';
@@ -112,6 +113,10 @@ export class FeedComponent implements OnChanges {
 
     async markAllRead() {
         await this.store.markAllRead();
+    }
+
+    async onMarkAsRead(idMap: SubscriptionReadMap) {
+        await this.store.markAsRead(idMap);
     }
 
     onSelecItem(item: ItemModel) {

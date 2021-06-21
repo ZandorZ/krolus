@@ -22,8 +22,8 @@
             </div>
         </section>
         <div class="menu-container">
-
-            <button mat-icon-button matTooltip="Mark as read" matTooltipPosition="left">
+            <button *ngIf="(!!selected && item.ID != selected?.ID) || item.New" mat-icon-button
+                matTooltip="Mark as read" matTooltipPosition="above" (click)="markAsRead($event, item)">
                 <mat-icon>done</mat-icon>
             </button>
         </div>

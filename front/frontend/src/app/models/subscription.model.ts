@@ -28,3 +28,6 @@ export const leafToSubscription = (l: LeafModel): SubscriptionModel => {
     }
 }
 
+export interface SubscriptionReadMap {
+    [id: string]: string[]
+}
