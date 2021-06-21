@@ -1,12 +1,8 @@
 .title {
-    // text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-left: 10px;
-    // vertical-align: middle;
-    // height: 40px;
-    // line-height: 40px;
     opacity: 0.8 !important;
 
     .mat-button {
@@ -32,7 +28,7 @@
     padding-left: 15px;
     padding-right: 20px;
     padding-top: 8px;
-    vertical-align: middle;
+    // vertical-align: middle;
     height: 50px !important;
 }
 

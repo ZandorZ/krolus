@@ -8,13 +8,6 @@
             <span class="flex"></span>
 
             <span class="item-buttons">
-                <button mat-icon-button (click)="openLink()" [matTooltip]="'Open link in new window'">
-                    <mat-icon>open_in_new</mat-icon>
-                </button>
-                <button [disabled]="loading" mat-icon-button (click)="donwloadItem()" matTooltip="Download content"
-                    matTooltipPosition="above">
-                    <mat-icon>download</mat-icon>
-                </button>
                 <button mat-icon-button (click)="close.emit()">
                     <mat-icon>close</mat-icon>
                 </button>
@@ -94,4 +87,23 @@
         </div>
 
     </div>
+
+
+    <mat-toolbar id="details">
+        <mat-toolbar-row>
+            <span class="mat-caption title">
+                {{model?.Link}}
+            </span>
+            <span class="flex"></span>
+            <span class="item-buttons">
+                <button mat-icon-button (click)="openLink()" [matTooltip]="'Open link in new window'">
+                    <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button [disabled]="loading" mat-icon-button (click)="donwloadItem()" matTooltip="Download content">
+                    <mat-icon>download</mat-icon>
+                </button>
+            </span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+
 </div>
