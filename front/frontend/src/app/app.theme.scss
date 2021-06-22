@@ -7,11 +7,21 @@
 
     app-feed {
         .mat-toolbar {
-            background: mat-color($primary, darker);
+            background: linear-gradient(
+                to right,
+                map-get($background, app-bar) 30%,
+                mat-color($primary, darker) 130%
+            );
         }
-        .bottom,
+        .bottom {
+            background: linear-gradient(
+                to left,
+                map-get($background, app-bar) 30%,
+                mat-color($primary, darker) 130%
+            );
+        }
         .mat-paginator {
-            background: mat-color($background, card) !important;
+            background: transparent;
         }
         app-custom-icons {
             fill: map-get($foreground, base);
@@ -23,7 +33,7 @@
             background: map-get($background, background);
             .title,
             app-item-icon mat-icon {
-                color: mat-color($accent) !important;
+                color: mat-color($accent);
             }
         }
         #mainRow {
@@ -31,6 +41,13 @@
         }
         #secondaryRow {
             color: mat-color($accent, lighter);
+        }
+
+        .detailsLink {
+            color: mat-color($primary, lighter) !important;
+        }
+        .detailsLink:hover {
+            color: mat-color($accent, lighter) !important;
         }
     }
 

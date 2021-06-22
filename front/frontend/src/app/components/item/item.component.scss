@@ -2,6 +2,12 @@
     padding-left: 15px !important;
 }
 
+#mainRow {
+    .title {
+        margin-left: 5px;
+    }
+}
+
 #secondaryRow {
     height: 40px !important;
     padding-right: 15px !important;
@@ -22,10 +28,8 @@
 
 .title {
     white-space: nowrap;
-    margin-left: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
-    vertical-align: middle;
     opacity: 0.8 !important;
 }
 
@@ -84,5 +88,13 @@ mat-progress-bar {
     position: absolute !important;
 }
 
-#details {
+.detailsLink {
+    &:hover {
+        cursor: pointer;
+    }
+    .mat-icon {
+        position: relative;
+        top: 3px;
+        width: 14px;
+    }
 }

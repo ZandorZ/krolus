@@ -91,14 +91,11 @@
 
     <mat-toolbar id="details">
         <mat-toolbar-row>
-            <span class="mat-caption title">
-                {{model?.Link}}
+            <span class="mat-caption title detailsLink" (click)="openLink()" [matTooltip]="'Open link in new window'">
+                <mat-icon>open_in_new</mat-icon> {{model?.Link}}
             </span>
             <span class="flex"></span>
             <span class="item-buttons">
-                <button mat-icon-button (click)="openLink()" [matTooltip]="'Open link in new window'">
-                    <mat-icon>open_in_new</mat-icon>
-                </button>
                 <button [disabled]="loading" mat-icon-button (click)="donwloadItem()" matTooltip="Download content">
                     <mat-icon>download</mat-icon>
                 </button>
