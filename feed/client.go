@@ -2,6 +2,7 @@ package feed
 
 import (
 	"context"
+	"crypto/tls"
 	"net/http"
 	"os"
 	"time"
@@ -51,7 +52,13 @@ func (t *TorClient) Close() {
 
 // NewGenericClient ...
 func NewGenericClient() *http.Client { //TODO: see https://github.com/bradfitz/exp-httpclient
+
 	return &http.Client{
 		Timeout: 30 * time.Second,
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				CipherSuites: []uint16{tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256},
+			},
+		},
 	}
 }
