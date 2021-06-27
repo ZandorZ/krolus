@@ -8,8 +8,8 @@ import (
 // IFeedStore ...
 type IFeedStore interface {
 	LoadMoreItems(request map[string]interface{}) (models.PaginatedItemCollection, error)
-	LoadSub(string) (models.SubscriptionModel, error)
-	GetSub(string) (models.SubscriptionModel, error)
+	LoadSub(string) (*models.SubscriptionModel, error)
+	GetSub(string) (*models.SubscriptionModel, error)
 }
 
 // ITreeStore interface

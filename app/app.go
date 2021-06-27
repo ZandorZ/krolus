@@ -85,7 +85,7 @@ func (k *KrolusApp) Start(options Options) {
 	appW.Bind(store.NewMediaStore(man, media.NewDownloader(req)))
 	appW.Bind(store.NewItemStore(man, treeState))
 	appW.Bind(store.NewTreeStore(agg, man, treeState, ob.Add("tree")))
-	appW.Bind(store.NewFeedStore(man, treeState, ob.Add("feed")))
+	appW.Bind(store.NewFeedStore(man, treeState, ob.Add("feed"), req))
 	if err := appW.Run(); err != nil {
 		myLogger.Fatalf("App error: %e", err)
 	}

@@ -19,15 +19,18 @@ type FeedStore struct {
 	manager        *data.Manager
 	treeState      *treex.State
 	obs            feed.Observable
+	requester      feed.Requester
 	selectedLeaves []string
 }
 
 // NewFeedStore ...
-func NewFeedStore(manager *data.Manager, treeState *treex.State, obs feed.Observable) IFeedStore {
+func NewFeedStore(manager *data.Manager, treeState *treex.State, obs feed.Observable, req feed.Requester) IFeedStore {
 	return &FeedStore{
-		manager:   manager,
-		treeState: treeState,
-		obs:       obs,
+		manager:        manager,
+		treeState:      treeState,
+		obs:            obs,
+		requester:      req,
+		selectedLeaves: []string{},
 	}
 }
 
@@ -89,14 +92,20 @@ func (f *FeedStore) LoadMoreItems(request map[string]interface{}) (models.Pagina
 }
 
 // LoadSub Loads Subscription from xurl
-func (f *FeedStore) LoadSub(XURL string) (models.SubscriptionModel, error) {
+func (f *FeedStore) LoadSub(XURL string) (*models.SubscriptionModel, error) {
 
-	_feed, err := gofeed.NewParser().ParseURL(XURL)
+	response, err := f.requester.Request(XURL)
 	if err != nil {
-		return models.SubscriptionModel{}, err
+		return nil, err
+	}
+	defer response.Body.Close()
+
+	_feed, err := gofeed.NewParser().Parse(response.Body)
+	if err != nil {
+		return nil, err
 	}
 
-	return models.SubscriptionModel{
+	return &models.SubscriptionModel{
 		Title:       _feed.Title,
 		Description: _feed.Description,
 		URL:         _feed.Link,
@@ -105,7 +114,6 @@ func (f *FeedStore) LoadSub(XURL string) (models.SubscriptionModel, error) {
 }
 
 // GetSub returns a subscription
-func (f *FeedStore) GetSub(ID string) (models.SubscriptionModel, error) {
-	sub, err := f.manager.Subscription.Get(ID)
-	return *sub, err
+func (f *FeedStore) GetSub(ID string) (*models.SubscriptionModel, error) {
+	return f.manager.Subscription.Get(ID)
 }
