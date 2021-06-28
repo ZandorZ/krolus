@@ -44,11 +44,11 @@ func isVideo(src string) bool {
 }
 
 func isAudio(src string) bool {
-	return isType(src, "mp3")
+	return isType(src, "mp3|wav")
 }
 
 func isType(src string, extensions string) bool {
-	re, err := regexp.Compile(fmt.Sprintf(`(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(%s)`, extensions))
+	re, err := regexp.Compile(fmt.Sprintf(`(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+.+(%s)$`, extensions))
 	if err != nil {
 		return false
 	}
