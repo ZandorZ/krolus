@@ -28,10 +28,9 @@ func (i *ItemManagerSqte) Add(item *models.ItemModel) error {
 func (i *ItemManagerSqte) AddInBatch(subBatch models.SubscriptionItemsMap, _tx interface{}) error {
 
 	tx, ok := _tx.(*gorm.DB)
-	if !ok {
-		tx = i.DB
+	if !ok || tx == nil {
+		tx = i.getTx()
 	}
-
 	for sub, items := range subBatch {
 		sliced := SplitItems(*items, 30)
 		for _, slice := range sliced {
