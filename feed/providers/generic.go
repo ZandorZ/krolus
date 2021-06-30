@@ -30,6 +30,10 @@ func (g *GenericProvider) Convert(item *gofeed.Item, model *models.ItemModel) {
 	if isAudio(item.Link) {
 		model.Type = models.TypeAudio
 	}
+
+	if len(model.Description) == 0 {
+		model.Description = item.Content
+	}
 }
 
 func (g *GenericProvider) Fetch(item *models.ItemModel) {
