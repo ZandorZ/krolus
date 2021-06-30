@@ -8,6 +8,7 @@ import (
 	"krolus/treex"
 	"krolus/treex/models"
 	"krolus/treex/persistence"
+	"os"
 	"os/user"
 
 	"github.com/wailsapp/wails"
@@ -16,17 +17,24 @@ import (
 
 func GetPath(production bool) string {
 
-	var basePath string
-
 	usr, err := user.Current()
 	if err != nil {
 		panic(err)
 	}
 
+	var basePath string
+
 	if production {
 		basePath = usr.HomeDir + "/.krolus"
 	} else {
-		basePath = usr.HomeDir + "/Projects/krolus/db"
+		basePath = os.TempDir() + "/.krolus"
+	}
+
+	if _, err := os.Stat(basePath); os.IsNotExist(err) {
+		err := os.Mkdir(basePath, os.FileMode(0755))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	return basePath
@@ -80,7 +88,7 @@ func (k *KrolusApp) Start(options Options) {
 		JS:               options.Js,
 		CSS:              options.Css,
 		Resizable:        true,
-		DisableInspector: false,
+		DisableInspector: options.Production,
 	})
 	appW.Bind(store.NewMediaStore(man, media.NewDownloader(req)))
 	appW.Bind(store.NewItemStore(man, treeState))
