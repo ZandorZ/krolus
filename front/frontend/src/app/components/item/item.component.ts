@@ -24,10 +24,14 @@ export class ItemComponent implements OnChanges {
     open = new EventEmitter<string>();
 
     @Output()
+    expand = new EventEmitter<boolean>();
+
+    @Output()
     selectSub = new EventEmitter<TreexNodeHeader>();
 
     content: SafeHtml;
     loading = false;
+    expanded = false;
 
     constructor(private sanitizer: DomSanitizer, private mediaStore: MediaStore, private _snackBar: MatSnackBar) {
     }

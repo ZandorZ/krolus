@@ -12,9 +12,10 @@
                     [headers]="treeSelectedHeaders$ | async" (hidemenu)="onToggleMenu($event)"></app-feed>
             </mat-drawer-content>
 
-            <mat-drawer #viewer [mode]="'side'" [opened]="isSelected$ | async" position="end">
+            <mat-drawer [style.width.%]="expanded ? 70 : 40" #viewer [mode]="'side'" [opened]="isSelected$ | async"
+                position="end">
                 <app-item *ngIf="!!item" [model]="item" (close)="onCloseItem()" (open)="onOpenItem($event)"
-                    (selectSub)="onSelectItemSub($event)">
+                    (expand)="onToggleExpand($event)" (selectSub)="onSelectItemSub($event)">
                 </app-item>
             </mat-drawer>
 

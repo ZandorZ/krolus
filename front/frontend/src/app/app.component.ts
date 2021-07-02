@@ -18,6 +18,7 @@ import { ItemStore } from './services/state/item.store';
 export class AppComponent implements OnInit {
 
     opened = true;
+    expanded = false;
 
     loading$: Observable<LoadingDictionary>;
     treeSelected$: Observable<TreexNode>;
@@ -57,11 +58,16 @@ export class AppComponent implements OnInit {
 
     onCloseItem() {
         this.item = undefined;
+        this.expanded = false;
         this.feedStore.unSelectItem();
     }
 
     onToggleMenu(hidden: boolean) {
         this.opened = !hidden;
+    }
+
+    onToggleExpand(expanded: boolean) {
+        this.expanded = expanded;
     }
 
     async onOpenItem(id: string) {
